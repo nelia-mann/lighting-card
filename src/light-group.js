@@ -1,7 +1,8 @@
 import { html, LitElement } from 'lit';
 import './light-icon.js'
+// import styles from './light.styles';
 
-export class LightComponent extends LitElement {
+export class LightGroupComponent extends LitElement {
 
     static get properties() {
         return {
@@ -13,25 +14,22 @@ export class LightComponent extends LitElement {
         super();
     }
 
-    getStyle() {
-        let result;
-        if (this._light.state === "off") {
-            result = `
-                color: #44739e;
+    // static styles = styles;
+
+    icons() {
+        const lights = this._light.members;
+        return lights.map((light) => {
+            return html`
+                <light-icon ._light=${light}></light-icon>
             `
-        } else {
-            result = `
-                color: #ffc107;;
-            `
-        }
-        return result;
+        })
     }
 
     render() {
         const name = this._light.attributes.friendly_name;
         return html`
-            <div  @click="${this.onClick}">
-                <light-icon ._light=${this._light}></light-icon>
+            <div @click="${this.onClick}">
+                ${this.icons()}
                 ${name}
             </div>
         `
@@ -47,4 +45,4 @@ export class LightComponent extends LitElement {
 
 }
 
-customElements.define("light-component", LightComponent);
+customElements.define("light-group-component", LightGroupComponent);

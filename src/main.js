@@ -19,7 +19,7 @@ export class MainCard extends LitElement {
     // initializes clocktype in constructor
     constructor() {
         super();
-        this._floor = "first";
+        this._floor = "main_floor";
     }
 
     // establish config information for card
@@ -40,57 +40,114 @@ export class MainCard extends LitElement {
         const floors = Object.keys(floorObjects);
         let lighting = {};
         floors.forEach((str) => {
-            lighting[str] = {};
+            lighting[str] = { solo: {}, groups: {}};
         })
         this._lighting = lighting;
-        this._floors = floors;
+        this._floors = floorObjects;
     }
 
     getAreas() {
         return this._hass.areas;
     }
 
-    setLighting() {
+    getLightEntities() {
         const entities = this._hass.entities;
-        const areas = this.getAreas();
+        let lightEntities = [];
         Object.entries(entities).forEach(([key, value]) => {
-            if (value.labels.includes("lighting")) {
-                const areaId = value.area_id;
-                const floorId = areas[areaId].floor_id
-                const light = this._hass.states[key];
-                const entityId = light.entity_id;
-                let labels = [...value.labels];
-                labels = labels.filter((label) => label != "lighting");
-                if (labels.length === 0) {
-                    this._lighting[floorId][entityId] = [light]
-                } else {
-                    const label = labels[0];
-                    if (label in this._lighting[floorId]) {
-                        this._lighting[floorId][label].push(light)
-                    } else {
-                        this._lighting[floorId][label] = [light];
-                    }
-                }
+            if (key.substring(0, 6) === "light.") {
+                lightEntities.push(value)
             }
+        })
+        return lightEntities;
+    }
+
+    getLightingGroups() {
+        const entities = this.getLightEntities();
+        let groups = [];
+        entities.forEach((entity) => {
+            if (entity.platform === "group") {
+                groups.push(entity)
+            }
+        })
+        return groups;
+    }
+
+    getIndividualLightEntities() {
+        return this.getLightEntities().filter((entity) => entity.platform != "group" )
+    }
+
+    isInGroup(entity) {
+        let result = false;
+        const groupEntities = this.getLightingGroups();
+        const entityId = entity.entity_id;
+        groupEntities.forEach(group => {
+            const groupId = group.entity_id;
+            const members = this._hass.states[groupId].attributes.entity_id;
+            members.includes(entityId) && (result = true);
+        })
+        return result;
+    }
+
+    getSoloLightEntities() {
+        const individualLights = this.getIndividualLightEntities();
+        const soloLights = individualLights.filter((light) => !this.isInGroup(light))
+        return soloLights;
+    }
+
+    addSoloLights() {
+        const entities = this.getSoloLightEntities();
+        const areas = this.getAreas();
+        entities.forEach((entity) => {
+            const areaId = entity.area_id;
+            const floorId = areas[areaId].floor_id;
+            const entityId = entity.entity_id;
+            const state = { ... this._hass.states[entityId] };
+            this._lighting[floorId]["solo"][entityId] = state;
         })
     }
 
+    addGroupedLights() {
+        const groups = this.getLightingGroups();
+        const areas = this.getAreas();
+        groups.forEach((group) => {
+            const areaId = group.area_id;
+            const floorId = areas[areaId].floor_id;
+            const groupId = group.entity_id;
+            const memberIds = this._hass.states[groupId].attributes.entity_id;
+            const memberStates = memberIds.map((id) => {
+                const stateDictionary = { ... this._hass.states[id] };
+                return stateDictionary;
+            })
+            let state = { ... this._hass.states[groupId] };
+            state.members = memberStates;
+            this._lighting[floorId]["groups"][groupId] = state;
+        })
+    }
+
+    setLighting() {
+        this.addSoloLights();
+        this.addGroupedLights();
+    }
+
+    // fix me
     prettyFloor(floor) {
-        let output = floor.charAt(0).toUpperCase() + floor.slice(1);
-        if ((output === "First") || (output === "Second")) {
-            output = output + " Floor";
-        }
-        return output;
+        let floorObject = this._floors[floor];
+        return floorObject.name;
     }
 
     getOnTot(floor) {
         let lights = this._lighting[floor];
         let on = 0;
         let tot = 0;
-        Object.values(lights).forEach((value) => {
-            value.forEach((light) => {
-                let state = light.state;
-                if (state === "on") {
+        Object.values(lights.solo).forEach((light) => {
+            if (light.state === "on") {
+                on = on + 1;
+            }
+            tot = tot + 1;
+        })
+        Object.values(lights.groups).forEach((group) => {
+            group.members.forEach((light) => {
+                if (light.state === "on") {
                     on = on + 1;
                 }
                 tot = tot + 1;
@@ -155,7 +212,8 @@ export class MainCard extends LitElement {
     }
 
     floorButtons() {
-        return this._floors.map((floor) => (this.floorButton(floor)));
+        const floors = Object.keys(this._floors);
+        return floors.map((floor) => (this.floorButton(floor)));
     }
 
     // return html
@@ -179,6 +237,7 @@ export class MainCard extends LitElement {
         return html`
             <panel-component
                 ._lights = ${this._lighting[this._floor]}
+                .callService=${this._hass.callService}
             ></panel-component>
         `;
     }
@@ -196,8 +255,8 @@ export class MainCard extends LitElement {
         return {
             rows: 5,
             columns: 18,
-            min_rows: 4,
-            max_rows: 4
+            min_rows: 5,
+            max_rows: 5
         }
     }
 

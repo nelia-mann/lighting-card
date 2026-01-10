@@ -1,6 +1,7 @@
 import { html, LitElement } from 'lit';
 import styles from './panel.styles.js';
 import './light.js';
+import './light-group.js'
 
 export class PanelComponent extends LitElement {
 
@@ -16,11 +17,24 @@ export class PanelComponent extends LitElement {
 
     static styles = styles;
 
-    lightDisplays() {
-        return Object.entries(this._lights).map(([key, value]) => {
+    soloLightDisplays() {
+        return Object.values(this._lights.solo).map((value) => {
             return html`
-                <light-component ._light=${value} ._key=${key}>
-                </light-component>
+                <light-component
+                    ._light=${value}
+                    .callService=${this.callService}
+                    ></light-component>
+            `
+        });
+    }
+
+    groupLightDisplays() {
+        return Object.values(this._lights.groups).map((value) => {
+            return html`
+                <light-group-component
+                    ._light=${value}
+                    .callService=${this.callService}
+                ></light-group-component>
             `
         });
     }
@@ -28,7 +42,8 @@ export class PanelComponent extends LitElement {
     render() {
         return html`
             <div class="panel">
-                ${this.lightDisplays()}
+                ${this.soloLightDisplays()}
+                ${this.groupLightDisplays()}
             </div>
         `
     }

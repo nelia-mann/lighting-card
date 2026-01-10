@@ -18,7 +18,7 @@ export default css`
         justify-content: space-around;
         align-items: center;
         width: 100%;
-        height: 24%;
+        height: 18%;
         margin: 0px;
         padding: 0px;
     }
