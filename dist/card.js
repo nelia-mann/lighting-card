@@ -8439,14 +8439,15 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
     addSoloLights() {
         const entities = this.getSoloLightEntities();
         const areas = this.getAreas();
-        console.log(areas);
-    /* entities.forEach((entity) => {
+        entities.forEach((entity)=>{
             const areaId = entity.area_id;
             const floorId = areas[areaId].floor_id;
-            const entityId = entity.entity_id;
-            const state = { ... this._hass.states[entityId] };
-            this._lighting[floorId]["solo"][entityId] = state;
-        }) */ }
+            console.log(floorId);
+        // const entityId = entity.entity_id;
+        // const state = { ... this._hass.states[entityId] };
+        // this._lighting[floorId]["solo"][entityId] = state;
+        });
+    }
     addGroupedLights() {
         const groups = this.getLightingGroups();
         const areas = this.getAreas();

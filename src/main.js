@@ -97,14 +97,14 @@ export class MainCard extends LitElement {
     addSoloLights() {
         const entities = this.getSoloLightEntities();
         const areas = this.getAreas();
-        console.log(areas);
-        /* entities.forEach((entity) => {
+        entities.forEach((entity) => {
             const areaId = entity.area_id;
             const floorId = areas[areaId].floor_id;
-            const entityId = entity.entity_id;
-            const state = { ... this._hass.states[entityId] };
-            this._lighting[floorId]["solo"][entityId] = state;
-        }) */
+            console.log(floorId)
+            // const entityId = entity.entity_id;
+            // const state = { ... this._hass.states[entityId] };
+            // this._lighting[floorId]["solo"][entityId] = state;
+        })
     }
 
     addGroupedLights() {
