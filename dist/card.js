@@ -8227,6 +8227,16 @@ class $4356f78c5c3f665b$export$82acdd66a4e4bf90 extends (0, $ab210b2da7b39b9d$ex
 customElements.define("light-icon", $4356f78c5c3f665b$export$82acdd66a4e4bf90);
 
 
+
+var $7c12e71e3f07e693$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
+
+    .light-element {
+        touch-action: none;
+    }
+
+`;
+
+
 class $046ae152b1d9e254$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
     _down;
     static get properties() {
@@ -8249,10 +8259,12 @@ class $046ae152b1d9e254$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
             `;
         return result;
     }
+    // pull styles
+    static styles = (0, $7c12e71e3f07e693$export$2e2bcd8739ae039);
     render() {
         const name = this._light.attributes.friendly_name;
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-            <div  @click=${this.onClick} @pointerup=${this.onUp} @pointerdown=${this.onDown}>
+            <div  class="light-element" @click=${this.onClick} @pointerup=${this.onUp} @pointerdown=${this.onDown}>
                 <light-icon ._light=${this._light}></light-icon>
                 ${name}
             </div>

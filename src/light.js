@@ -1,5 +1,6 @@
 import { html, LitElement } from 'lit';
-import './light-icon.js'
+import './light-icon.js';
+import styles from './light.styles.js';
 
 export class LightComponent extends LitElement {
 
@@ -29,10 +30,13 @@ export class LightComponent extends LitElement {
         return result;
     }
 
+    // pull styles
+    static styles = styles;
+
     render() {
         const name = this._light.attributes.friendly_name;
         return html`
-            <div  @click=${this.onClick} @pointerup=${this.onUp} @pointerdown=${this.onDown}>
+            <div  class="light-element" @click=${this.onClick} @pointerup=${this.onUp} @pointerdown=${this.onDown}>
                 <light-icon ._light=${this._light}></light-icon>
                 ${name}
             </div>
