@@ -28,8 +28,8 @@ export class MainCard extends LitElement {
 
     set hass(hass) {
         this._hass = hass;
-        console.log(this._hass);
-        // this.setFloors();
+        this.setFloors();
+        console.log(this._floors);
         // this.setLighting();
     }
 

@@ -8380,8 +8380,8 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
     setConfig() {}
     set hass(hass) {
         this._hass = hass;
-        console.log(this._hass);
-    // this.setFloors();
+        this.setFloors();
+        console.log(this._floors);
     // this.setLighting();
     }
     // pull styles
