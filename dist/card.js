@@ -8440,12 +8440,15 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
         const entities = this.getSoloLightEntities();
         const areas = this.getAreas();
         entities.forEach((entity)=>{
-            // const areaId = entity.area_id;
-            console.log(entity);
-        // const floorId = areas[areaId].floor_id;
-        // const entityId = entity.entity_id;
-        // const state = { ... this._hass.states[entityId] };
-        // this._lighting[floorId]["solo"][entityId] = state;
+            const areaId = entity.area_id;
+            if (areaId) {
+                const floorId = areas[areaId].floor_id;
+                const entityId = entity.entity_id;
+                const state = {
+                    ...this._hass.states[entityId]
+                };
+                this._lighting[floorId]["solo"][entityId] = state;
+            }
         });
     }
     addGroupedLights() {
@@ -8453,25 +8456,27 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
         const areas = this.getAreas();
         groups.forEach((group)=>{
             const areaId = group.area_id;
-            const floorId = areas[areaId].floor_id;
-            const groupId = group.entity_id;
-            const memberIds = this._hass.states[groupId].attributes.entity_id;
-            const memberStates = memberIds.map((id)=>{
-                const stateDictionary = {
-                    ...this._hass.states[id]
+            if (areaId) {
+                const floorId = areas[areaId].floor_id;
+                const groupId = group.entity_id;
+                const memberIds = this._hass.states[groupId].attributes.entity_id;
+                const memberStates = memberIds.map((id)=>{
+                    const stateDictionary = {
+                        ...this._hass.states[id]
+                    };
+                    return stateDictionary;
+                });
+                let state = {
+                    ...this._hass.states[groupId]
                 };
-                return stateDictionary;
-            });
-            let state = {
-                ...this._hass.states[groupId]
-            };
-            state.members = memberStates;
-            this._lighting[floorId]["groups"][groupId] = state;
+                state.members = memberStates;
+                this._lighting[floorId]["groups"][groupId] = state;
+            }
         });
     }
     setLighting() {
         this.addSoloLights();
-    // this.addGroupedLights();
+        this.addGroupedLights();
     }
     // fix me
     prettyFloor(floor) {
@@ -8541,8 +8546,8 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
         return result;
     }
     floorButtons() {
-    // const floors = Object.keys(this._floors);
-    // return floors.map((floor) => (this.floorButton(floor)));
+        const floors = Object.keys(this._floors);
+        return floors.map((floor)=>this.floorButton(floor));
     }
     // return html
     render() {
@@ -8562,12 +8567,13 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
         this._floor = e.currentTarget.id;
     }
     content() {
-    /* return html`
+        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
             <panel-component
                 ._lights = ${this._lighting[this._floor]}
                 .callService=${this._hass.callService}
             ></panel-component>
-        `; */ }
+        `;
+    }
     isFloor(floor) {
         return this._floor === floor;
     }

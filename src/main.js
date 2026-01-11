@@ -98,12 +98,13 @@ export class MainCard extends LitElement {
         const entities = this.getSoloLightEntities();
         const areas = this.getAreas();
         entities.forEach((entity) => {
-            // const areaId = entity.area_id;
-            console.log(entity);
-            // const floorId = areas[areaId].floor_id;
-            // const entityId = entity.entity_id;
-            // const state = { ... this._hass.states[entityId] };
-            // this._lighting[floorId]["solo"][entityId] = state;
+            const areaId = entity.area_id;
+            if (areaId) {
+                const floorId = areas[areaId].floor_id;
+                const entityId = entity.entity_id;
+                const state = { ... this._hass.states[entityId] };
+                this._lighting[floorId]["solo"][entityId] = state;
+            }
         })
     }
 
@@ -112,22 +113,25 @@ export class MainCard extends LitElement {
         const areas = this.getAreas();
         groups.forEach((group) => {
             const areaId = group.area_id;
-            const floorId = areas[areaId].floor_id;
-            const groupId = group.entity_id;
-            const memberIds = this._hass.states[groupId].attributes.entity_id;
-            const memberStates = memberIds.map((id) => {
-                const stateDictionary = { ... this._hass.states[id] };
-                return stateDictionary;
-            })
-            let state = { ... this._hass.states[groupId] };
-            state.members = memberStates;
-            this._lighting[floorId]["groups"][groupId] = state;
+            if (areaId) {
+                const floorId = areas[areaId].floor_id;
+                const groupId = group.entity_id;
+                const memberIds = this._hass.states[groupId].attributes.entity_id;
+                const memberStates = memberIds.map((id) => {
+                    const stateDictionary = { ... this._hass.states[id] };
+                    return stateDictionary;
+                })
+                let state = { ... this._hass.states[groupId] };
+                state.members = memberStates;
+                this._lighting[floorId]["groups"][groupId] = state;
+            }
+
         })
     }
 
     setLighting() {
         this.addSoloLights();
-        // this.addGroupedLights();
+        this.addGroupedLights();
     }
 
     // fix me
@@ -213,8 +217,8 @@ export class MainCard extends LitElement {
     }
 
     floorButtons() {
-        // const floors = Object.keys(this._floors);
-        // return floors.map((floor) => (this.floorButton(floor)));
+        const floors = Object.keys(this._floors);
+        return floors.map((floor) => (this.floorButton(floor)));
     }
 
     // return html
@@ -237,12 +241,12 @@ export class MainCard extends LitElement {
     }
 
     content() {
-        /* return html`
+        return html`
             <panel-component
                 ._lights = ${this._lighting[this._floor]}
                 .callService=${this._hass.callService}
             ></panel-component>
-        `; */
+        `;
     }
 
     isFloor(floor) {
