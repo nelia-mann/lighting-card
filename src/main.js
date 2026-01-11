@@ -99,8 +99,9 @@ export class MainCard extends LitElement {
         const areas = this.getAreas();
         entities.forEach((entity) => {
             const areaId = entity.area_id;
-            const floorId = areas[areaId].floor_id;
-            console.log(floorId)
+            console.log(entity);
+            console.log(areaId);
+            // const floorId = areas[areaId].floor_id;
             // const entityId = entity.entity_id;
             // const state = { ... this._hass.states[entityId] };
             // this._lighting[floorId]["solo"][entityId] = state;
