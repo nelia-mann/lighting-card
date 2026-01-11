@@ -28,8 +28,9 @@ export class MainCard extends LitElement {
 
     set hass(hass) {
         this._hass = hass;
-        this.setFloors();
-        this.setLighting();
+        console.log(this._hass);
+        // this.setFloors();
+        // this.setLighting();
     }
 
     // pull styles
@@ -212,8 +213,8 @@ export class MainCard extends LitElement {
     }
 
     floorButtons() {
-        const floors = Object.keys(this._floors);
-        return floors.map((floor) => (this.floorButton(floor)));
+        // const floors = Object.keys(this._floors);
+        // return floors.map((floor) => (this.floorButton(floor)));
     }
 
     // return html
@@ -236,12 +237,12 @@ export class MainCard extends LitElement {
     }
 
     content() {
-        return html`
+        /* return html`
             <panel-component
                 ._lights = ${this._lighting[this._floor]}
                 .callService=${this._hass.callService}
             ></panel-component>
-        `;
+        `; */
     }
 
     isFloor(floor) {

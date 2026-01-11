@@ -8380,8 +8380,9 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
     setConfig() {}
     set hass(hass) {
         this._hass = hass;
-        this.setFloors();
-        this.setLighting();
+        console.log(this._hass);
+    // this.setFloors();
+    // this.setLighting();
     }
     // pull styles
     static styles = (0, $24833e213e3419f0$export$2e2bcd8739ae039);
@@ -8542,8 +8543,8 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
         return result;
     }
     floorButtons() {
-        const floors = Object.keys(this._floors);
-        return floors.map((floor)=>this.floorButton(floor));
+    // const floors = Object.keys(this._floors);
+    // return floors.map((floor) => (this.floorButton(floor)));
     }
     // return html
     render() {
@@ -8563,13 +8564,12 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
         this._floor = e.currentTarget.id;
     }
     content() {
-        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+    /* return html`
             <panel-component
                 ._lights = ${this._lighting[this._floor]}
                 .callService=${this._hass.callService}
             ></panel-component>
-        `;
-    }
+        `; */ }
     isFloor(floor) {
         return this._floor === floor;
     }
