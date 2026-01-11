@@ -8252,7 +8252,7 @@ class $046ae152b1d9e254$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
     render() {
         const name = this._light.attributes.friendly_name;
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-            <div  @click="${this.onClick}" @mouseup="${this.onUp}" @mousedown="${this.onDown}">
+            <div  @click=${this.onClick} @pointerup=${this.onUp} @pointerdown=${this.onDown}>
                 <light-icon ._light=${this._light}></light-icon>
                 ${name}
             </div>
@@ -8266,9 +8266,11 @@ class $046ae152b1d9e254$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
         this.callService('light', 'toggle', data);
     }
     onDown() {
+        console.log("down");
         this._down = new Date().valueOf();
     }
     onUp() {
+        console.log("up");
         const elapsed = new Date().valueOf() - this._down;
         if (elapsed > 1000) this.onHold();
     }

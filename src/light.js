@@ -32,7 +32,7 @@ export class LightComponent extends LitElement {
     render() {
         const name = this._light.attributes.friendly_name;
         return html`
-            <div  @click="${this.onClick}" @mouseup="${this.onUp}" @mousedown="${this.onDown}">
+            <div  @click=${this.onClick} @pointerup=${this.onUp} @pointerdown=${this.onDown}>
                 <light-icon ._light=${this._light}></light-icon>
                 ${name}
             </div>
@@ -48,10 +48,12 @@ export class LightComponent extends LitElement {
     }
 
     onDown() {
+        console.log("down");
         this._down = new Date().valueOf();
     }
 
     onUp() {
+        console.log("up");
         const elapsed = new Date().valueOf() - this._down;
         if (elapsed > 1000) {
             this.onHold();
