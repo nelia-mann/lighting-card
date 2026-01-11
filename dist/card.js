@@ -8440,9 +8440,8 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
         const entities = this.getSoloLightEntities();
         const areas = this.getAreas();
         entities.forEach((entity)=>{
-            const areaId = entity.area_id;
+            // const areaId = entity.area_id;
             console.log(entity);
-            console.log(areaId);
         // const floorId = areas[areaId].floor_id;
         // const entityId = entity.entity_id;
         // const state = { ... this._hass.states[entityId] };
