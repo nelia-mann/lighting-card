@@ -8381,8 +8381,7 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
     set hass(hass) {
         this._hass = hass;
         this.setFloors();
-        console.log(this._floors);
-    // this.setLighting();
+        this.setLighting();
     }
     // pull styles
     static styles = (0, $24833e213e3419f0$export$2e2bcd8739ae039);
@@ -8440,16 +8439,14 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
     addSoloLights() {
         const entities = this.getSoloLightEntities();
         const areas = this.getAreas();
-        entities.forEach((entity)=>{
+        console.log(areas);
+    /* entities.forEach((entity) => {
             const areaId = entity.area_id;
             const floorId = areas[areaId].floor_id;
             const entityId = entity.entity_id;
-            const state = {
-                ...this._hass.states[entityId]
-            };
+            const state = { ... this._hass.states[entityId] };
             this._lighting[floorId]["solo"][entityId] = state;
-        });
-    }
+        }) */ }
     addGroupedLights() {
         const groups = this.getLightingGroups();
         const areas = this.getAreas();
@@ -8473,7 +8470,7 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
     }
     setLighting() {
         this.addSoloLights();
-        this.addGroupedLights();
+    // this.addGroupedLights();
     }
     // fix me
     prettyFloor(floor) {

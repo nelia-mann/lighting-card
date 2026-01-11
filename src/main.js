@@ -29,8 +29,7 @@ export class MainCard extends LitElement {
     set hass(hass) {
         this._hass = hass;
         this.setFloors();
-        console.log(this._floors);
-        // this.setLighting();
+        this.setLighting();
     }
 
     // pull styles
@@ -98,13 +97,14 @@ export class MainCard extends LitElement {
     addSoloLights() {
         const entities = this.getSoloLightEntities();
         const areas = this.getAreas();
-        entities.forEach((entity) => {
+        console.log(areas);
+        /* entities.forEach((entity) => {
             const areaId = entity.area_id;
             const floorId = areas[areaId].floor_id;
             const entityId = entity.entity_id;
             const state = { ... this._hass.states[entityId] };
             this._lighting[floorId]["solo"][entityId] = state;
-        })
+        }) */
     }
 
     addGroupedLights() {
@@ -127,7 +127,7 @@ export class MainCard extends LitElement {
 
     setLighting() {
         this.addSoloLights();
-        this.addGroupedLights();
+        // this.addGroupedLights();
     }
 
     // fix me
