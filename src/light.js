@@ -3,6 +3,8 @@ import './light-icon.js'
 
 export class LightComponent extends LitElement {
 
+    _down;
+
     static get properties() {
         return {
             _light: { state: true },
@@ -30,7 +32,7 @@ export class LightComponent extends LitElement {
     render() {
         const name = this._light.attributes.friendly_name;
         return html`
-            <div  @click="${this.onClick}">
+            <div  @click="${this.onClick}" @mouseup="${this.onUp}" @mousedown="${this.onDown}">
                 <light-icon ._light=${this._light}></light-icon>
                 ${name}
             </div>
@@ -43,6 +45,25 @@ export class LightComponent extends LitElement {
             entity_id: entityId,
         }
         this.callService('light', 'toggle', data)
+    }
+
+    onDown() {
+        this._down = new Date().valueOf();
+    }
+
+    onUp() {
+        const elapsed = new Date().valueOf() - this._down;
+        if (elapsed > 1000) {
+            this.onHold();
+        }
+    }
+
+    onHold() {
+        const entityId = this._light.entity_id;
+        const data = {
+            entity_id: "light.kitchen_pantry_light",
+        }
+        this.callService('light', 'turn_on', data)
     }
 
 }

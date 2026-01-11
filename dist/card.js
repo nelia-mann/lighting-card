@@ -8228,6 +8228,7 @@ customElements.define("light-icon", $4356f78c5c3f665b$export$82acdd66a4e4bf90);
 
 
 class $046ae152b1d9e254$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
+    _down;
     static get properties() {
         return {
             _light: {
@@ -8251,7 +8252,7 @@ class $046ae152b1d9e254$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
     render() {
         const name = this._light.attributes.friendly_name;
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-            <div  @click="${this.onClick}">
+            <div  @click="${this.onClick}" @mouseup="${this.onUp}" @mousedown="${this.onDown}">
                 <light-icon ._light=${this._light}></light-icon>
                 ${name}
             </div>
@@ -8263,6 +8264,20 @@ class $046ae152b1d9e254$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
             entity_id: entityId
         };
         this.callService('light', 'toggle', data);
+    }
+    onDown() {
+        this._down = new Date().valueOf();
+    }
+    onUp() {
+        const elapsed = new Date().valueOf() - this._down;
+        if (elapsed > 1000) this.onHold();
+    }
+    onHold() {
+        const entityId = this._light.entity_id;
+        const data = {
+            entity_id: "light.kitchen_pantry_light"
+        };
+        this.callService('light', 'turn_on', data);
     }
 }
 customElements.define("light-component", $046ae152b1d9e254$export$5e33b198135dff7b);
