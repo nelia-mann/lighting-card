@@ -622,6 +622,7 @@ var $24833e213e3419f0$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         font-weight: 400;
         padding: 3%;
         margin: 0px;
+        display: flex;
         flex-flow: column nowrap;
         justify-content: space-between;
         align-items: center;
@@ -634,7 +635,17 @@ var $24833e213e3419f0$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         justify-content: space-around;
         align-items: center;
         width: 100%;
-        height: 18%;
+        height: 50px;
+        margin: 0px;
+        padding: 0px;
+    }
+
+    .content-row {
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: space-around;
+        align-items: center;
+        width: 100;
         margin: 0px;
         padding: 0px;
     }
@@ -680,19 +691,21 @@ var $fd69d66a3348dfcc$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
     light-component {
         border: solid 1px rgba(0, 0, 0, 0.2);
         border-radius: 12px;
-        height: 8%;
+        height: 20px;
         padding: 2%;
         padding-top: 1%;
-        margin: 2%;
+        padding-bottom: 1%;
+        margin: 1%;
     }
 
     light-group-component {
         border: solid 1px rgba(0, 0, 0, 0.2);
         border-radius: 12px;
-        height: 8%;
+        height: 20px;
         padding: 2%;
         padding-top: 1%;
-        margin: 2%;
+        padding-bottom: 1%;
+        margin: 1%;
     }
 
     .panel {
@@ -8536,7 +8549,9 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
     render() {
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
             <ha-card>
-                ${this.content()}
+                <div class="content-row">
+                    ${this.content()}
+                </div>
                 <div class="button-row">
                     ${this.floorButtons()}
                 </div>
@@ -8564,10 +8579,10 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
     }
     getGridOptions() {
         return {
-            rows: 5,
-            columns: 18,
-            min_rows: 5,
-            max_rows: 5
+            rows: 6,
+            columns: 21,
+            min_rows: 6,
+            max_rows: 6
         };
     }
 }

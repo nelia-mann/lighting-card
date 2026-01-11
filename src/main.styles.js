@@ -6,6 +6,7 @@ export default css`
         font-weight: 400;
         padding: 3%;
         margin: 0px;
+        display: flex;
         flex-flow: column nowrap;
         justify-content: space-between;
         align-items: center;
@@ -18,7 +19,17 @@ export default css`
         justify-content: space-around;
         align-items: center;
         width: 100%;
-        height: 18%;
+        height: 50px;
+        margin: 0px;
+        padding: 0px;
+    }
+
+    .content-row {
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: space-around;
+        align-items: center;
+        width: 100;
         margin: 0px;
         padding: 0px;
     }

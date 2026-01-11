@@ -220,7 +220,9 @@ export class MainCard extends LitElement {
     render() {
         return html`
             <ha-card>
-                ${this.content()}
+                <div class="content-row">
+                    ${this.content()}
+                </div>
                 <div class="button-row">
                     ${this.floorButtons()}
                 </div>
@@ -253,10 +255,10 @@ export class MainCard extends LitElement {
 
     getGridOptions() {
         return {
-            rows: 5,
-            columns: 18,
-            min_rows: 5,
-            max_rows: 5
+            rows: 6,
+            columns: 21,
+            min_rows: 6,
+            max_rows: 6
         }
     }
 
