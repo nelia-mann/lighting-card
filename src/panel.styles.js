@@ -3,7 +3,7 @@ import { css } from 'lit';
 export default css`
 
     light-component {
-        border: solid 1px rgba(0, 0, 0, 0.2);
+        border: solid 1px #e5e5e5;
         border-radius: 12px;
         height: 20px;
         padding: 2%;
@@ -13,7 +13,7 @@ export default css`
     }
 
     light-group-component {
-        border: solid 1px rgba(0, 0, 0, 0.2);
+        border: solid 1px #e5e5e5;
         border-radius: 12px;
         height: 20px;
         padding: 2%;

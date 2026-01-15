@@ -689,7 +689,7 @@ var $24833e213e3419f0$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 var $fd69d66a3348dfcc$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
 
     light-component {
-        border: solid 1px rgba(0, 0, 0, 0.2);
+        border: solid 1px #e5e5e5;
         border-radius: 12px;
         height: 20px;
         padding: 2%;
@@ -699,7 +699,7 @@ var $fd69d66a3348dfcc$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
     }
 
     light-group-component {
-        border: solid 1px rgba(0, 0, 0, 0.2);
+        border: solid 1px #e5e5e5;
         border-radius: 12px;
         height: 20px;
         padding: 2%;
@@ -8295,16 +8295,97 @@ customElements.define("light-component", $046ae152b1d9e254$export$5e33b198135dff
 
 
 
+
+class $7b51049c0e09ac55$export$6c439a004ee1ea17 extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
+    static get properties() {
+        return {
+            opened: {
+                type: Boolean,
+                reflect: true
+            },
+            title: {
+                type: String
+            }
+        };
+    }
+    static styles = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
+        dialog {
+        padding: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        /* Backdrop styling using ::backdrop pseudo-element */
+        }
+
+        dialog::backdrop {
+        background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+        }
+
+        .close-button {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        }
+    `;
+    render() {
+        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+        <dialog @close="${this._handleClose}">
+            <div class="modal-header">
+                <h2>${this.title}</h2>
+                <button class="close-button" @click="${this.closeModal}" aria-label="Close modal">
+                    &times;
+                </button>
+            </div>
+            <div class="modal-content">
+                <!-- Content is passed via <slot> -->
+                <slot> Ping </slot>
+            </div>
+        </dialog>
+        `;
+    }
+    // Lifecycle method to open/close the native dialog
+    updated(changedProperties) {
+        if (changedProperties.has('opened')) {
+            const dialog = this.shadowRoot.querySelector('dialog');
+            if (this.opened) dialog.showModal(); // Opens the dialog modally, disabling content behind it
+            else dialog.close();
+        }
+    }
+    closeModal() {
+        this.opened = false;
+        // Optional: dispatch a custom event when closing from inside the modal
+        this.dispatchEvent(new CustomEvent('modal-closed'));
+    }
+    _handleClose() {
+        // Sync property if closed via the native Esc key
+        if (this.opened) this.opened = false;
+    }
+}
+customElements.define("light-group-expanded", $7b51049c0e09ac55$export$6c439a004ee1ea17);
+
+
 class $3de3c4907c023614$export$bc0d8e9b1cedf4f4 extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
     static get properties() {
         return {
             _light: {
                 state: true
+            },
+            isModalOpen: {
+                type: Boolean
             }
         };
     }
     constructor(){
         super();
+        this.isModalOpen = false;
     }
     // static styles = styles;
     icons() {
@@ -8318,13 +8399,37 @@ class $3de3c4907c023614$export$bc0d8e9b1cedf4f4 extends (0, $ab210b2da7b39b9d$ex
     render() {
         const name = this._light.attributes.friendly_name;
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-            <div @click="${this.onClick}">
+            <div @pointerup=${this.onUp} @pointerdown=${this.onDown}>
                 ${this.icons()}
                 ${name}
+                <light-group-expanded
+                    title="My Modal Title"
+                    ?opened="${this.isModalOpen}"
+                    @modal-closed="${this.handleModalClosed}"
+                ></light-group-expanded>
             </div>
         `;
     }
+    onDown() {
+        this._down = new Date().valueOf();
+    }
+    onUp() {
+        const elapsed = new Date().valueOf() - this._down;
+        if (elapsed > 1000) this.onHold();
+        else this.onClick();
+    }
+    onHold() {
+        this.isModalOpen = true;
+    }
+    closeModalFromContent() {
+        this.isModalOpen = false;
+    }
+    handleModalClosed() {
+        // Handle the custom event if needed
+        console.log('Modal was closed.');
+    }
     onClick() {
+        console.log("clicked");
         const entityId = this._light.entity_id;
         const data = {
             entity_id: entityId
