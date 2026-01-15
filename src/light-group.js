@@ -5,6 +5,9 @@ import './light-group-expanded.js';
 
 export class LightGroupComponent extends LitElement {
 
+    _holding = false;
+    _HOLD_DURATION = 500;
+
     static get properties() {
         return {
             _light: { state: true },
@@ -44,21 +47,21 @@ export class LightGroupComponent extends LitElement {
     }
 
     onDown() {
-        this._down = new Date().valueOf();
+        this._holding = true;
+        setTimeout(() => { this.onHold() }, this._HOLD_DURATION);
     }
 
     onUp() {
-        const elapsed = new Date().valueOf() - this._down;
-        if (elapsed > 1000) {
-            this.onHold();
+        this._holding = false;
+    }
+
+    onHold() {
+        if (this._holding) {
+            this.isModalOpen = true;
         }
         else {
             this.onClick();
         }
-    }
-
-    onHold() {
-        this.isModalOpen = true;
     }
 
     handleModalClosed() {

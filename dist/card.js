@@ -8373,6 +8373,8 @@ customElements.define("light-group-expanded", $7b51049c0e09ac55$export$6c439a004
 
 
 class $3de3c4907c023614$export$bc0d8e9b1cedf4f4 extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
+    _holding = false;
+    _HOLD_DURATION = 500;
     static get properties() {
         return {
             _light: {
@@ -8411,15 +8413,17 @@ class $3de3c4907c023614$export$bc0d8e9b1cedf4f4 extends (0, $ab210b2da7b39b9d$ex
         `;
     }
     onDown() {
-        this._down = new Date().valueOf();
+        this._holding = true;
+        setTimeout(()=>{
+            this.onHold();
+        }, this._HOLD_DURATION);
     }
     onUp() {
-        const elapsed = new Date().valueOf() - this._down;
-        if (elapsed > 1000) this.onHold();
-        else this.onClick();
+        this._holding = false;
     }
     onHold() {
-        this.isModalOpen = true;
+        if (this._holding) this.isModalOpen = true;
+        else this.onClick();
     }
     handleModalClosed() {
         this.isModalOpen = false;
