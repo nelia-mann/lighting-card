@@ -34,12 +34,12 @@ export class LightGroupComponent extends LitElement {
             <div @pointerup=${this.onUp} @pointerdown=${this.onDown}>
                 ${this.icons()}
                 ${name}
-                <light-group-expanded
-                    title="My Modal Title"
-                    ?opened="${this.isModalOpen}"
-                    @modal-closed="${this.handleModalClosed}"
-                ></light-group-expanded>
             </div>
+            <light-group-expanded
+                title="My Modal Title"
+                ?opened="${this.isModalOpen}"
+                @modal-closed="${this.handleModalClosed}"
+            ></light-group-expanded>
         `
     }
 
@@ -66,7 +66,6 @@ export class LightGroupComponent extends LitElement {
     }
 
     onClick() {
-        console.log("clicked");
         const entityId = this._light.entity_id;
         const data = {
             entity_id: entityId,

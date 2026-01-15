@@ -8402,12 +8402,12 @@ class $3de3c4907c023614$export$bc0d8e9b1cedf4f4 extends (0, $ab210b2da7b39b9d$ex
             <div @pointerup=${this.onUp} @pointerdown=${this.onDown}>
                 ${this.icons()}
                 ${name}
-                <light-group-expanded
-                    title="My Modal Title"
-                    ?opened="${this.isModalOpen}"
-                    @modal-closed="${this.handleModalClosed}"
-                ></light-group-expanded>
             </div>
+            <light-group-expanded
+                title="My Modal Title"
+                ?opened="${this.isModalOpen}"
+                @modal-closed="${this.handleModalClosed}"
+            ></light-group-expanded>
         `;
     }
     onDown() {
@@ -8425,7 +8425,6 @@ class $3de3c4907c023614$export$bc0d8e9b1cedf4f4 extends (0, $ab210b2da7b39b9d$ex
         this.isModalOpen = false;
     }
     onClick() {
-        console.log("clicked");
         const entityId = this._light.entity_id;
         const data = {
             entity_id: entityId
