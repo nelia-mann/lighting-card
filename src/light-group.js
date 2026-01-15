@@ -61,13 +61,8 @@ export class LightGroupComponent extends LitElement {
         this.isModalOpen = true;
     }
 
-    closeModalFromContent() {
-        this.isModalOpen = false;
-    }
-
     handleModalClosed() {
-        // Handle the custom event if needed
-        console.log('Modal was closed.');
+        this.isModalOpen = false;
     }
 
     onClick() {

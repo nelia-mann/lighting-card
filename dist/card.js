@@ -8421,12 +8421,8 @@ class $3de3c4907c023614$export$bc0d8e9b1cedf4f4 extends (0, $ab210b2da7b39b9d$ex
     onHold() {
         this.isModalOpen = true;
     }
-    closeModalFromContent() {
-        this.isModalOpen = false;
-    }
     handleModalClosed() {
-        // Handle the custom event if needed
-        console.log('Modal was closed.');
+        this.isModalOpen = false;
     }
     onClick() {
         console.log("clicked");
