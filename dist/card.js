@@ -691,21 +691,23 @@ var $fd69d66a3348dfcc$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
     light-component {
         border: solid 1px #e5e5e5;
         border-radius: 12px;
-        height: 20px;
-        padding: 2%;
-        padding-top: 1%;
-        padding-bottom: 1%;
-        margin: 1%;
+        height: 25px;
+        padding: 10px;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        margin: 10px;
+        display: flex;
+        flex-flow: row nowrap;
     }
 
     light-group-component {
         border: solid 1px #e5e5e5;
         border-radius: 12px;
-        height: 20px;
-        padding: 2%;
-        padding-top: 1%;
-        padding-bottom: 1%;
-        margin: 1%;
+        height: 25px;
+        padding: 10px;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        margin: 10px;
     }
 
     .panel {
@@ -713,6 +715,10 @@ var $fd69d66a3348dfcc$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         height: 82%;
         display: flex;
         flex-flow: row wrap;
+    }
+
+    .light-element {
+        touch-action: none;
     }
 `;
 
@@ -8296,7 +8302,8 @@ customElements.define("light-component", $046ae152b1d9e254$export$5e33b198135dff
 
 
 
-class $7b51049c0e09ac55$export$6c439a004ee1ea17 extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
+
+class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
     static get properties() {
         return {
             opened: {
@@ -8310,43 +8317,68 @@ class $7b51049c0e09ac55$export$6c439a004ee1ea17 extends (0, $ab210b2da7b39b9d$ex
     }
     static styles = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
         dialog {
-        padding: 1rem;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        /* Backdrop styling using ::backdrop pseudo-element */
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            /* Backdrop styling using ::backdrop pseudo-element */
+        }
+
+        dialog[open] {
+            display: flex;
+            flex-flow: column nowrap;
+            justify-content: space-between;
+            align-items: center;
+            overflow: hidden;
         }
 
         dialog::backdrop {
-        background-color: rgba(0, 0, 0, 0.5);
+            background-color: rgba(0, 0, 0, 0.5);
         }
 
         .modal-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 20px;
+            margin-top: -10px;
+            background: none;
+            padding-top: none;
+            padding-bottom: none;
+            height: 40px;
         }
 
         .close-button {
-        background: none;
-        border: none;
-        font-size: 1.5rem;
-        cursor: pointer;
+            background: none;
+            font-size: 15px;
+            padding: none;
+            cursor: pointer;
+            margin-left: 20px;
+            margin-right: -30px;
+            border: none;
         }
+
+        .modal-content {
+            width: 100%;
+            display: flex;
+            flex-flow: column nowrap;
+            align-items: flex-start;
+            justify-content: center;
+        }
+
     `;
     render() {
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
         <dialog @close="${this._handleClose}">
             <div class="modal-header">
-                <h2>${this.title}</h2>
+                <h1>${this.title}</h1>
                 <button class="close-button" @click="${this.closeModal}" aria-label="Close modal">
-                    &times;
+                    <ha-svg-icon .path=${0, $04557c061247a0a6$export$cdf8f7e64334eb05}"></ha-svg-icon>
                 </button>
             </div>
             <div class="modal-content">
                 <!-- Content is passed via <slot> -->
-                <slot> Ping </slot>
+                <slot></slot>
             </div>
         </dialog>
         `;
@@ -8369,7 +8401,8 @@ class $7b51049c0e09ac55$export$6c439a004ee1ea17 extends (0, $ab210b2da7b39b9d$ex
         if (this.opened) this.opened = false;
     }
 }
-customElements.define("light-group-expanded", $7b51049c0e09ac55$export$6c439a004ee1ea17);
+customElements.define("popout-window", $4b68482a6361126c$export$506b69e3dcbd131b);
+
 
 
 class $3de3c4907c023614$export$bc0d8e9b1cedf4f4 extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
@@ -8389,13 +8422,24 @@ class $3de3c4907c023614$export$bc0d8e9b1cedf4f4 extends (0, $ab210b2da7b39b9d$ex
         super();
         this.isModalOpen = false;
     }
-    // static styles = styles;
+    static styles = (0, $fd69d66a3348dfcc$export$2e2bcd8739ae039);
     icons() {
         const lights = this._light.members;
         return lights.map((light)=>{
             return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
                 <light-icon ._light=${light}></light-icon>
             `;
+        });
+    }
+    lights() {
+        const lights = this._light.members;
+        return lights.map((light)=>{
+            return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+                <light-component
+                    ._light=${light}
+                    .callService=${this.callService}
+                ></light-component>
+                `;
         });
     }
     render() {
@@ -8405,11 +8449,13 @@ class $3de3c4907c023614$export$bc0d8e9b1cedf4f4 extends (0, $ab210b2da7b39b9d$ex
                 ${this.icons()}
                 ${name}
             </div>
-            <light-group-expanded
-                title="My Modal Title"
+            <popout-window
+                title="${name}"
                 ?opened="${this.isModalOpen}"
                 @modal-closed="${this.handleModalClosed}"
-            ></light-group-expanded>
+            >
+                ${this.lights()}
+            </popout-window>
         `;
     }
     onDown() {

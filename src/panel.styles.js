@@ -5,21 +5,23 @@ export default css`
     light-component {
         border: solid 1px #e5e5e5;
         border-radius: 12px;
-        height: 20px;
-        padding: 2%;
-        padding-top: 1%;
-        padding-bottom: 1%;
-        margin: 1%;
+        height: 25px;
+        padding: 10px;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        margin: 10px;
+        display: flex;
+        flex-flow: row nowrap;
     }
 
     light-group-component {
         border: solid 1px #e5e5e5;
         border-radius: 12px;
-        height: 20px;
-        padding: 2%;
-        padding-top: 1%;
-        padding-bottom: 1%;
-        margin: 1%;
+        height: 25px;
+        padding: 10px;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        margin: 10px;
     }
 
     .panel {
@@ -27,5 +29,9 @@ export default css`
         height: 82%;
         display: flex;
         flex-flow: row wrap;
+    }
+
+    .light-element {
+        touch-action: none;
     }
 `;

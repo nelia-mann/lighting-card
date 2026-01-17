@@ -1,7 +1,7 @@
 import { html, LitElement } from 'lit';
 import './light-icon.js';
-import './light-group-expanded.js';
-// import styles from './light.styles';
+import './popout-window.js';
+import styles from './panel.styles';
 
 export class LightGroupComponent extends LitElement {
 
@@ -20,7 +20,7 @@ export class LightGroupComponent extends LitElement {
         this.isModalOpen = false;
     }
 
-    // static styles = styles;
+    static styles = styles;
 
     icons() {
         const lights = this._light.members;
@@ -31,6 +31,18 @@ export class LightGroupComponent extends LitElement {
         })
     }
 
+    lights() {
+        const lights = this._light.members;
+        return lights.map((light) => {
+            return html`
+                <light-component
+                    ._light=${light}
+                    .callService=${this.callService}
+                ></light-component>
+                `
+        })
+    }
+
     render() {
         const name = this._light.attributes.friendly_name;
         return html`
@@ -38,11 +50,13 @@ export class LightGroupComponent extends LitElement {
                 ${this.icons()}
                 ${name}
             </div>
-            <light-group-expanded
-                title="My Modal Title"
+            <popout-window
+                title="${name}"
                 ?opened="${this.isModalOpen}"
                 @modal-closed="${this.handleModalClosed}"
-            ></light-group-expanded>
+            >
+                ${this.lights()}
+            </popout-window>
         `
     }
 
