@@ -1,6 +1,8 @@
 import { html, LitElement } from 'lit';
 import './light-icon.js';
 import './popout-window.js';
+import './light-inner.js';
+import './light-group-inner.js';
 import styles from './panel.styles';
 
 export class LightGroupComponent extends LitElement {
@@ -35,10 +37,10 @@ export class LightGroupComponent extends LitElement {
         const lights = this._light.members;
         return lights.map((light) => {
             return html`
-                <light-component
+                <light-inner
                     ._light=${light}
                     .callService=${this.callService}
-                ></light-component>
+                ></light-inner>
                 `
         })
     }
@@ -55,6 +57,10 @@ export class LightGroupComponent extends LitElement {
                 ?opened="${this.isModalOpen}"
                 @modal-closed="${this.handleModalClosed}"
             >
+                <light-group-inner
+                    ._light=${this._light}
+                    .callService=${this.callService}
+                ></light-group-inner>
                 ${this.lights()}
             </popout-window>
         `

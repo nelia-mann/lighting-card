@@ -14,7 +14,29 @@ export default css`
         flex-flow: row nowrap;
     }
 
+    light-inner {
+        border: solid 1px #e5e5e5;
+        border-radius: 12px;
+        height: 25px;
+        padding: 10px;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        margin: 10px;
+        display: flex;
+        flex-flow: row nowrap;
+    }
+
     light-group-component {
+        border: solid 1px #e5e5e5;
+        border-radius: 12px;
+        height: 25px;
+        padding: 10px;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        margin: 10px;
+    }
+
+    light-group-inner {
         border: solid 1px #e5e5e5;
         border-radius: 12px;
         height: 25px;

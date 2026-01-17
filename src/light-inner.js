@@ -1,17 +1,12 @@
 import { html, LitElement } from 'lit';
 import './light-icon.js';
-import './popout-window.js';
 import styles from './panel.styles';
 
 export class LightComponent extends LitElement {
 
-    _holding = false;
-    _HOLD_DURATION = 500;
-
     static get properties() {
         return {
             _light: { state: true },
-            isModalOpen: { type: Boolean }
         }
     }
 
@@ -33,49 +28,23 @@ export class LightComponent extends LitElement {
         return result;
     }
 
+    isBrightness() {
+        const result = this._light.attributes.brightness;
+        return (!(result === undefined))
+    }
+
     // pull styles
     static styles = styles;
 
     render() {
         const name = this._light.attributes.friendly_name;
+        console.log(name, this.isBrightness());
         return html`
-            <div  class="light-element" @pointerup=${this.onUp} @pointerdown=${this.onDown}>
+            <div  class="light-element" @click=${this.onClick}>
                 <light-icon ._light=${this._light}></light-icon>
                 ${name}
             </div>
-            <popout-window
-                title="${name}"
-                ?opened="${this.isModalOpen}"
-                @modal-closed="${this.handleModalClosed}"
-            >
-                <light-inner
-                    ._light=${this._light}
-                    .callService=${this.callService}
-                ></light-inner>
-            </popout-window>
         `
-    }
-
-    onDown() {
-        this._holding = true;
-        setTimeout(() => { this.onHold() }, this._HOLD_DURATION);
-    }
-
-    onUp() {
-        this._holding = false;
-    }
-
-    onHold() {
-        if (this._holding) {
-            this.isModalOpen = true;
-        }
-        else {
-            this.onClick();
-        }
-    }
-
-    handleModalClosed() {
-        this.isModalOpen = false;
     }
 
     onClick() {
@@ -88,4 +57,4 @@ export class LightComponent extends LitElement {
 
 }
 
-customElements.define("light-component", LightComponent);
+customElements.define("light-inner", LightComponent);
