@@ -8473,7 +8473,8 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
         `;
     }
     bSelected(light) {
-        this._bLight = light;
+        if (this._bLight === light) this._bLight = null;
+        else this._bLight = light;
     }
     // Lifecycle method to open/close the native dialog
     updated(changedProperties) {

@@ -78,7 +78,11 @@ export class PopoutWindow extends LitElement {
     }
 
     bSelected(light) {
-        this._bLight = light;
+        if (this._bLight === light) {
+            this._bLight = null;
+        } else {
+            this._bLight = light;
+        }
     }
 
     // Lifecycle method to open/close the native dialog
