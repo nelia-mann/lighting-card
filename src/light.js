@@ -60,7 +60,7 @@ export class LightComponent extends LitElement {
     render() {
         const name = this._light.attributes.friendly_name;
         return html`
-            <div @pointerup=${this.onUp} @pointerdown=${this.onDown}>
+            <div class="light-element" @pointerup=${this.onUp} @pointerdown=${this.onDown}>
                 ${this.icons()}
                 ${name}
             </div>

@@ -32,6 +32,24 @@ export class LightComponent extends LitElement {
         return icon;
     }
 
+    icons() {
+        let result;
+        const lights = this._light.members;
+        if (lights) {
+            result = lights.map((light) => {
+                return html`
+                    <light-icon ._light=${light}></light-icon>
+                `
+            })
+        }
+        else {
+            result = html`
+                <light-icon ._light=${this._light}></light-icon>
+            `
+        }
+        return result;
+    }
+
     // pull styles
     static styles = styles;
 
@@ -40,7 +58,7 @@ export class LightComponent extends LitElement {
         return html`
             <div class="light-row">
                 <div  class="light-element" @click=${this.onClick}>
-                    <light-icon ._light=${this._light}></light-icon>
+                    ${this.icons()}
                     ${name}
                 </div>
                 ${this.brightnessIcon()}

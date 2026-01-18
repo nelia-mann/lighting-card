@@ -1,7 +1,6 @@
 import { html, LitElement } from 'lit';
 import styles from './panel.styles.js';
 import './light.js';
-import './light-group.js'
 
 export class PanelComponent extends LitElement {
 
@@ -31,10 +30,10 @@ export class PanelComponent extends LitElement {
     groupLightDisplays() {
         return Object.values(this._lights.groups).map((value) => {
             return html`
-                <light-group-component
+                <light-component
                     ._light=${value}
                     .callService=${this.callService}
-                ></light-group-component>
+                ></light-component>
             `
         });
     }

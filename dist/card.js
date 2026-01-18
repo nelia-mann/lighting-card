@@ -8393,6 +8393,19 @@ class $2b5036ce56cc8e0c$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
             `;
         return icon;
     }
+    icons() {
+        let result;
+        const lights = this._light.members;
+        if (lights) result = lights.map((light)=>{
+            return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+                    <light-icon ._light=${light}></light-icon>
+                `;
+        });
+        else result = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+                <light-icon ._light=${this._light}></light-icon>
+            `;
+        return result;
+    }
     // pull styles
     static styles = (0, $fd69d66a3348dfcc$export$2e2bcd8739ae039);
     render() {
@@ -8400,7 +8413,7 @@ class $2b5036ce56cc8e0c$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
             <div class="light-row">
                 <div  class="light-element" @click=${this.onClick}>
-                    <light-icon ._light=${this._light}></light-icon>
+                    ${this.icons()}
                     ${name}
                 </div>
                 ${this.brightnessIcon()}
@@ -8466,7 +8479,7 @@ class $046ae152b1d9e254$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
     render() {
         const name = this._light.attributes.friendly_name;
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-            <div @pointerup=${this.onUp} @pointerdown=${this.onDown}>
+            <div class="light-element" @pointerup=${this.onUp} @pointerdown=${this.onDown}>
                 ${this.icons()}
                 ${name}
             </div>
@@ -8510,139 +8523,6 @@ class $046ae152b1d9e254$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
 customElements.define("light-component", $046ae152b1d9e254$export$5e33b198135dff7b);
 
 
-
-
-
-
-
-
-
-class $356e244835475c07$export$4f5500bed3757085 extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
-    static get properties() {
-        return {
-            _light: {
-                state: true
-            }
-        };
-    }
-    constructor(){
-        super();
-        this.isModalOpen = false;
-    }
-    static styles = (0, $fd69d66a3348dfcc$export$2e2bcd8739ae039);
-    icons() {
-        const lights = this._light.members;
-        return lights.map((light)=>{
-            return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-                <light-icon ._light=${light}></light-icon>
-            `;
-        });
-    }
-    render() {
-        const name = this._light.attributes.friendly_name;
-        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-            <div @click=${this.onClick}>
-                ${this.icons()}
-                ${name}
-            </div>
-        `;
-    }
-    onClick() {
-        const entityId = this._light.entity_id;
-        const data = {
-            entity_id: entityId
-        };
-        this.callService('light', 'toggle', data);
-    }
-}
-customElements.define("light-group-inner", $356e244835475c07$export$4f5500bed3757085);
-
-
-
-class $3de3c4907c023614$export$bc0d8e9b1cedf4f4 extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
-    _holding = false;
-    _HOLD_DURATION = 500;
-    static get properties() {
-        return {
-            _light: {
-                state: true
-            },
-            isModalOpen: {
-                type: Boolean
-            }
-        };
-    }
-    constructor(){
-        super();
-        this.isModalOpen = false;
-    }
-    static styles = (0, $fd69d66a3348dfcc$export$2e2bcd8739ae039);
-    icons() {
-        const lights = this._light.members;
-        return lights.map((light)=>{
-            return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-                <light-icon ._light=${light}></light-icon>
-            `;
-        });
-    }
-    lights() {
-        const lights = this._light.members;
-        return lights.map((light)=>{
-            return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-                <light-inner
-                    ._light=${light}
-                    .callService=${this.callService}
-                ></light-inner>
-                `;
-        });
-    }
-    render() {
-        const name = this._light.attributes.friendly_name;
-        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-            <div @pointerup=${this.onUp} @pointerdown=${this.onDown}>
-                ${this.icons()}
-                ${name}
-            </div>
-            <popout-window
-                title="${name}"
-                ?opened="${this.isModalOpen}"
-                @modal-closed="${this.handleModalClosed}"
-            >
-                <light-group-inner
-                    ._light=${this._light}
-                    .callService=${this.callService}
-                ></light-group-inner>
-                ${this.lights()}
-            </popout-window>
-        `;
-    }
-    onDown() {
-        this._holding = true;
-        setTimeout(()=>{
-            this.onHold();
-        }, this._HOLD_DURATION);
-    }
-    onUp() {
-        this._holding = false;
-    }
-    onHold() {
-        if (this._holding) this.isModalOpen = true;
-        else this.onClick();
-    }
-    handleModalClosed() {
-        this.isModalOpen = false;
-    }
-    onClick() {
-        const entityId = this._light.entity_id;
-        const data = {
-            entity_id: entityId
-        };
-        this.callService('light', 'toggle', data);
-    }
-}
-customElements.define("light-group-component", $3de3c4907c023614$export$bc0d8e9b1cedf4f4);
-
-
 class $fdede02cbd34666f$export$40073d408f029a0b extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
     static get properties() {
         return {
@@ -8668,10 +8548,10 @@ class $fdede02cbd34666f$export$40073d408f029a0b extends (0, $ab210b2da7b39b9d$ex
     groupLightDisplays() {
         return Object.values(this._lights.groups).map((value)=>{
             return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-                <light-group-component
+                <light-component
                     ._light=${value}
                     .callService=${this.callService}
-                ></light-group-component>
+                ></light-component>
             `;
         });
     }
