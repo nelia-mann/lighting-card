@@ -3,18 +3,25 @@ import { css } from 'lit';
 export default css`
 
     light-component {
-        border: solid 1px #e5e5e5;
-        border-radius: 12px;
-        height: 25px;
-        padding: 10px;
-        padding-top: 5px;
-        padding-bottom: 5px;
-        margin: 10px;
-        display: flex;
-        flex-flow: row nowrap;
     }
 
     light-inner {
+    }
+
+    .light-row {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .brightness-icon {
+        border: solid 1px #e5e5e5;
+        border-radius: 50%;
+        padding: 5px;
+    }
+
+    .light-element {
         border: solid 1px #e5e5e5;
         border-radius: 12px;
         height: 25px;

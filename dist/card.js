@@ -689,18 +689,25 @@ var $24833e213e3419f0$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 var $fd69d66a3348dfcc$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
 
     light-component {
-        border: solid 1px #e5e5e5;
-        border-radius: 12px;
-        height: 25px;
-        padding: 10px;
-        padding-top: 5px;
-        padding-bottom: 5px;
-        margin: 10px;
-        display: flex;
-        flex-flow: row nowrap;
     }
 
     light-inner {
+    }
+
+    .light-row {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .brightness-icon {
+        border: solid 1px #e5e5e5;
+        border-radius: 50%;
+        padding: 5px;
+    }
+
+    .light-element {
         border: solid 1px #e5e5e5;
         border-radius: 12px;
         height: 25px;
@@ -8374,6 +8381,7 @@ class $046ae152b1d9e254$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
     }
     constructor(){
         super();
+        this.isModalOpen = false;
     }
     getStyle() {
         let result;
@@ -8451,29 +8459,30 @@ class $2b5036ce56cc8e0c$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
     constructor(){
         super();
     }
-    getStyle() {
-        let result;
-        if (this._light.state === "off") result = `
-                color: #44739e;
-            `;
-        else result = `
-                color: #ffc107;;
-            `;
-        return result;
-    }
     isBrightness() {
         const result = this._light.attributes.brightness;
         return !(result === undefined);
+    }
+    brightnessIcon() {
+        let icon = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)``;
+        if (this.isBrightness()) icon = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+                <div class="brightness-icon">
+                    <ha-svg-icon .path=${0, $04557c061247a0a6$export$6ace9c955f434b80} ></ha-svg-icon>
+                </div>
+            `;
+        return icon;
     }
     // pull styles
     static styles = (0, $fd69d66a3348dfcc$export$2e2bcd8739ae039);
     render() {
         const name = this._light.attributes.friendly_name;
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-            <div  class="light-element" @click=${this.onClick}>
-                <light-icon ._light=${this._light}></light-icon>
-                ${name}
-                <ha-svg-icon .path=${0, $04557c061247a0a6$export$dea852a9f40b969} ></ha-svg-icon>
+            <div class="light-row">
+                <div  class="light-element" @click=${this.onClick}>
+                    <light-icon ._light=${this._light}></light-icon>
+                    ${name}
+                </div>
+                ${this.brightnessIcon()}
             </div>
         `;
     }

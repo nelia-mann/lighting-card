@@ -17,6 +17,7 @@ export class LightComponent extends LitElement {
 
     constructor() {
         super();
+        this.isModalOpen = false;
     }
 
     getStyle() {
