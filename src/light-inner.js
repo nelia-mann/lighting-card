@@ -25,11 +25,15 @@ export class LightComponent extends LitElement {
         if (this.isBrightness()) {
             icon = html`
                 <div class="brightness-icon">
-                    <ha-svg-icon .path=${mdiBrightness6} ></ha-svg-icon>
+                    <ha-svg-icon .path=${mdiBrightness6} @click=${this.onSelectB}></ha-svg-icon>
                 </div>
             `
         }
         return icon;
+    }
+
+    onSelectB() {
+        console.log("selected");
     }
 
     icons() {

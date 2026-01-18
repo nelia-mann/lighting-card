@@ -23,14 +23,13 @@ export default css`
 
     .light-element {
         border: solid 1px #e5e5e5;
+        width: 210px;
         border-radius: 12px;
-        height: 25px;
+        height: 21px;
         padding: 10px;
         padding-top: 5px;
         padding-bottom: 5px;
-        margin: 10px;
-        display: flex;
-        flex-flow: row nowrap;
+        margin: 7px;
     }
 
     light-group-component {

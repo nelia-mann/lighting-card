@@ -709,14 +709,13 @@ var $fd69d66a3348dfcc$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 
     .light-element {
         border: solid 1px #e5e5e5;
+        width: 210px;
         border-radius: 12px;
-        height: 25px;
+        height: 21px;
         padding: 10px;
         padding-top: 5px;
         padding-bottom: 5px;
-        margin: 10px;
-        display: flex;
-        flex-flow: row nowrap;
+        margin: 7px;
     }
 
     light-group-component {
@@ -8388,10 +8387,13 @@ class $2b5036ce56cc8e0c$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
         let icon = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)``;
         if (this.isBrightness()) icon = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
                 <div class="brightness-icon">
-                    <ha-svg-icon .path=${0, $04557c061247a0a6$export$6ace9c955f434b80} ></ha-svg-icon>
+                    <ha-svg-icon .path=${0, $04557c061247a0a6$export$6ace9c955f434b80} @click=${this.onSelectB}></ha-svg-icon>
                 </div>
             `;
         return icon;
+    }
+    onSelectB() {
+        console.log("selected");
     }
     icons() {
         let result;
