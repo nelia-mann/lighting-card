@@ -713,7 +713,7 @@ var $fd69d66a3348dfcc$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 
     .light-element {
         border: solid 1px #e5e5e5;
-        width: 210px;
+        width: 215px;
         border-radius: 12px;
         height: 21px;
         padding: 10px;

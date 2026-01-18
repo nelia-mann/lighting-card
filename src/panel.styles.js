@@ -27,7 +27,7 @@ export default css`
 
     .light-element {
         border: solid 1px #e5e5e5;
-        width: 210px;
+        width: 215px;
         border-radius: 12px;
         height: 21px;
         padding: 10px;
