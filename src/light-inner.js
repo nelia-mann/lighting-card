@@ -59,7 +59,6 @@ export class LightComponent extends LitElement {
     static styles = styles;
 
     render() {
-        console.log(this._isBSelected)
         const name = this._light.attributes.friendly_name;
         return html`
             <div class="light-row">

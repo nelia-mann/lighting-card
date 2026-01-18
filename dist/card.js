@@ -8378,7 +8378,6 @@ class $2b5036ce56cc8e0c$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
     // pull styles
     static styles = (0, $fd69d66a3348dfcc$export$2e2bcd8739ae039);
     render() {
-        console.log(this._isBSelected);
         const name = this._light.attributes.friendly_name;
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
             <div class="light-row">
@@ -8399,6 +8398,24 @@ class $2b5036ce56cc8e0c$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
     }
 }
 customElements.define("light-inner", $2b5036ce56cc8e0c$export$5e33b198135dff7b);
+
+
+
+class $22525f8c309ddf11$export$8e7f140c5ed569cb extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
+    static get properties() {
+        return {
+            _light: {
+                state: true
+            }
+        };
+    }
+    render() {
+        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+            <div>PING</div>
+        `;
+    }
+}
+customElements.define("brightness-bar", $22525f8c309ddf11$export$8e7f140c5ed569cb);
 
 
 class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
@@ -8442,7 +8459,7 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
     }
     brightnessBar() {
         let result = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)``;
-        if (this._bLight) result = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<div>ping</div>`;
+        if (this._bLight) result = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<brightness-bar ._light=${this._bLight}></brightness-bar>`;
         return result;
     }
     isBSelected(light) {

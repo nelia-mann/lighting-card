@@ -2,6 +2,7 @@ import { html, LitElement } from 'lit';
 import { mdiCloseCircleOutline } from '@mdi/js';
 import styles from './popout.styles.js';
 import './light-inner.js';
+import './brightness-bar.js'
 
 export class PopoutWindow extends LitElement {
 
@@ -43,7 +44,7 @@ export class PopoutWindow extends LitElement {
     brightnessBar() {
         let result = html``;
         if (this._bLight) {
-            result = html`<div>ping</div>`
+            result = html`<brightness-bar ._light=${this._bLight}></brightness-bar>`
         }
         return result;
     }
