@@ -41,22 +41,6 @@ export class LightComponent extends LitElement {
         return result;
     }
 
-    lights() {
-        const lights = this._light.members;
-        let result = html``;
-        if (lights) {
-            result = lights.map((light) => {
-                return html`
-                    <light-inner
-                        ._light=${light}
-                        .callService=${this.callService}
-                    ></light-inner>
-                    `
-                })
-        }
-        return result;
-    }
-
     render() {
         const name = this._light.attributes.friendly_name;
         return html`
@@ -68,13 +52,9 @@ export class LightComponent extends LitElement {
                 title="${name}"
                 ?opened="${this.isModalOpen}"
                 @modal-closed="${this.handleModalClosed}"
-            >
-                <light-inner
-                    ._light=${this._light}
-                    .callService=${this.callService}
-                ></light-inner>
-                ${this.lights()}
-            </popout-window>
+                ._light="${this._light}"
+                .callService="${this.callService}"
+            ></popout-window>
         `
     }
 

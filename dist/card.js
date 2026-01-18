@@ -8263,105 +8263,58 @@ customElements.define("light-icon", $4356f78c5c3f665b$export$82acdd66a4e4bf90);
 
 
 
-class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
-    static get properties() {
-        return {
-            opened: {
-                type: Boolean,
-                reflect: true
-            },
-            title: {
-                type: String
-            }
-        };
+
+var $84adf0e0aa3f1db7$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
+    dialog {
+        border: 1px solid #ccc;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        /* Backdrop styling using ::backdrop pseudo-element */
     }
-    static styles = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
-        dialog {
-            border: 1px solid #ccc;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            /* Backdrop styling using ::backdrop pseudo-element */
-        }
 
-        dialog[open] {
-            display: flex;
-            flex-flow: column nowrap;
-            justify-content: space-between;
-            align-items: center;
-            overflow: hidden;
-        }
-
-        dialog::backdrop {
-            background-color: rgba(0, 0, 0, 0.5);
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 20px;
-            margin-top: -10px;
-            background: none;
-            padding-top: none;
-            padding-bottom: none;
-            height: 40px;
-        }
-
-        .close-button {
-            background: none;
-            font-size: 15px;
-            padding: none;
-            cursor: pointer;
-            margin-left: 20px;
-            margin-right: -30px;
-            border: none;
-        }
-
-        .modal-content {
-            width: 100%;
-            display: flex;
-            flex-flow: column nowrap;
-            align-items: flex-start;
-            justify-content: center;
-        }
-
-    `;
-    render() {
-        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-        <dialog @close="${this._handleClose}">
-            <div class="modal-header">
-                <h1>${this.title}</h1>
-                <button class="close-button" @click="${this.closeModal}" aria-label="Close modal">
-                    <ha-svg-icon .path=${0, $04557c061247a0a6$export$cdf8f7e64334eb05}"></ha-svg-icon>
-                </button>
-            </div>
-            <div class="modal-content">
-                <!-- Content is passed via <slot> -->
-                <slot></slot>
-            </div>
-        </dialog>
-        `;
+    dialog[open] {
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: space-between;
+        align-items: center;
+        overflow: hidden;
     }
-    // Lifecycle method to open/close the native dialog
-    updated(changedProperties) {
-        if (changedProperties.has('opened')) {
-            const dialog = this.shadowRoot.querySelector('dialog');
-            if (this.opened) dialog.showModal(); // Opens the dialog modally, disabling content behind it
-            else dialog.close();
-        }
+
+    dialog::backdrop {
+        background-color: rgba(0, 0, 0, 0.5);
     }
-    closeModal() {
-        this.opened = false;
-        // Optional: dispatch a custom event when closing from inside the modal
-        this.dispatchEvent(new CustomEvent('modal-closed'));
+
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 20px;
+        margin-top: -10px;
+        background: none;
+        padding-top: none;
+        padding-bottom: none;
+        height: 40px;
     }
-    _handleClose() {
-        // Sync property if closed via the native Esc key
-        if (this.opened) this.opened = false;
+
+    .close-button {
+        background: none;
+        font-size: 15px;
+        padding: none;
+        cursor: pointer;
+        margin-left: 20px;
+        margin-right: -30px;
+        border: none;
     }
-}
-customElements.define("popout-window", $4b68482a6361126c$export$506b69e3dcbd131b);
+
+    .modal-content {
+        width: 100%;
+        display: flex;
+        flex-flow: column nowrap;
+        align-items: flex-start;
+        justify-content: center;
+    }
+`;
 
 
 
@@ -8433,6 +8386,75 @@ class $2b5036ce56cc8e0c$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
 customElements.define("light-inner", $2b5036ce56cc8e0c$export$5e33b198135dff7b);
 
 
+class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
+    static get properties() {
+        return {
+            opened: {
+                type: Boolean,
+                reflect: true
+            },
+            title: {
+                type: String
+            },
+            _light: {
+                state: true
+            }
+        };
+    }
+    static styles = (0, $84adf0e0aa3f1db7$export$2e2bcd8739ae039);
+    lights() {
+        const lights = this._light.members;
+        let result = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)``;
+        if (lights) result = lights.map((light)=>{
+            return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+                    <light-inner
+                        ._light=${light}
+                        .callService=${this.callService}
+                    ></light-inner>
+                    `;
+        });
+        return result;
+    }
+    render() {
+        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+        <dialog @close="${this._handleClose}">
+            <div class="modal-header">
+                <h1>${this.title}</h1>
+                <button class="close-button" @click="${this.closeModal}" aria-label="Close modal">
+                    <ha-svg-icon .path=${0, $04557c061247a0a6$export$cdf8f7e64334eb05}"></ha-svg-icon>
+                </button>
+            </div>
+            <div class="modal-content">
+                <light-inner
+                    ._light=${this._light}
+                    .callService=${this.callService}
+                ></light-inner>
+                ${this.lights()}
+            </div>
+        </dialog>
+        `;
+    }
+    // Lifecycle method to open/close the native dialog
+    updated(changedProperties) {
+        if (changedProperties.has('opened')) {
+            const dialog = this.shadowRoot.querySelector('dialog');
+            if (this.opened) dialog.showModal(); // Opens the dialog modally, disabling content behind it
+            else dialog.close();
+        }
+    }
+    closeModal() {
+        this.opened = false;
+        // Optional: dispatch a custom event when closing from inside the modal
+        this.dispatchEvent(new CustomEvent('modal-closed'));
+    }
+    _handleClose() {
+        if (this.opened) this.closeModal();
+    }
+}
+customElements.define("popout-window", $4b68482a6361126c$export$506b69e3dcbd131b);
+
+
+
 
 class $046ae152b1d9e254$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
     _holding = false;
@@ -8465,19 +8487,6 @@ class $046ae152b1d9e254$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
             `;
         return result;
     }
-    lights() {
-        const lights = this._light.members;
-        let result = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)``;
-        if (lights) result = lights.map((light)=>{
-            return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-                    <light-inner
-                        ._light=${light}
-                        .callService=${this.callService}
-                    ></light-inner>
-                    `;
-        });
-        return result;
-    }
     render() {
         const name = this._light.attributes.friendly_name;
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
@@ -8489,13 +8498,9 @@ class $046ae152b1d9e254$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
                 title="${name}"
                 ?opened="${this.isModalOpen}"
                 @modal-closed="${this.handleModalClosed}"
-            >
-                <light-inner
-                    ._light=${this._light}
-                    .callService=${this.callService}
-                ></light-inner>
-                ${this.lights()}
-            </popout-window>
+                ._light="${this._light}"
+                .callService="${this.callService}"
+            ></popout-window>
         `;
     }
     onDown() {
