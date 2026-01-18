@@ -1,6 +1,7 @@
 import { html, LitElement } from 'lit';
 import './light-icon.js';
 import styles from './panel.styles';
+import { mdiLightbulb } from '@mdi/js';
 
 export class LightComponent extends LitElement {
 
@@ -38,11 +39,11 @@ export class LightComponent extends LitElement {
 
     render() {
         const name = this._light.attributes.friendly_name;
-        console.log(name, this.isBrightness());
         return html`
             <div  class="light-element" @click=${this.onClick}>
                 <light-icon ._light=${this._light}></light-icon>
                 ${name}
+                <ha-svg-icon .path=${mdiLightbulb} ></ha-svg-icon>
             </div>
         `
     }

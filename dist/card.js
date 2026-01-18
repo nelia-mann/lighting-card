@@ -8439,6 +8439,7 @@ customElements.define("light-component", $046ae152b1d9e254$export$5e33b198135dff
 
 
 
+
 class $2b5036ce56cc8e0c$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
     static get properties() {
         return {
@@ -8468,11 +8469,11 @@ class $2b5036ce56cc8e0c$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
     static styles = (0, $fd69d66a3348dfcc$export$2e2bcd8739ae039);
     render() {
         const name = this._light.attributes.friendly_name;
-        console.log(name, this.isBrightness());
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
             <div  class="light-element" @click=${this.onClick}>
                 <light-icon ._light=${this._light}></light-icon>
                 ${name}
+                <ha-svg-icon .path=${0, $04557c061247a0a6$export$dea852a9f40b969} ></ha-svg-icon>
             </div>
         `;
     }
