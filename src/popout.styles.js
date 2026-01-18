@@ -57,4 +57,9 @@ export default css`
         align-items: flex-start;
         justify-content: center;
     }
+
+    brightness-bar {
+        border: solid;
+        margin-left: 100px;
+    }
 `;

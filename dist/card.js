@@ -8325,6 +8325,11 @@ var $84adf0e0aa3f1db7$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         align-items: flex-start;
         justify-content: center;
     }
+
+    brightness-bar {
+        border: solid;
+        margin-left: 100px;
+    }
 `;
 
 
@@ -8459,7 +8464,10 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
     }
     brightnessBar() {
         let result = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)``;
-        if (this._bLight) result = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<brightness-bar ._light=${this._bLight}></brightness-bar>`;
+        if (this._bLight) result = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<brightness-bar
+                    ._light=${this._bLight}
+                    .callService=${this.callService}
+                ></brightness-bar>`;
         return result;
     }
     isBSelected(light) {

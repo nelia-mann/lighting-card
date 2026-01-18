@@ -44,7 +44,10 @@ export class PopoutWindow extends LitElement {
     brightnessBar() {
         let result = html``;
         if (this._bLight) {
-            result = html`<brightness-bar ._light=${this._bLight}></brightness-bar>`
+            result = html`<brightness-bar
+                    ._light=${this._bLight}
+                    .callService=${this.callService}
+                ></brightness-bar>`
         }
         return result;
     }
