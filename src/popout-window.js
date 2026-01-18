@@ -9,8 +9,14 @@ export class PopoutWindow extends LitElement {
         return {
             opened: { type: Boolean, reflect: true },
             title: { type: String },
-            _light: { state: true }
+            _light: { state: true },
+            _bLight: { state: true }
         }
+    }
+
+    constructor() {
+        super();
+        this._bLight = null;
     }
 
     static styles = styles;
@@ -54,8 +60,7 @@ export class PopoutWindow extends LitElement {
     }
 
     bSelected(light) {
-        console.log("message received");
-        console.log(light)
+        this._bLight = light;
     }
 
     // Lifecycle method to open/close the native dialog

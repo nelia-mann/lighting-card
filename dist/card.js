@@ -8398,8 +8398,15 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
             },
             _light: {
                 state: true
+            },
+            _bLight: {
+                state: true
             }
         };
+    }
+    constructor(){
+        super();
+        this._bLight = null;
     }
     static styles = (0, $84adf0e0aa3f1db7$export$2e2bcd8739ae039);
     lights() {
@@ -8437,8 +8444,7 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
         `;
     }
     bSelected(light) {
-        console.log("message received");
-        console.log(light);
+        this._bLight = light;
     }
     // Lifecycle method to open/close the native dialog
     updated(changedProperties) {
