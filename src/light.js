@@ -1,7 +1,8 @@
 import { html, LitElement } from 'lit';
 import './light-icon.js';
 import './popout-window.js';
-import styles from './panel.styles';
+import './light-inner.js';
+import styles from './panel.styles.js';
 
 export class LightComponent extends LitElement {
 
@@ -11,7 +12,7 @@ export class LightComponent extends LitElement {
     static get properties() {
         return {
             _light: { state: true },
-            isModalOpen: { type: Boolean }
+            isModalOpen: { type: Boolean},
         }
     }
 
@@ -20,28 +21,47 @@ export class LightComponent extends LitElement {
         this.isModalOpen = false;
     }
 
-    getStyle() {
+    static styles = styles;
+
+    icons() {
         let result;
-        if (this._light.state === "off") {
-            result = `
-                color: #44739e;
-            `
-        } else {
-            result = `
-                color: #ffc107;;
+        const lights = this._light.members;
+        if (lights) {
+            result = lights.map((light) => {
+                return html`
+                    <light-icon ._light=${light}></light-icon>
+                `
+            })
+        }
+        else {
+            result = html`
+                <light-icon ._light=${this._light}></light-icon>
             `
         }
         return result;
     }
 
-    // pull styles
-    static styles = styles;
+    lights() {
+        const lights = this._light.members;
+        let result = html``;
+        if (lights) {
+            result = lights.map((light) => {
+                return html`
+                    <light-inner
+                        ._light=${light}
+                        .callService=${this.callService}
+                    ></light-inner>
+                    `
+                })
+        }
+        return result;
+    }
 
     render() {
         const name = this._light.attributes.friendly_name;
         return html`
-            <div  class="light-element" @pointerup=${this.onUp} @pointerdown=${this.onDown}>
-                <light-icon ._light=${this._light}></light-icon>
+            <div @pointerup=${this.onUp} @pointerdown=${this.onDown}>
+                ${this.icons()}
                 ${name}
             </div>
             <popout-window
@@ -53,6 +73,7 @@ export class LightComponent extends LitElement {
                     ._light=${this._light}
                     .callService=${this.callService}
                 ></light-inner>
+                ${this.lights()}
             </popout-window>
         `
     }

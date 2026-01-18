@@ -8366,85 +8366,6 @@ customElements.define("popout-window", $4b68482a6361126c$export$506b69e3dcbd131b
 
 
 
-class $046ae152b1d9e254$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
-    _holding = false;
-    _HOLD_DURATION = 500;
-    static get properties() {
-        return {
-            _light: {
-                state: true
-            },
-            isModalOpen: {
-                type: Boolean
-            }
-        };
-    }
-    constructor(){
-        super();
-        this.isModalOpen = false;
-    }
-    getStyle() {
-        let result;
-        if (this._light.state === "off") result = `
-                color: #44739e;
-            `;
-        else result = `
-                color: #ffc107;;
-            `;
-        return result;
-    }
-    // pull styles
-    static styles = (0, $fd69d66a3348dfcc$export$2e2bcd8739ae039);
-    render() {
-        const name = this._light.attributes.friendly_name;
-        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-            <div  class="light-element" @pointerup=${this.onUp} @pointerdown=${this.onDown}>
-                <light-icon ._light=${this._light}></light-icon>
-                ${name}
-            </div>
-            <popout-window
-                title="${name}"
-                ?opened="${this.isModalOpen}"
-                @modal-closed="${this.handleModalClosed}"
-            >
-                <light-inner
-                    ._light=${this._light}
-                    .callService=${this.callService}
-                ></light-inner>
-            </popout-window>
-        `;
-    }
-    onDown() {
-        this._holding = true;
-        setTimeout(()=>{
-            this.onHold();
-        }, this._HOLD_DURATION);
-    }
-    onUp() {
-        this._holding = false;
-    }
-    onHold() {
-        if (this._holding) this.isModalOpen = true;
-        else this.onClick();
-    }
-    handleModalClosed() {
-        this.isModalOpen = false;
-    }
-    onClick() {
-        const entityId = this._light.entity_id;
-        const data = {
-            entity_id: entityId
-        };
-        this.callService('light', 'toggle', data);
-    }
-}
-customElements.define("light-component", $046ae152b1d9e254$export$5e33b198135dff7b);
-
-
-
-
-
-
 
 
 
@@ -8495,6 +8416,102 @@ class $2b5036ce56cc8e0c$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
     }
 }
 customElements.define("light-inner", $2b5036ce56cc8e0c$export$5e33b198135dff7b);
+
+
+
+class $046ae152b1d9e254$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
+    _holding = false;
+    _HOLD_DURATION = 500;
+    static get properties() {
+        return {
+            _light: {
+                state: true
+            },
+            isModalOpen: {
+                type: Boolean
+            }
+        };
+    }
+    constructor(){
+        super();
+        this.isModalOpen = false;
+    }
+    static styles = (0, $fd69d66a3348dfcc$export$2e2bcd8739ae039);
+    icons() {
+        let result;
+        const lights = this._light.members;
+        if (lights) result = lights.map((light)=>{
+            return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+                    <light-icon ._light=${light}></light-icon>
+                `;
+        });
+        else result = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+                <light-icon ._light=${this._light}></light-icon>
+            `;
+        return result;
+    }
+    lights() {
+        const lights = this._light.members;
+        let result = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)``;
+        if (lights) result = lights.map((light)=>{
+            return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+                    <light-inner
+                        ._light=${light}
+                        .callService=${this.callService}
+                    ></light-inner>
+                    `;
+        });
+        return result;
+    }
+    render() {
+        const name = this._light.attributes.friendly_name;
+        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+            <div @pointerup=${this.onUp} @pointerdown=${this.onDown}>
+                ${this.icons()}
+                ${name}
+            </div>
+            <popout-window
+                title="${name}"
+                ?opened="${this.isModalOpen}"
+                @modal-closed="${this.handleModalClosed}"
+            >
+                <light-inner
+                    ._light=${this._light}
+                    .callService=${this.callService}
+                ></light-inner>
+                ${this.lights()}
+            </popout-window>
+        `;
+    }
+    onDown() {
+        this._holding = true;
+        setTimeout(()=>{
+            this.onHold();
+        }, this._HOLD_DURATION);
+    }
+    onUp() {
+        this._holding = false;
+    }
+    onHold() {
+        if (this._holding) this.isModalOpen = true;
+        else this.onClick();
+    }
+    handleModalClosed() {
+        this.isModalOpen = false;
+    }
+    onClick() {
+        const entityId = this._light.entity_id;
+        const data = {
+            entity_id: entityId
+        };
+        this.callService('light', 'toggle', data);
+    }
+}
+customElements.define("light-component", $046ae152b1d9e254$export$5e33b198135dff7b);
+
+
+
+
 
 
 
