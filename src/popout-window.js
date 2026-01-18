@@ -24,6 +24,7 @@ export class PopoutWindow extends LitElement {
                     <light-inner
                         ._light=${light}
                         .callService=${this.callService}
+                        @bSelected=${() => this.bSelected(light)}
                     ></light-inner>
                     `
                 })
@@ -44,11 +45,17 @@ export class PopoutWindow extends LitElement {
                 <light-inner
                     ._light=${this._light}
                     .callService=${this.callService}
+                    @bSelected=${() => this.bSelected(this._light)}
                 ></light-inner>
                 ${this.lights()}
             </div>
         </dialog>
         `;
+    }
+
+    bSelected(light) {
+        console.log("message received");
+        console.log(light)
     }
 
     // Lifecycle method to open/close the native dialog

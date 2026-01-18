@@ -8346,7 +8346,7 @@ class $2b5036ce56cc8e0c$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
         return icon;
     }
     onSelectB() {
-        console.log("selected");
+        this.dispatchEvent(new CustomEvent('bSelected'));
     }
     icons() {
         let result;
@@ -8410,6 +8410,7 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
                     <light-inner
                         ._light=${light}
                         .callService=${this.callService}
+                        @bSelected=${()=>this.bSelected(light)}
                     ></light-inner>
                     `;
         });
@@ -8428,11 +8429,16 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
                 <light-inner
                     ._light=${this._light}
                     .callService=${this.callService}
+                    @bSelected=${()=>this.bSelected(this._light)}
                 ></light-inner>
                 ${this.lights()}
             </div>
         </dialog>
         `;
+    }
+    bSelected(light) {
+        console.log("message received");
+        console.log(light);
     }
     // Lifecycle method to open/close the native dialog
     updated(changedProperties) {

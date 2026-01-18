@@ -33,7 +33,7 @@ export class LightComponent extends LitElement {
     }
 
     onSelectB() {
-        console.log("selected");
+        this.dispatchEvent(new CustomEvent('bSelected'));
     }
 
     icons() {
