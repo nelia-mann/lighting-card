@@ -21,6 +21,10 @@ export default css`
         padding: 5px;
     }
 
+    .brightness-icon.true {
+        outline: solid rgb(0,0,0);
+    }
+
     .light-element {
         border: solid 1px #e5e5e5;
         width: 210px;

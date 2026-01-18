@@ -1,4 +1,4 @@
-import { html, LitElement, css } from 'lit';
+import { html, LitElement } from 'lit';
 import { mdiCloseCircleOutline } from '@mdi/js';
 import styles from './popout.styles.js';
 import './light-inner.js';
@@ -28,14 +28,28 @@ export class PopoutWindow extends LitElement {
             result = lights.map((light) => {
                 return html`
                     <light-inner
+                        id=${light}
                         ._light=${light}
                         .callService=${this.callService}
                         @bSelected=${() => this.bSelected(light)}
+                        ._isBSelected=${this.isBSelected(light)}
                     ></light-inner>
                     `
                 })
         }
         return result;
+    }
+
+    brightnessBar() {
+        let result = html``;
+        if (this._bLight) {
+            result = html`<div>ping</div>`
+        }
+        return result;
+    }
+
+    isBSelected(light) {
+        return (this._bLight === light)
     }
 
     render() {
@@ -47,13 +61,17 @@ export class PopoutWindow extends LitElement {
                     <ha-svg-icon .path=${mdiCloseCircleOutline}"></ha-svg-icon>
                 </button>
             </div>
-            <div class="modal-content">
-                <light-inner
-                    ._light=${this._light}
-                    .callService=${this.callService}
-                    @bSelected=${() => this.bSelected(this._light)}
-                ></light-inner>
-                ${this.lights()}
+            <div class="content-row">
+                <div class="modal-content">
+                    <light-inner
+                        ._light=${this._light}
+                        .callService=${this.callService}
+                        @bSelected=${() => this.bSelected(this._light)}
+                        ._isBSelected=${this.isBSelected(this._light)}
+                    ></light-inner>
+                    ${this.lights()}
+                </div>
+                ${this.brightnessBar()}
             </div>
         </dialog>
         `;

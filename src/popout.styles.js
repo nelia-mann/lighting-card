@@ -12,7 +12,7 @@ export default css`
     dialog[open] {
         display: flex;
         flex-flow: column nowrap;
-        justify-content: space-between;
+        justify-content: center;
         align-items: center;
         overflow: hidden;
     }
@@ -41,6 +41,13 @@ export default css`
         margin-left: 20px;
         margin-right: -30px;
         border: none;
+    }
+
+    .content-row {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-around;
+        align-items: center;
     }
 
     .modal-content {

@@ -707,6 +707,10 @@ var $fd69d66a3348dfcc$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         padding: 5px;
     }
 
+    .brightness-icon.true {
+        outline: solid rgb(0,0,0);
+    }
+
     .light-element {
         border: solid 1px #e5e5e5;
         width: 210px;
@@ -8276,7 +8280,7 @@ var $84adf0e0aa3f1db7$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
     dialog[open] {
         display: flex;
         flex-flow: column nowrap;
-        justify-content: space-between;
+        justify-content: center;
         align-items: center;
         overflow: hidden;
     }
@@ -8307,6 +8311,13 @@ var $84adf0e0aa3f1db7$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         border: none;
     }
 
+    .content-row {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-around;
+        align-items: center;
+    }
+
     .modal-content {
         width: 100%;
         display: flex;
@@ -8326,6 +8337,9 @@ class $2b5036ce56cc8e0c$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
         return {
             _light: {
                 state: true
+            },
+            _isBSelected: {
+                state: true
             }
         };
     }
@@ -8339,7 +8353,7 @@ class $2b5036ce56cc8e0c$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
     brightnessIcon() {
         let icon = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)``;
         if (this.isBrightness()) icon = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-                <div class="brightness-icon">
+                <div class="brightness-icon ${this._isBSelected}">
                     <ha-svg-icon .path=${0, $04557c061247a0a6$export$6ace9c955f434b80} @click=${this.onSelectB}></ha-svg-icon>
                 </div>
             `;
@@ -8364,6 +8378,7 @@ class $2b5036ce56cc8e0c$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
     // pull styles
     static styles = (0, $fd69d66a3348dfcc$export$2e2bcd8739ae039);
     render() {
+        console.log(this._isBSelected);
         const name = this._light.attributes.friendly_name;
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
             <div class="light-row">
@@ -8415,13 +8430,23 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
         if (lights) result = lights.map((light)=>{
             return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
                     <light-inner
+                        id=${light}
                         ._light=${light}
                         .callService=${this.callService}
                         @bSelected=${()=>this.bSelected(light)}
+                        ._isBSelected=${this.isBSelected(light)}
                     ></light-inner>
                     `;
         });
         return result;
+    }
+    brightnessBar() {
+        let result = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)``;
+        if (this._bLight) result = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<div>ping</div>`;
+        return result;
+    }
+    isBSelected(light) {
+        return this._bLight === light;
     }
     render() {
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
@@ -8432,13 +8457,17 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
                     <ha-svg-icon .path=${0, $04557c061247a0a6$export$cdf8f7e64334eb05}"></ha-svg-icon>
                 </button>
             </div>
-            <div class="modal-content">
-                <light-inner
-                    ._light=${this._light}
-                    .callService=${this.callService}
-                    @bSelected=${()=>this.bSelected(this._light)}
-                ></light-inner>
-                ${this.lights()}
+            <div class="content-row">
+                <div class="modal-content">
+                    <light-inner
+                        ._light=${this._light}
+                        .callService=${this.callService}
+                        @bSelected=${()=>this.bSelected(this._light)}
+                        ._isBSelected=${this.isBSelected(this._light)}
+                    ></light-inner>
+                    ${this.lights()}
+                </div>
+                ${this.brightnessBar()}
             </div>
         </dialog>
         `;
@@ -8464,7 +8493,6 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
     }
 }
 customElements.define("popout-window", $4b68482a6361126c$export$506b69e3dcbd131b);
-
 
 
 

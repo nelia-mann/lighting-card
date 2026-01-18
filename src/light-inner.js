@@ -8,6 +8,7 @@ export class LightComponent extends LitElement {
     static get properties() {
         return {
             _light: { state: true },
+            _isBSelected: {state: true }
         }
     }
 
@@ -24,7 +25,7 @@ export class LightComponent extends LitElement {
         let icon = html``;
         if (this.isBrightness()) {
             icon = html`
-                <div class="brightness-icon">
+                <div class="brightness-icon ${this._isBSelected}">
                     <ha-svg-icon .path=${mdiBrightness6} @click=${this.onSelectB}></ha-svg-icon>
                 </div>
             `
@@ -58,6 +59,7 @@ export class LightComponent extends LitElement {
     static styles = styles;
 
     render() {
+        console.log(this._isBSelected)
         const name = this._light.attributes.friendly_name;
         return html`
             <div class="light-row">
