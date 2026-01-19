@@ -709,6 +709,7 @@ var $fd69d66a3348dfcc$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 
     .brightness-icon.true {
         outline: solid rgb(0,0,0);
+        outline-offset: -4px;
     }
 
     .light-element {
@@ -8285,6 +8286,10 @@ var $84adf0e0aa3f1db7$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         overflow: hidden;
     }
 
+    h1 {
+        font-weight: 400;
+    }
+
     dialog::backdrop {
         background-color: rgba(0, 0, 0, 0.5);
     }
@@ -8327,8 +8332,11 @@ var $84adf0e0aa3f1db7$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
     }
 
     brightness-bar {
-        border: solid;
-        margin-left: 100px;
+        border: solid 1px #e5e5e5;
+        margin-left: 20px;
+        height: 200px;
+        width: 30px;
+        border-radius: 12px;
     }
 `;
 
@@ -8406,6 +8414,20 @@ customElements.define("light-inner", $2b5036ce56cc8e0c$export$5e33b198135dff7b);
 
 
 
+
+var $533b43d098d21d4e$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
+
+    input[type="range"] {
+        writing-mode: vertical-lr;
+        direction: rtl;
+        height: 100%;
+        opacity: 1;
+    }
+
+
+`;
+
+
 class $22525f8c309ddf11$export$8e7f140c5ed569cb extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
     static get properties() {
         return {
@@ -8414,9 +8436,29 @@ class $22525f8c309ddf11$export$8e7f140c5ed569cb extends (0, $ab210b2da7b39b9d$ex
             }
         };
     }
+    constructor(){
+        super();
+    }
+    static styles = (0, $533b43d098d21d4e$export$2e2bcd8739ae039);
+    handleOnChange(e) {
+        const value = e.target.value;
+        const entityId = this._light.entity_id;
+        const data = {
+            entity_id: entityId,
+            brightness: value
+        };
+        this.callService('light', 'turn_on', data);
+    }
     render() {
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-            <div>PING</div>
+            <input
+                type="range"
+                id="brightness"
+                max="255"
+                min="0"
+                value="${this._light.attributes.brightness}"
+                @change="${this.handleOnChange}"
+            ></input>
         `;
     }
 }
@@ -8443,7 +8485,6 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
     }
     constructor(){
         super();
-        this._bLight = null;
     }
     static styles = (0, $84adf0e0aa3f1db7$export$2e2bcd8739ae039);
     lights() {
@@ -8471,9 +8512,11 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
         return result;
     }
     isBSelected(light) {
-        return this._bLight === light;
+        if (this._bLight) return this._bLight.entity_id === light.entity_id;
+        else return false;
     }
     render() {
+        // console.log(this._bLight)
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
         <dialog @close="${this._handleClose}">
             <div class="modal-header">

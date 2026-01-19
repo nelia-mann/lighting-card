@@ -23,6 +23,7 @@ export default css`
 
     .brightness-icon.true {
         outline: solid rgb(0,0,0);
+        outline-offset: -4px;
     }
 
     .light-element {

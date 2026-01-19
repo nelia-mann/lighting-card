@@ -17,6 +17,10 @@ export default css`
         overflow: hidden;
     }
 
+    h1 {
+        font-weight: 400;
+    }
+
     dialog::backdrop {
         background-color: rgba(0, 0, 0, 0.5);
     }
@@ -59,7 +63,10 @@ export default css`
     }
 
     brightness-bar {
-        border: solid;
-        margin-left: 100px;
+        border: solid 1px #e5e5e5;
+        margin-left: 20px;
+        height: 200px;
+        width: 30px;
+        border-radius: 12px;
     }
 `;

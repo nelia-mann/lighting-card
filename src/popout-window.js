@@ -1,5 +1,5 @@
 import { html, LitElement } from 'lit';
-import { mdiCloseCircleOutline } from '@mdi/js';
+import { mdiCloseCircleOutline, mdiImageFilterHdrOutline } from '@mdi/js';
 import styles from './popout.styles.js';
 import './light-inner.js';
 import './brightness-bar.js'
@@ -17,7 +17,6 @@ export class PopoutWindow extends LitElement {
 
     constructor() {
         super();
-        this._bLight = null;
     }
 
     static styles = styles;
@@ -53,10 +52,15 @@ export class PopoutWindow extends LitElement {
     }
 
     isBSelected(light) {
-        return (this._bLight === light)
+        if (this._bLight) {
+            return (this._bLight.entity_id === light.entity_id);
+        } else {
+            return false;
+        }
     }
 
     render() {
+        // console.log(this._bLight)
         return html`
         <dialog @close="${this._handleClose}">
             <div class="modal-header">
