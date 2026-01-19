@@ -8332,6 +8332,7 @@ var $84adf0e0aa3f1db7$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
     }
 
     brightness-bar {
+        position: relative;
         border: solid 1px #e5e5e5;
         margin-left: 20px;
         height: 200px;
@@ -8418,10 +8419,35 @@ customElements.define("light-inner", $2b5036ce56cc8e0c$export$5e33b198135dff7b);
 var $533b43d098d21d4e$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
 
     input[type="range"] {
+        position: absolute;
+        top: 5%;
+        left: 0%;
         writing-mode: vertical-lr;
         direction: rtl;
-        height: 100%;
-        opacity: 1;
+        height: 95%;
+        opacity: 0;
+    }
+
+    .background-bar {
+        position: absolute;
+        top: 5%;
+        left: 0%;
+        width: 100%;
+        height: 95%;
+        border-radius: 12px;
+    }
+
+    .filled {
+        height: var(--height);
+        background-color: rgb(255, 193, 7);
+        border-bottom-left-radius: 12px;
+        border-bottom-right-radius: 12px;
+    }
+
+    .empty {
+        height: var(--depth);
+        background-color: none;
+        border-radius: 12px;
     }
 
 
@@ -8432,6 +8458,9 @@ class $22525f8c309ddf11$export$8e7f140c5ed569cb extends (0, $ab210b2da7b39b9d$ex
     static get properties() {
         return {
             _light: {
+                state: true
+            },
+            _brightness: {
                 state: true
             }
         };
@@ -8448,9 +8477,21 @@ class $22525f8c309ddf11$export$8e7f140c5ed569cb extends (0, $ab210b2da7b39b9d$ex
             brightness: value
         };
         this.callService('light', 'turn_on', data);
+        this._brightness = value;
+    }
+    getBrightness() {
+        if (this._brightness) return this._brightness;
+        else return this._light.attributes.brightness;
+    }
+    getHeight() {
+        return 100 * this.getBrightness() / 255;
     }
     render() {
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+            <div class="background-bar">
+                <div class="empty" style="--depth: ${100 - this.getHeight()}%"></div>
+                <div class="filled" style="--height: ${this.getHeight()}%"></div>
+            </div>
             <input
                 type="range"
                 id="brightness"

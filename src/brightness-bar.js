@@ -8,6 +8,7 @@ export class BrightnessBar extends LitElement {
     static get properties() {
         return {
             _light: { state: true },
+            _brightness: { state: true }
         }
     }
 
@@ -25,10 +26,28 @@ export class BrightnessBar extends LitElement {
             brightness: value
         }
         this.callService('light', 'turn_on', data);
+        this._brightness = value;
+    }
+
+    getBrightness() {
+        if (this._brightness) {
+            return this._brightness;
+        }
+        else {
+            return this._light.attributes.brightness;
+        }
+    }
+
+    getHeight() {
+        return 100 * this.getBrightness() / 255
     }
 
     render() {
         return html`
+            <div class="background-bar">
+                <div class="empty" style="--depth: ${100 - this.getHeight()}%"></div>
+                <div class="filled" style="--height: ${this.getHeight()}%"></div>
+            </div>
             <input
                 type="range"
                 id="brightness"

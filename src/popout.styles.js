@@ -63,6 +63,7 @@ export default css`
     }
 
     brightness-bar {
+        position: relative;
         border: solid 1px #e5e5e5;
         margin-left: 20px;
         height: 200px;
