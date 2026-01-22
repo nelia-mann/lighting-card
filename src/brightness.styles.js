@@ -2,36 +2,26 @@ import { css } from 'lit';
 
 export default css`
 
-    input[type="range"] {
-        position: absolute;
-        top: 5%;
-        left: 0%;
+    .slider {
+        appearance: none;
+        width: 25px;
+        border: solid 1px #e5e5e5;
+        border-radius: 12px;
         writing-mode: vertical-lr;
         direction: rtl;
-        height: 95%;
+        height: 150px;
+        margin-left: 25px;
+        background: linear-gradient(to top, rgb(255, 193, 7) var(--height), rgba(0, 0, 0, 0) var(--height))
+    }
+
+    .slider::-webkit-slider-thumb {
+        appearance: none;
         opacity: 0;
     }
 
-    .background-bar {
-        position: absolute;
-        top: 5%;
-        left: 0%;
-        width: 100%;
-        height: 95%;
-        border-radius: 12px;
-    }
-
-    .filled {
-        height: var(--height);
-        background-color: rgb(255, 193, 7);
-        border-bottom-left-radius: 12px;
-        border-bottom-right-radius: 12px;
-    }
-
-    .empty {
-        height: var(--depth);
-        background-color: none;
-        border-radius: 12px;
+    .slider::-moz-range-thumb {
+        appearance: none;
+        opacity: 0;
     }
 
 

@@ -11,7 +11,8 @@ export class PopoutWindow extends LitElement {
             opened: { type: Boolean, reflect: true },
             title: { type: String },
             _light: { state: true },
-            _bLight: { state: true }
+            _bLightId: { state: true },
+            ctLightId: { state: true }
         }
     }
 
@@ -40,11 +41,27 @@ export class PopoutWindow extends LitElement {
         return result;
     }
 
+    getBLight() {
+        if (this._bLightId === this._light.entity_id) {
+            return this._light;
+        }
+        else {
+            const lights = this._light.members;
+            let result;
+            lights.forEach((light) => {
+                if (this._bLightId === light.entity_id) {
+                    result = light;
+                }
+            })
+            return result;
+        }
+    }
+
     brightnessBar() {
         let result = html``;
-        if (this._bLight) {
+        if (this._bLightId) {
             result = html`<brightness-bar
-                    ._light=${this._bLight}
+                    ._light=${this.getBLight()}
                     .callService=${this.callService}
                 ></brightness-bar>`
         }
@@ -52,11 +69,11 @@ export class PopoutWindow extends LitElement {
     }
 
     isBSelected(light) {
-        if (this._bLight) {
-            return (this._bLight.entity_id === light.entity_id);
-        } else {
-            return false;
-        }
+        return (this._bLightId === light.entity_id);
+    }
+
+    isCtSelected(light) {
+        return (this._ctLightId === light.entity_id);
     }
 
     render() {
@@ -86,10 +103,20 @@ export class PopoutWindow extends LitElement {
     }
 
     bSelected(light) {
-        if (this._bLight === light) {
-            this._bLight = null;
+        if (this._bLightId === light.entity_id) {
+            this._bLightId = null;
         } else {
-            this._bLight = light;
+            this._bLightId = light.entity_id;
+            this._ctLightId = null;
+        }
+    }
+
+    ctSelected(light) {
+        if (this._ctLightId === light.entity_id) {
+            this._ctLightId = null;
+        } else {
+            this._ctLightId = light.entity_id;
+            this._bLightId = null;
         }
     }
 

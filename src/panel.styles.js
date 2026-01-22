@@ -22,7 +22,7 @@ export default css`
     }
 
     .brightness-icon.true {
-        outline: solid rgb(0,0,0);
+        outline: solid rgb(255, 193, 7);
         outline-offset: -4px;
     }
 

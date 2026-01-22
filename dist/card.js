@@ -708,7 +708,7 @@ var $fd69d66a3348dfcc$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
     }
 
     .brightness-icon.true {
-        outline: solid rgb(0,0,0);
+        outline: solid rgb(255, 193, 7);
         outline-offset: -4px;
     }
 
@@ -8330,15 +8330,6 @@ var $84adf0e0aa3f1db7$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         align-items: flex-start;
         justify-content: center;
     }
-
-    brightness-bar {
-        position: relative;
-        border: solid 1px #e5e5e5;
-        margin-left: 20px;
-        height: 200px;
-        width: 30px;
-        border-radius: 12px;
-    }
 `;
 
 
@@ -8418,36 +8409,26 @@ customElements.define("light-inner", $2b5036ce56cc8e0c$export$5e33b198135dff7b);
 
 var $533b43d098d21d4e$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
 
-    input[type="range"] {
-        position: absolute;
-        top: 5%;
-        left: 0%;
+    .slider {
+        appearance: none;
+        width: 25px;
+        border: solid 1px #e5e5e5;
+        border-radius: 12px;
         writing-mode: vertical-lr;
         direction: rtl;
-        height: 95%;
+        height: 150px;
+        margin-left: 25px;
+        background: linear-gradient(to top, rgb(255, 193, 7) var(--height), rgba(0, 0, 0, 0) var(--height))
+    }
+
+    .slider::-webkit-slider-thumb {
+        appearance: none;
         opacity: 0;
     }
 
-    .background-bar {
-        position: absolute;
-        top: 5%;
-        left: 0%;
-        width: 100%;
-        height: 95%;
-        border-radius: 12px;
-    }
-
-    .filled {
-        height: var(--height);
-        background-color: rgb(255, 193, 7);
-        border-bottom-left-radius: 12px;
-        border-bottom-right-radius: 12px;
-    }
-
-    .empty {
-        height: var(--depth);
-        background-color: none;
-        border-radius: 12px;
+    .slider::-moz-range-thumb {
+        appearance: none;
+        opacity: 0;
     }
 
 
@@ -8459,9 +8440,6 @@ class $22525f8c309ddf11$export$8e7f140c5ed569cb extends (0, $ab210b2da7b39b9d$ex
         return {
             _light: {
                 state: true
-            },
-            _brightness: {
-                state: true
             }
         };
     }
@@ -8469,7 +8447,7 @@ class $22525f8c309ddf11$export$8e7f140c5ed569cb extends (0, $ab210b2da7b39b9d$ex
         super();
     }
     static styles = (0, $533b43d098d21d4e$export$2e2bcd8739ae039);
-    handleOnChange(e) {
+    handleOnInput(e) {
         const value = e.target.value;
         const entityId = this._light.entity_id;
         const data = {
@@ -8477,28 +8455,24 @@ class $22525f8c309ddf11$export$8e7f140c5ed569cb extends (0, $ab210b2da7b39b9d$ex
             brightness: value
         };
         this.callService('light', 'turn_on', data);
-        this._brightness = value;
     }
     getBrightness() {
-        if (this._brightness) return this._brightness;
-        else return this._light.attributes.brightness;
+        return this._light.attributes.brightness;
     }
     getHeight() {
         return 100 * this.getBrightness() / 255;
     }
     render() {
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-            <div class="background-bar">
-                <div class="empty" style="--depth: ${100 - this.getHeight()}%"></div>
-                <div class="filled" style="--height: ${this.getHeight()}%"></div>
-            </div>
             <input
+                class="slider"
                 type="range"
                 id="brightness"
                 max="255"
                 min="0"
-                value="${this._light.attributes.brightness}"
-                @change="${this.handleOnChange}"
+                value="${this.getBrightness()}"
+                @input="${this.handleOnInput}"
+                style="--height: ${this.getHeight()}%"
             ></input>
         `;
     }
@@ -8519,7 +8493,10 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
             _light: {
                 state: true
             },
-            _bLight: {
+            _bLightId: {
+                state: true
+            },
+            ctLightId: {
                 state: true
             }
         };
@@ -8544,17 +8521,30 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
         });
         return result;
     }
+    getBLight() {
+        if (this._bLightId === this._light.entity_id) return this._light;
+        else {
+            const lights = this._light.members;
+            let result;
+            lights.forEach((light)=>{
+                if (this._bLightId === light.entity_id) result = light;
+            });
+            return result;
+        }
+    }
     brightnessBar() {
         let result = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)``;
-        if (this._bLight) result = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<brightness-bar
-                    ._light=${this._bLight}
+        if (this._bLightId) result = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<brightness-bar
+                    ._light=${this.getBLight()}
                     .callService=${this.callService}
                 ></brightness-bar>`;
         return result;
     }
     isBSelected(light) {
-        if (this._bLight) return this._bLight.entity_id === light.entity_id;
-        else return false;
+        return this._bLightId === light.entity_id;
+    }
+    isCtSelected(light) {
+        return this._ctLightId === light.entity_id;
     }
     render() {
         // console.log(this._bLight)
@@ -8582,8 +8572,18 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
         `;
     }
     bSelected(light) {
-        if (this._bLight === light) this._bLight = null;
-        else this._bLight = light;
+        if (this._bLightId === light.entity_id) this._bLightId = null;
+        else {
+            this._bLightId = light.entity_id;
+            this._ctLightId = null;
+        }
+    }
+    ctSelected(light) {
+        if (this._ctLightId === light.entity_id) this._ctLightId = null;
+        else {
+            this._ctLightId = light.entity_id;
+            this._bLightId = null;
+        }
     }
     // Lifecycle method to open/close the native dialog
     updated(changedProperties) {
