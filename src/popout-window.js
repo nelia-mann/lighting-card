@@ -77,7 +77,6 @@ export class PopoutWindow extends LitElement {
     }
 
     render() {
-        // console.log(this._bLight)
         return html`
         <dialog @close="${this._handleClose}">
             <div class="modal-header">

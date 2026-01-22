@@ -702,14 +702,42 @@ var $fd69d66a3348dfcc$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
     }
 
     .brightness-icon {
+        margin-left: 10px;
+        width: 30px;
+        height: 30px;
         border: solid 1px #e5e5e5;
         border-radius: 50%;
-        padding: 5px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
     .brightness-icon.true {
         outline: solid rgb(255, 193, 7);
         outline-offset: -4px;
+    }
+
+    .ct-icon {
+        margin-left: 10px;
+        width: 30px;
+        height: 30px;
+        border: solid 1px #e5e5e5;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: var(--grad);
+    }
+
+    .hs-icon {
+        margin-left: 10px;
+        width: 30px;
+        height: 30px;
+        border: solid 1px #e5e5e5;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
     .light-element {
@@ -8351,18 +8379,76 @@ class $2b5036ce56cc8e0c$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
     constructor(){
         super();
     }
-    isBrightness() {
-        const result = this._light.attributes.brightness;
+    getTempRed(temp) {
+        let red;
+        if (temp <= 6600) red = 255;
+        else {
+            red = temp / 100 - 60;
+            red = Math.round(329.698727446 * red ** -0.1332047592);
+        }
+        red < 0 && (red = 0);
+        red > 255 && (red = 255);
+        return red;
+    }
+    getTempGreen(temp) {
+        let green;
+        if (temp <= 6600) {
+            green = temp / 100;
+            green = Math.round(99.4708025861 * Math.log(green) - 161.1195681661);
+        } else {
+            green = temp / 100 - 60;
+            green = Math.round(288.1221695283 * green ** -0.0755148492);
+        }
+        green < 0 && (green = 0);
+        green > 255 && (green = 255);
+        return green;
+    }
+    getTempBlue(temp) {
+        let blue;
+        if (temp > 6600) blue = 255;
+        else if (temp <= 1900) blue = 0;
+        else {
+            blue = temp / 100 - 10;
+            blue = Math.round(138.5177312231 * Math.log(blue) - 305.0447927307);
+        }
+        blue < 0 && (blue = 0);
+        blue > 255 && (blue = 255);
+        return blue;
+    }
+    getTempColor(temp) {
+        return `rgb(${this.getTempRed(temp)}, ${this.getTempGreen(temp)}, ${this.getTempBlue(temp)})`;
+    }
+    isAttribute(attribute) {
+        const result = this._light.attributes[attribute];
         return !(result === undefined);
     }
     brightnessIcon() {
-        let icon = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)``;
-        if (this.isBrightness()) icon = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
                 <div class="brightness-icon ${this._isBSelected}">
                     <ha-svg-icon .path=${0, $04557c061247a0a6$export$6ace9c955f434b80} @click=${this.onSelectB}></ha-svg-icon>
                 </div>
             `;
-        return icon;
+    }
+    gradient() {
+        const minTemp = 1500;
+        const maxTemp = 9000;
+        const min = this.getTempColor(minTemp);
+        const max = this.getTempColor(maxTemp);
+        const steps = 10;
+        let output = `linear-gradient(to top`;
+        for(let step = 0; step <= steps; step++){
+            const result = this.getTempColor((minTemp * (steps - step) + maxTemp * step) / steps);
+            const percent = Math.round(step * 100 / steps);
+            output = output + `, ` + result + ` ${percent}%`;
+        }
+        output = output + `)`;
+        return output;
+    }
+    ctIcon() {
+        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<div class="ct-icon" style="--grad: ${this.gradient()};"></div>`;
+    }
+    hsIcon() {
+        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<div class="hs-icon"> HS </div>`;
     }
     onSelectB() {
         this.dispatchEvent(new CustomEvent('bSelected'));
@@ -8390,7 +8476,9 @@ class $2b5036ce56cc8e0c$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
                     ${this.icons()}
                     ${name}
                 </div>
-                ${this.brightnessIcon()}
+                ${this.isAttribute('brightness') ? this.brightnessIcon() : ``}
+                ${this.isAttribute('color_temp_kelvin') ? this.ctIcon() : ``}
+                ${this.isAttribute('hs_color') ? this.hsIcon() : ``}
             </div>
         `;
     }
@@ -8547,7 +8635,6 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
         return this._ctLightId === light.entity_id;
     }
     render() {
-        // console.log(this._bLight)
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
         <dialog @close="${this._handleClose}">
             <div class="modal-header">
