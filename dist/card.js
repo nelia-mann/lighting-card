@@ -8528,6 +8528,9 @@ class $22525f8c309ddf11$export$8e7f140c5ed569cb extends (0, $ab210b2da7b39b9d$ex
         return {
             _light: {
                 state: true
+            },
+            _brightness: {
+                state: true
             }
         };
     }
@@ -8535,7 +8538,7 @@ class $22525f8c309ddf11$export$8e7f140c5ed569cb extends (0, $ab210b2da7b39b9d$ex
         super();
     }
     static styles = (0, $533b43d098d21d4e$export$2e2bcd8739ae039);
-    handleOnInput(e) {
+    handleOnChange(e) {
         const value = e.target.value;
         const entityId = this._light.entity_id;
         const data = {
@@ -8544,8 +8547,13 @@ class $22525f8c309ddf11$export$8e7f140c5ed569cb extends (0, $ab210b2da7b39b9d$ex
         };
         this.callService('light', 'turn_on', data);
     }
+    handleOnInput(e) {
+        const value = e.target.value;
+        this._brightness = value;
+    }
     getBrightness() {
-        return this._light.attributes.brightness;
+        if (this._brightness) return this._brightness;
+        else return this._light.attributes.brightness;
     }
     getHeight() {
         return 100 * this.getBrightness() / 255;
@@ -8560,6 +8568,7 @@ class $22525f8c309ddf11$export$8e7f140c5ed569cb extends (0, $ab210b2da7b39b9d$ex
                 min="0"
                 value="${this.getBrightness()}"
                 @input="${this.handleOnInput}"
+                @change="${this.handleOnChange}"
                 style="--height: ${this.getHeight()}%"
             ></input>
         `;
@@ -8582,9 +8591,6 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
                 state: true
             },
             _bLightId: {
-                state: true
-            },
-            ctLightId: {
                 state: true
             }
         };
@@ -8631,9 +8637,6 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
     isBSelected(light) {
         return this._bLightId === light.entity_id;
     }
-    isCtSelected(light) {
-        return this._ctLightId === light.entity_id;
-    }
     render() {
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
         <dialog @close="${this._handleClose}">
@@ -8663,13 +8666,6 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
         else {
             this._bLightId = light.entity_id;
             this._ctLightId = null;
-        }
-    }
-    ctSelected(light) {
-        if (this._ctLightId === light.entity_id) this._ctLightId = null;
-        else {
-            this._ctLightId = light.entity_id;
-            this._bLightId = null;
         }
     }
     // Lifecycle method to open/close the native dialog

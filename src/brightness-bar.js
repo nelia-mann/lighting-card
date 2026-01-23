@@ -7,7 +7,8 @@ export class BrightnessBar extends LitElement {
 
     static get properties() {
         return {
-            _light: { state: true},
+            _light: { state: true },
+            _brightness: {state: true}
         }
     }
 
@@ -17,7 +18,7 @@ export class BrightnessBar extends LitElement {
 
     static styles = styles;
 
-    handleOnInput(e) {
+    handleOnChange(e) {
         const value = e.target.value;
         const entityId = this._light.entity_id;
         const data = {
@@ -27,8 +28,17 @@ export class BrightnessBar extends LitElement {
         this.callService('light', 'turn_on', data);
     }
 
+    handleOnInput(e) {
+        const value = e.target.value;
+        this._brightness = value;
+    }
+
     getBrightness() {
-        return this._light.attributes.brightness;
+        if (this._brightness) {
+            return this._brightness;
+        } else {
+            return this._light.attributes.brightness;
+        }
     }
 
     getHeight() {
@@ -45,6 +55,7 @@ export class BrightnessBar extends LitElement {
                 min="0"
                 value="${this.getBrightness()}"
                 @input="${this.handleOnInput}"
+                @change="${this.handleOnChange}"
                 style="--height: ${this.getHeight()}%"
             ></input>
         `

@@ -12,7 +12,6 @@ export class PopoutWindow extends LitElement {
             title: { type: String },
             _light: { state: true },
             _bLightId: { state: true },
-            ctLightId: { state: true }
         }
     }
 
@@ -72,10 +71,6 @@ export class PopoutWindow extends LitElement {
         return (this._bLightId === light.entity_id);
     }
 
-    isCtSelected(light) {
-        return (this._ctLightId === light.entity_id);
-    }
-
     render() {
         return html`
         <dialog @close="${this._handleClose}">
@@ -107,15 +102,6 @@ export class PopoutWindow extends LitElement {
         } else {
             this._bLightId = light.entity_id;
             this._ctLightId = null;
-        }
-    }
-
-    ctSelected(light) {
-        if (this._ctLightId === light.entity_id) {
-            this._ctLightId = null;
-        } else {
-            this._ctLightId = light.entity_id;
-            this._bLightId = null;
         }
     }
 
