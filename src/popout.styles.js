@@ -68,6 +68,7 @@ export default css`
         height: 150px;
         border: none;
         margin-left: 20px;
+        margin-right: 10px;
         display: flex;
         justify-content: center;
         align-items: center;

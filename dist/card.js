@@ -8365,6 +8365,7 @@ var $84adf0e0aa3f1db7$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         height: 150px;
         border: none;
         margin-left: 20px;
+        margin-right: 10px;
         display: flex;
         justify-content: center;
         align-items: center;
