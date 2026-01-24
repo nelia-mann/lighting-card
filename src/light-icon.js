@@ -1,5 +1,5 @@
 import { html, LitElement } from 'lit';
-import { mdiLightbulb, mdiLightbulbOff } from '@mdi/js';
+import { mdiLightbulb, mdiLightbulbOff, mdiLightbulbGroup, mdiLightbulbGroupOff } from '@mdi/js';
 
 export class LightIcon extends LitElement {
 
@@ -13,11 +13,13 @@ export class LightIcon extends LitElement {
         super();
     }
 
-    // static styles = styles;
-
     lightbulb() {
         let lightbulb;
-        (this._light.state === "on") ? (lightbulb = mdiLightbulb) : (lightbulb = mdiLightbulbOff);
+        if (this._light.members) {
+            (this._light.state === "on") ? (lightbulb = mdiLightbulbGroup) : (lightbulb = mdiLightbulbGroupOff);
+        } else {
+            (this._light.state === "on") ? (lightbulb = mdiLightbulb) : (lightbulb = mdiLightbulbOff);
+        }
         return lightbulb;
     }
 

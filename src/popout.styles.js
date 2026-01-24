@@ -54,7 +54,7 @@ export default css`
         align-items: center;
     }
 
-    .modal-content {
+    .select-lights {
         width: 100%;
         display: flex;
         flex-flow: column nowrap;
@@ -62,15 +62,11 @@ export default css`
         justify-content: center;
     }
 
-    brightness-bar {
-        position: relative;
-        width: 25px;
-        height: 150px;
-        border: none;
-        margin-left: 20px;
-        margin-right: 10px;
+    light-control {
         display: flex;
-        justify-content: center;
+        flex-flow: row nowrap;
+        justify-content: space-around;
         align-items: center;
     }
+
 `;

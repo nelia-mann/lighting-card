@@ -701,42 +701,6 @@ var $fd69d66a3348dfcc$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         align-items: center;
     }
 
-    .brightness-icon {
-        margin-left: 10px;
-        width: 30px;
-        height: 30px;
-        border: solid 1px #e5e5e5;
-        border-radius: 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background: rgba(255, 193, 7, .2);
-    }
-
-    .brightness-icon.true {
-        outline: solid rgb(255, 193, 7);
-        outline-offset: -4px;
-    }
-
-    .ct-icon {
-        margin-left: 10px;
-        width: 30px;
-        height: 30px;
-        border: solid 1px #e5e5e5;
-        border-radius: 50%;
-        background: var(--grad);
-    }
-
-    .hs-icon {
-        margin-left: 10px;
-        width: 30px;
-        height: 30px;
-        border: solid 1px #e5e5e5;
-        border-radius: 50%;
-        overflow: hidden;
-        background-image: radial-gradient(circle at center, white 0%, transparent 100%), var(--grad);
-    }
-
     .light-element {
         border: solid 1px #e5e5e5;
         width: 215px;
@@ -746,6 +710,11 @@ var $fd69d66a3348dfcc$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         padding-top: 5px;
         padding-bottom: 5px;
         margin: 7px;
+    }
+
+    .light-element.true {
+        outline: solid rgb(255, 193, 7);
+        outline-offset: -4px;
     }
 
     light-group-component {
@@ -8244,10 +8213,10 @@ class $4356f78c5c3f665b$export$82acdd66a4e4bf90 extends (0, $ab210b2da7b39b9d$ex
     constructor(){
         super();
     }
-    // static styles = styles;
     lightbulb() {
         let lightbulb;
-        this._light.state === "on" ? lightbulb = (0, $04557c061247a0a6$export$dea852a9f40b969) : lightbulb = (0, $04557c061247a0a6$export$aad4bcd9f6406e73);
+        if (this._light.members) this._light.state === "on" ? lightbulb = (0, $04557c061247a0a6$export$2e6be2b8a537add2) : lightbulb = (0, $04557c061247a0a6$export$da8ede764477ab6a);
+        else this._light.state === "on" ? lightbulb = (0, $04557c061247a0a6$export$dea852a9f40b969) : lightbulb = (0, $04557c061247a0a6$export$aad4bcd9f6406e73);
         return lightbulb;
     }
     getOpacity() {
@@ -8348,7 +8317,7 @@ var $84adf0e0aa3f1db7$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         align-items: center;
     }
 
-    .modal-content {
+    .select-lights {
         width: 100%;
         display: flex;
         flex-flow: column nowrap;
@@ -8356,84 +8325,17 @@ var $84adf0e0aa3f1db7$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         justify-content: center;
     }
 
-    brightness-bar {
-        position: relative;
-        width: 25px;
-        height: 150px;
-        border: none;
-        margin-left: 20px;
-        margin-right: 10px;
+    light-control {
         display: flex;
-        justify-content: center;
+        flex-flow: row nowrap;
+        justify-content: space-around;
         align-items: center;
     }
+
 `;
 
 
 
-
-
-
-function $d66841a16b153167$var$getTempRed(temp) {
-    let red;
-    if (temp <= 6600) red = 255;
-    else {
-        red = temp / 100 - 60;
-        red = Math.round(329.698727446 * red ** -0.1332047592);
-    }
-    red < 0 && (red = 0);
-    red > 255 && (red = 255);
-    return red;
-}
-function $d66841a16b153167$var$getTempGreen(temp) {
-    let green;
-    if (temp <= 6600) {
-        green = temp / 100;
-        green = Math.round(99.4708025861 * Math.log(green) - 161.1195681661);
-    } else {
-        green = temp / 100 - 60;
-        green = Math.round(288.1221695283 * green ** -0.0755148492);
-    }
-    green < 0 && (green = 0);
-    green > 255 && (green = 255);
-    return green;
-}
-function $d66841a16b153167$var$getTempBlue(temp) {
-    let blue;
-    if (temp > 6600) blue = 255;
-    else if (temp <= 1900) blue = 0;
-    else {
-        blue = temp / 100 - 10;
-        blue = Math.round(138.5177312231 * Math.log(blue) - 305.0447927307);
-    }
-    blue < 0 && (blue = 0);
-    blue > 255 && (blue = 255);
-    return blue;
-}
-function $d66841a16b153167$var$getTempColor(temp) {
-    return `rgb(${$d66841a16b153167$var$getTempRed(temp)}, ${$d66841a16b153167$var$getTempGreen(temp)}, ${$d66841a16b153167$var$getTempBlue(temp)})`;
-}
-function $d66841a16b153167$export$5b5356aa7e20fd72(minTemp, maxTemp, steps) {
-    const min = $d66841a16b153167$var$getTempColor(minTemp);
-    const max = $d66841a16b153167$var$getTempColor(maxTemp);
-    let output = `linear-gradient(to top`;
-    for(let step = 0; step <= steps; step++){
-        const result = $d66841a16b153167$var$getTempColor((minTemp * (steps - step) + maxTemp * step) / steps);
-        const percent = Math.round(step * 100 / steps);
-        output = output + `, ` + result + ` ${percent}%`;
-    }
-    output = output + `)`;
-    return output;
-}
-function $d66841a16b153167$export$475133aea461e763(steps) {
-    let output = `conic-gradient( from 0deg`;
-    for(let step = 0; step <= steps; step++){
-        const angle = Math.round(step * 360 / steps);
-        output = output + `, hsl(${angle}, 100%, 50%)`;
-    }
-    output = output + `)`;
-    return output;
-}
 
 
 class $2b5036ce56cc8e0c$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
@@ -8442,39 +8344,14 @@ class $2b5036ce56cc8e0c$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
             _light: {
                 state: true
             },
-            _isBSelected: {
+            _isSelected: {
                 state: true
             }
         };
     }
     constructor(){
         super();
-    }
-    isAttribute(attribute) {
-        const result = this._light.attributes[attribute];
-        return !(result === undefined);
-    }
-    brightnessIcon() {
-        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-                <div class="brightness-icon ${this._isBSelected}">
-                    <ha-svg-icon .path=${0, $04557c061247a0a6$export$6ace9c955f434b80} @click=${this.onSelectB}></ha-svg-icon>
-                </div>
-            `;
-    }
-    getTempGradient() {
-        const minTemp = 1500;
-        const maxTemp = 9000;
-        const steps = 10;
-        return (0, $d66841a16b153167$export$5b5356aa7e20fd72)(minTemp, maxTemp, steps);
-    }
-    ctIcon() {
-        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<div class="ct-icon" style="--grad: ${this.getTempGradient()};"></div>`;
-    }
-    hsIcon() {
-        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<div class="hs-icon" style="--grad: ${(0, $d66841a16b153167$export$475133aea461e763)(10)};"></div>`;
-    }
-    onSelectB() {
-        this.dispatchEvent(new CustomEvent('bSelected'));
+        this._isSelected = false;
     }
     icons() {
         let result;
@@ -8495,22 +8372,15 @@ class $2b5036ce56cc8e0c$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
         const name = this._light.attributes.friendly_name;
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
             <div class="light-row">
-                <div  class="light-element" @click=${this.onClick}>
+                <div  class="light-element ${this._isSelected}" @click=${this.onClick}>
                     ${this.icons()}
                     ${name}
                 </div>
-                ${this.isAttribute('brightness') ? this.brightnessIcon() : ``}
-                ${this.isAttribute('color_temp_kelvin') ? this.ctIcon() : ``}
-                ${this.isAttribute('hs_color') ? this.hsIcon() : ``}
             </div>
         `;
     }
     onClick() {
-        const entityId = this._light.entity_id;
-        const data = {
-            entity_id: entityId
-        };
-        this.callService('light', 'toggle', data);
+        this.dispatchEvent(new CustomEvent('select'));
     }
 }
 customElements.define("light-inner", $2b5036ce56cc8e0c$export$5e33b198135dff7b);
@@ -8600,6 +8470,221 @@ class $22525f8c309ddf11$export$8e7f140c5ed569cb extends (0, $ab210b2da7b39b9d$ex
 customElements.define("brightness-bar", $22525f8c309ddf11$export$8e7f140c5ed569cb);
 
 
+
+function $d66841a16b153167$var$getTempRed(temp) {
+    let red;
+    if (temp <= 6600) red = 255;
+    else {
+        red = temp / 100 - 60;
+        red = Math.round(329.698727446 * red ** -0.1332047592);
+    }
+    red < 0 && (red = 0);
+    red > 255 && (red = 255);
+    return red;
+}
+function $d66841a16b153167$var$getTempGreen(temp) {
+    let green;
+    if (temp <= 6600) {
+        green = temp / 100;
+        green = Math.round(99.4708025861 * Math.log(green) - 161.1195681661);
+    } else {
+        green = temp / 100 - 60;
+        green = Math.round(288.1221695283 * green ** -0.0755148492);
+    }
+    green < 0 && (green = 0);
+    green > 255 && (green = 255);
+    return green;
+}
+function $d66841a16b153167$var$getTempBlue(temp) {
+    let blue;
+    if (temp > 6600) blue = 255;
+    else if (temp <= 1900) blue = 0;
+    else {
+        blue = temp / 100 - 10;
+        blue = Math.round(138.5177312231 * Math.log(blue) - 305.0447927307);
+    }
+    blue < 0 && (blue = 0);
+    blue > 255 && (blue = 255);
+    return blue;
+}
+function $d66841a16b153167$var$getTempColor(temp) {
+    return `rgb(${$d66841a16b153167$var$getTempRed(temp)}, ${$d66841a16b153167$var$getTempGreen(temp)}, ${$d66841a16b153167$var$getTempBlue(temp)})`;
+}
+function $d66841a16b153167$export$5b5356aa7e20fd72(minTemp, maxTemp, steps) {
+    const min = $d66841a16b153167$var$getTempColor(minTemp);
+    const max = $d66841a16b153167$var$getTempColor(maxTemp);
+    let output = `linear-gradient(to top`;
+    for(let step = 0; step <= steps; step++){
+        const result = $d66841a16b153167$var$getTempColor((minTemp * (steps - step) + maxTemp * step) / steps);
+        const percent = Math.round(step * 100 / steps);
+        output = output + `, ` + result + ` ${percent}%`;
+    }
+    output = output + `)`;
+    return output;
+}
+function $d66841a16b153167$export$475133aea461e763(steps) {
+    let output = `conic-gradient( from 0deg`;
+    for(let step = 0; step <= steps; step++){
+        const angle = Math.round(step * 360 / steps);
+        output = output + `, hsl(${angle}, 100%, 50%)`;
+    }
+    output = output + `)`;
+    return output;
+}
+
+
+
+
+var $201c56a28a72cc27$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
+
+    .control-column {
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: space-around;
+        align-items: center;
+        border: solid 1px #e5e5e5;
+        border-radius: 12px;
+        margin-left: 10px;
+    }
+
+    .icon {
+        width: 30px;
+        height: 30px;
+        border: solid 1px #e5e5e5;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 10px;
+    }
+
+    .icon.onoff {
+    }
+
+    .icon.brightness {
+        background: rgba(255, 193, 7, .2);
+    }
+
+    .icon.true {
+        outline: solid rgb(0,0,0);
+        outline-offset: -3px;
+    }
+
+    .icon.ct {
+        overflow: hidden;
+        background: var(--grad);
+    }
+
+    .icon.hs {
+        overflow: hidden;
+        background-image: radial-gradient(circle at center, white 0%, transparent 100%), var(--grad);
+    }
+
+
+    brightness-bar {
+        position: relative;
+        width: 25px;
+        height: 150px;
+        border: none;
+        margin-left: 20px;
+        margin-right: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+`;
+
+
+
+
+class $f76fa2dde9e8d076$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
+    static get properties() {
+        return {
+            _light: {
+                state: true
+            },
+            _control: {
+                state: true
+            }
+        };
+    }
+    constructor(){
+        super();
+    }
+    getTempGradient() {
+        const minTemp = 1500;
+        const maxTemp = 9000;
+        const steps = 10;
+        return (0, $d66841a16b153167$export$5b5356aa7e20fd72)(minTemp, maxTemp, steps);
+    }
+    isAttribute(attribute) {
+        const result = this._light.attributes[attribute];
+        return !(result === undefined);
+    }
+    lightIcon() {
+        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+        <div class="onoff icon" @click=${this.onOff}>
+            <light-icon ._light=${this._light}></light-icon>
+        </div>
+        `;
+    }
+    brightnessIcon() {
+        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+                <div
+                    class="brightness icon ${this.isSelected("brightness")}"
+                    @click=${()=>this.onSelect("brightness")}
+                >
+                    <ha-svg-icon .path=${0, $04557c061247a0a6$export$6ace9c955f434b80}></ha-svg-icon>
+                </div>
+            `;
+    }
+    ctIcon() {
+        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<div
+            class="ct icon ${this.isSelected("ct")}"
+            style="--grad: ${this.getTempGradient()};"
+            @click=${()=>this.onSelect("ct")}
+        ></div>`;
+    }
+    hsIcon() {
+        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<div
+            class="hs icon ${this.isSelected("hs")}"
+            style="--grad: ${(0, $d66841a16b153167$export$475133aea461e763)(10)};"
+            @click=${()=>this.onSelect("hs")}
+        ></div>`;
+    }
+    onSelect(result) {
+        this._control = result;
+    }
+    isSelected(string) {
+        return this._control === string;
+    }
+    onOff() {
+        const entityId = this._light.entity_id;
+        const data = {
+            entity_id: entityId
+        };
+        this.callService('light', 'toggle', data);
+    }
+    brightnessBar() {
+        if (this.isSelected('brightness')) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<brightness-bar ._light=${this._light} .callService=${this.callService}></brightness-bar>`;
+    }
+    static styles = (0, $201c56a28a72cc27$export$2e2bcd8739ae039);
+    render() {
+        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+            <div class="control-column">
+                ${this.lightIcon()}
+                ${this.isAttribute('brightness') ? this.brightnessIcon() : ``}
+                ${this.isAttribute('color_temp_kelvin') ? this.ctIcon() : ``}
+                ${this.isAttribute('hs_color') ? this.hsIcon() : ``}
+            </div>
+            ${this.brightnessBar()}
+        `;
+    }
+}
+customElements.define("light-control", $f76fa2dde9e8d076$export$5ebffa7af4af21de);
+
+
 class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
     static get properties() {
         return {
@@ -8613,7 +8698,7 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
             _light: {
                 state: true
             },
-            _bLightId: {
+            _lightId: {
                 state: true
             }
         };
@@ -8622,45 +8707,34 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
         super();
     }
     static styles = (0, $84adf0e0aa3f1db7$export$2e2bcd8739ae039);
+    innerLight(light) {
+        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+            <light-inner
+                id=${light}
+                ._light=${light}
+                ._isSelected=${this.isSelected(light)}
+                @select=${()=>this.select(light)}
+            ></light-inner>
+        `;
+    }
     lights() {
         const lights = this._light.members;
         let result = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)``;
         if (lights) result = lights.map((light)=>{
-            return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-                    <light-inner
-                        id=${light}
-                        ._light=${light}
-                        .callService=${this.callService}
-                        @bSelected=${()=>this.bSelected(light)}
-                        ._isBSelected=${this.isBSelected(light)}
-                    ></light-inner>
-                    `;
+            return this.innerLight(light);
         });
         return result;
     }
-    getBLight() {
-        if (this._bLightId === this._light.entity_id) return this._light;
-        else {
-            const lights = this._light.members;
-            let result;
-            lights.forEach((light)=>{
-                if (this._bLightId === light.entity_id) result = light;
-            });
-            return result;
-        }
-    }
-    brightnessBar() {
-        let result = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)``;
-        if (this._bLightId) result = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<brightness-bar
-                    ._light=${this.getBLight()}
+    lightControl() {
+        if (this.selectedLight()) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+                <light-control
+                    ._light = ${this.selectedLight()}
                     .callService=${this.callService}
-                ></brightness-bar>`;
-        return result;
-    }
-    isBSelected(light) {
-        return this._bLightId === light.entity_id;
+                ></light-control>
+            `;
     }
     render() {
+        this.defaultSelect();
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
         <dialog @close="${this._handleClose}">
             <div class="modal-header">
@@ -8670,25 +8744,32 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
                 </button>
             </div>
             <div class="content-row">
-                <div class="modal-content">
-                    <light-inner
-                        ._light=${this._light}
-                        .callService=${this.callService}
-                        @bSelected=${()=>this.bSelected(this._light)}
-                        ._isBSelected=${this.isBSelected(this._light)}
-                    ></light-inner>
+                <div class="select-lights">
+                    ${this.innerLight(this._light)}
                     ${this.lights()}
                 </div>
-                ${this.brightnessBar()}
+                ${this.lightControl()}
             </div>
         </dialog>
         `;
     }
-    bSelected(light) {
-        if (this._bLightId === light.entity_id) this._bLightId = null;
-        else {
-            this._bLightId = light.entity_id;
-            this._ctLightId = null;
+    defaultSelect() {
+        if (!this._lightId) this._lightId = this._light.entity_id;
+    }
+    select(light) {
+        this._lightId = light.entity_id;
+    }
+    isSelected(light) {
+        return this._lightId === light.entity_id;
+    }
+    selectedLight() {
+        if (this._lightId === this._light.entity_id) return this._light;
+        else if (this._light.members) {
+            let result;
+            this._light.members.forEach((light)=>{
+                if (this._lightId === light.entity_id) result = light;
+            });
+            return result;
         }
     }
     // Lifecycle method to open/close the native dialog

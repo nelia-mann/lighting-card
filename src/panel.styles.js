@@ -15,42 +15,6 @@ export default css`
         align-items: center;
     }
 
-    .brightness-icon {
-        margin-left: 10px;
-        width: 30px;
-        height: 30px;
-        border: solid 1px #e5e5e5;
-        border-radius: 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background: rgba(255, 193, 7, .2);
-    }
-
-    .brightness-icon.true {
-        outline: solid rgb(255, 193, 7);
-        outline-offset: -4px;
-    }
-
-    .ct-icon {
-        margin-left: 10px;
-        width: 30px;
-        height: 30px;
-        border: solid 1px #e5e5e5;
-        border-radius: 50%;
-        background: var(--grad);
-    }
-
-    .hs-icon {
-        margin-left: 10px;
-        width: 30px;
-        height: 30px;
-        border: solid 1px #e5e5e5;
-        border-radius: 50%;
-        overflow: hidden;
-        background-image: radial-gradient(circle at center, white 0%, transparent 100%), var(--grad);
-    }
-
     .light-element {
         border: solid 1px #e5e5e5;
         width: 215px;
@@ -60,6 +24,11 @@ export default css`
         padding-top: 5px;
         padding-bottom: 5px;
         margin: 7px;
+    }
+
+    .light-element.true {
+        outline: solid rgb(255, 193, 7);
+        outline-offset: -4px;
     }
 
     light-group-component {
