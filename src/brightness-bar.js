@@ -47,6 +47,7 @@ export class BrightnessBar extends LitElement {
 
     render() {
         return html`
+            <div class="shown-slider" style="--height: ${this.getHeight()}%"></div>
             <input
                 class="slider"
                 type="range"
@@ -56,7 +57,6 @@ export class BrightnessBar extends LitElement {
                 value="${this.getBrightness()}"
                 @input="${this.handleOnInput}"
                 @change="${this.handleOnChange}"
-                style="--height: ${this.getHeight()}%"
             ></input>
         `
     }

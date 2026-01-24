@@ -8358,6 +8358,17 @@ var $84adf0e0aa3f1db7$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         align-items: flex-start;
         justify-content: center;
     }
+
+    brightness-bar {
+        position: relative;
+        width: 25px;
+        height: 150px;
+        border: none;
+        margin-left: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 `;
 
 
@@ -8498,25 +8509,25 @@ customElements.define("light-inner", $2b5036ce56cc8e0c$export$5e33b198135dff7b);
 var $533b43d098d21d4e$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
 
     .slider {
-        appearance: none;
+        position: absolute;
+        opacity: 0;
+        top: 0;
+        left: 0;
         width: 25px;
-        border: solid 1px #e5e5e5;
-        border-radius: 12px;
         writing-mode: vertical-lr;
         direction: rtl;
         height: 150px;
-        margin-left: 25px;
-        background: linear-gradient(to top, rgb(255, 193, 7) var(--height), rgba(0, 0, 0, 0) var(--height))
     }
 
-    .slider::-webkit-slider-thumb {
-        appearance: none;
-        opacity: 0;
-    }
-
-    .slider::-moz-range-thumb {
-        appearance: none;
-        opacity: 0;
+    .shown-slider {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 25px;
+        height: 150px;
+        border: solid 1px #e5e5e5;
+        border-radius: 12px;
+        background: linear-gradient(to top, rgb(255, 193, 7) var(--height), rgba(0, 0, 0, 0) var(--height));
     }
 
 
@@ -8560,6 +8571,7 @@ class $22525f8c309ddf11$export$8e7f140c5ed569cb extends (0, $ab210b2da7b39b9d$ex
     }
     render() {
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+            <div class="shown-slider" style="--height: ${this.getHeight()}%"></div>
             <input
                 class="slider"
                 type="range"
@@ -8569,7 +8581,6 @@ class $22525f8c309ddf11$export$8e7f140c5ed569cb extends (0, $ab210b2da7b39b9d$ex
                 value="${this.getBrightness()}"
                 @input="${this.handleOnInput}"
                 @change="${this.handleOnChange}"
-                style="--height: ${this.getHeight()}%"
             ></input>
         `;
     }

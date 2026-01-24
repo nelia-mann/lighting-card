@@ -61,4 +61,15 @@ export default css`
         align-items: flex-start;
         justify-content: center;
     }
+
+    brightness-bar {
+        position: relative;
+        width: 25px;
+        height: 150px;
+        border: none;
+        margin-left: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 `;
