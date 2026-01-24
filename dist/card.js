@@ -710,6 +710,7 @@ var $fd69d66a3348dfcc$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         display: flex;
         justify-content: center;
         align-items: center;
+        background: rgba(255, 193, 7, .2);
     }
 
     .brightness-icon.true {
@@ -723,9 +724,6 @@ var $fd69d66a3348dfcc$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         height: 30px;
         border: solid 1px #e5e5e5;
         border-radius: 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
         background: var(--grad);
     }
 
@@ -735,9 +733,8 @@ var $fd69d66a3348dfcc$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         height: 30px;
         border: solid 1px #e5e5e5;
         border-radius: 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        overflow: hidden;
+        background-image: radial-gradient(circle at center, white 0%, transparent 100%), var(--grad);
     }
 
     .light-element {
@@ -8377,6 +8374,68 @@ var $84adf0e0aa3f1db7$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 
 
 
+function $d66841a16b153167$var$getTempRed(temp) {
+    let red;
+    if (temp <= 6600) red = 255;
+    else {
+        red = temp / 100 - 60;
+        red = Math.round(329.698727446 * red ** -0.1332047592);
+    }
+    red < 0 && (red = 0);
+    red > 255 && (red = 255);
+    return red;
+}
+function $d66841a16b153167$var$getTempGreen(temp) {
+    let green;
+    if (temp <= 6600) {
+        green = temp / 100;
+        green = Math.round(99.4708025861 * Math.log(green) - 161.1195681661);
+    } else {
+        green = temp / 100 - 60;
+        green = Math.round(288.1221695283 * green ** -0.0755148492);
+    }
+    green < 0 && (green = 0);
+    green > 255 && (green = 255);
+    return green;
+}
+function $d66841a16b153167$var$getTempBlue(temp) {
+    let blue;
+    if (temp > 6600) blue = 255;
+    else if (temp <= 1900) blue = 0;
+    else {
+        blue = temp / 100 - 10;
+        blue = Math.round(138.5177312231 * Math.log(blue) - 305.0447927307);
+    }
+    blue < 0 && (blue = 0);
+    blue > 255 && (blue = 255);
+    return blue;
+}
+function $d66841a16b153167$var$getTempColor(temp) {
+    return `rgb(${$d66841a16b153167$var$getTempRed(temp)}, ${$d66841a16b153167$var$getTempGreen(temp)}, ${$d66841a16b153167$var$getTempBlue(temp)})`;
+}
+function $d66841a16b153167$export$5b5356aa7e20fd72(minTemp, maxTemp, steps) {
+    const min = $d66841a16b153167$var$getTempColor(minTemp);
+    const max = $d66841a16b153167$var$getTempColor(maxTemp);
+    let output = `linear-gradient(to top`;
+    for(let step = 0; step <= steps; step++){
+        const result = $d66841a16b153167$var$getTempColor((minTemp * (steps - step) + maxTemp * step) / steps);
+        const percent = Math.round(step * 100 / steps);
+        output = output + `, ` + result + ` ${percent}%`;
+    }
+    output = output + `)`;
+    return output;
+}
+function $d66841a16b153167$export$475133aea461e763(steps) {
+    let output = `conic-gradient( from 0deg`;
+    for(let step = 0; step <= steps; step++){
+        const angle = Math.round(step * 360 / steps);
+        output = output + `, hsl(${angle}, 100%, 50%)`;
+    }
+    output = output + `)`;
+    return output;
+}
+
+
 class $2b5036ce56cc8e0c$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
     static get properties() {
         return {
@@ -8391,45 +8450,6 @@ class $2b5036ce56cc8e0c$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
     constructor(){
         super();
     }
-    getTempRed(temp) {
-        let red;
-        if (temp <= 6600) red = 255;
-        else {
-            red = temp / 100 - 60;
-            red = Math.round(329.698727446 * red ** -0.1332047592);
-        }
-        red < 0 && (red = 0);
-        red > 255 && (red = 255);
-        return red;
-    }
-    getTempGreen(temp) {
-        let green;
-        if (temp <= 6600) {
-            green = temp / 100;
-            green = Math.round(99.4708025861 * Math.log(green) - 161.1195681661);
-        } else {
-            green = temp / 100 - 60;
-            green = Math.round(288.1221695283 * green ** -0.0755148492);
-        }
-        green < 0 && (green = 0);
-        green > 255 && (green = 255);
-        return green;
-    }
-    getTempBlue(temp) {
-        let blue;
-        if (temp > 6600) blue = 255;
-        else if (temp <= 1900) blue = 0;
-        else {
-            blue = temp / 100 - 10;
-            blue = Math.round(138.5177312231 * Math.log(blue) - 305.0447927307);
-        }
-        blue < 0 && (blue = 0);
-        blue > 255 && (blue = 255);
-        return blue;
-    }
-    getTempColor(temp) {
-        return `rgb(${this.getTempRed(temp)}, ${this.getTempGreen(temp)}, ${this.getTempBlue(temp)})`;
-    }
     isAttribute(attribute) {
         const result = this._light.attributes[attribute];
         return !(result === undefined);
@@ -8441,26 +8461,17 @@ class $2b5036ce56cc8e0c$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
                 </div>
             `;
     }
-    gradient() {
+    getTempGradient() {
         const minTemp = 1500;
         const maxTemp = 9000;
-        const min = this.getTempColor(minTemp);
-        const max = this.getTempColor(maxTemp);
         const steps = 10;
-        let output = `linear-gradient(to top`;
-        for(let step = 0; step <= steps; step++){
-            const result = this.getTempColor((minTemp * (steps - step) + maxTemp * step) / steps);
-            const percent = Math.round(step * 100 / steps);
-            output = output + `, ` + result + ` ${percent}%`;
-        }
-        output = output + `)`;
-        return output;
+        return (0, $d66841a16b153167$export$5b5356aa7e20fd72)(minTemp, maxTemp, steps);
     }
     ctIcon() {
-        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<div class="ct-icon" style="--grad: ${this.gradient()};"></div>`;
+        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<div class="ct-icon" style="--grad: ${this.getTempGradient()};"></div>`;
     }
     hsIcon() {
-        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<div class="hs-icon"> HS </div>`;
+        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<div class="hs-icon" style="--grad: ${(0, $d66841a16b153167$export$475133aea461e763)(10)};"></div>`;
     }
     onSelectB() {
         this.dispatchEvent(new CustomEvent('bSelected'));

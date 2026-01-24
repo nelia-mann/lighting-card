@@ -2,6 +2,7 @@ import { html, LitElement } from 'lit';
 import './light-icon.js';
 import styles from './panel.styles';
 import { mdiBrightness6 } from '@mdi/js';
+import { tempGradient, hsGradient } from './color-util.js';
 
 export class LightComponent extends LitElement {
 
@@ -14,54 +15,6 @@ export class LightComponent extends LitElement {
 
     constructor() {
         super();
-    }
-
-    getTempRed(temp) {
-        let red;
-        if (temp <= 6600) {
-            red = 255;
-        } else {
-            red = (temp / 100) - 60;
-            red = Math.round(329.698727446 * (red ** (-0.1332047592)));
-        }
-        (red < 0) && (red = 0);
-        (red > 255) && (red = 255);
-        return red;
-    }
-
-    getTempGreen(temp) {
-        let green;
-        if (temp <= 6600) {
-            green = temp / 100;
-            green = Math.round((99.4708025861) * Math.log(green) - 161.1195681661);
-        } else {
-            green = (temp / 100) - 60;
-            green = Math.round(288.1221695283 * (green ** (-0.0755148492)));
-        }
-        (green < 0) && (green = 0);
-        (green > 255) && (green = 255);
-        return green;
-    }
-
-    getTempBlue(temp) {
-        let blue;
-        if (temp > 6600) {
-            blue = 255;
-        } else {
-            if (temp <= 1900) {
-                blue = 0;
-            } else {
-                blue = (temp / 100) - 10;
-                blue = Math.round(138.5177312231 * Math.log(blue) - 305.0447927307);
-            }
-        }
-        (blue < 0) && (blue = 0);
-        (blue > 255) && (blue = 255);
-        return blue;
-    }
-
-    getTempColor(temp) {
-        return `rgb(${this.getTempRed(temp)}, ${this.getTempGreen(temp)}, ${this.getTempBlue(temp)})`
     }
 
     isAttribute(attribute) {
@@ -77,28 +30,19 @@ export class LightComponent extends LitElement {
             `
     }
 
-    gradient() {
+    getTempGradient() {
         const minTemp = 1500;
         const maxTemp = 9000;
-        const min = this.getTempColor(minTemp);
-        const max = this.getTempColor(maxTemp);
         const steps = 10;
-        let output = `linear-gradient(to top`
-        for (let step = 0; step <= steps; step++) {
-            const result = this.getTempColor((minTemp * (steps - step) + maxTemp * step) / steps);
-            const percent = Math.round(step * 100 / steps);
-            output = output + `, ` + result + ` ${percent}%`;
-        }
-        output = output + `)`;
-        return output;
+        return tempGradient(minTemp, maxTemp, steps);
     }
 
     ctIcon() {
-        return html`<div class="ct-icon" style="--grad: ${this.gradient()};"></div>`
+        return html`<div class="ct-icon" style="--grad: ${this.getTempGradient()};"></div>`
     }
 
     hsIcon() {
-        return html`<div class="hs-icon"> HS </div>`
+        return html`<div class="hs-icon" style="--grad: ${hsGradient(10)};"></div>`
     }
 
     onSelectB() {
