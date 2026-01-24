@@ -8527,7 +8527,7 @@ var $533b43d098d21d4e$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         height: 150px;
         border: solid 1px #e5e5e5;
         border-radius: 12px;
-        background: linear-gradient(to top, rgb(255, 193, 7) var(--height), rgba(0, 0, 0, 0) var(--height));
+        background: linear-gradient(to top, rgb(255, 193, 7) var(--height), rgb(255, 193, 7, .1) var(--height));
     }
 
 

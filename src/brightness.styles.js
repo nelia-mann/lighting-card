@@ -21,7 +21,7 @@ export default css`
         height: 150px;
         border: solid 1px #e5e5e5;
         border-radius: 12px;
-        background: linear-gradient(to top, rgb(255, 193, 7) var(--height), rgba(0, 0, 0, 0) var(--height));
+        background: linear-gradient(to top, rgb(255, 193, 7) var(--height), rgb(255, 193, 7, .1) var(--height));
     }
 
 
