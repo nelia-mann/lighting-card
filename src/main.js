@@ -68,7 +68,6 @@ export class MainCard extends LitElement {
                 selects.forEach((select) => {
                     if (select.entity_id.includes(light_id)) {
                         value.select = select
-                        console.log(value);
                     }
                 })
                 lightEntities.push(value)
