@@ -13,4 +13,16 @@ export default css`
         background-image: radial-gradient(circle at center, white 0%, transparent 100%), var(--grad);
     }
 
+    .dot {
+        position: absolute;
+        top: var(--top);
+        left: var(--left);
+        width: 10px;
+        height: 10px;
+        margin-left: -5px;
+        margin-top: -5px;
+        border-radius: 50%;
+        background: rgb(0, 0, 0);
+    }
+
 `;
