@@ -8634,8 +8634,8 @@ var $9da7823e99ded1f7$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         position: absolute;
         top: 0;
         left: 0;
-        width: 150px;
-        height: 150px;
+        width: var(--scale);
+        height: var(--scale);
         border-radius: 50%;
         border: solid 1px #e5e5e5;
         background-image: radial-gradient(circle at center, white 0%, transparent 100%), var(--grad);
@@ -8645,12 +8645,13 @@ var $9da7823e99ded1f7$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         position: absolute;
         top: var(--top);
         left: var(--left);
-        width: 10px;
-        height: 10px;
-        margin-left: -5px;
-        margin-top: -5px;
+        width: 20px;
+        height: 20px;
+        margin-left: -10px;
+        margin-top: -10px;
         border-radius: 50%;
-        background: rgb(0, 0, 0);
+        background: var(--color);
+        border: solid 2px #e5e5e5;
     }
 
 `;
@@ -8658,6 +8659,8 @@ var $9da7823e99ded1f7$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 
 
 class $39525fd96e3f385d$export$f80663f808113381 extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
+    _SCALE = 150;
+    _box;
     static get properties() {
         return {
             _light: {
@@ -8668,16 +8671,21 @@ class $39525fd96e3f385d$export$f80663f808113381 extends (0, $ab210b2da7b39b9d$ex
             },
             _saturation: {
                 state: true
+            },
+            _isDown: {
+                state: true
             }
         };
     }
     constructor(){
         super();
+        this._isDown = false;
+    }
+    firstUpdated() {
+        this._box = this.renderRoot.querySelector('.wheel-background');
+        this.initializeValues();
     }
     static styles = (0, $9da7823e99ded1f7$export$2e2bcd8739ae039);
-    handleOnChange(e) {}
-    handleOnInput(e) {}
-    getHS() {}
     initializeValues() {
         const hs_values = this._light.attributes.hs_color;
         if (hs_values) {
@@ -8699,16 +8707,55 @@ class $39525fd96e3f385d$export$f80663f808113381 extends (0, $ab210b2da7b39b9d$ex
             Y
         ];
     }
+    getColor() {
+        return `hsl(${this._hue}, ${this._saturation}%, ${100 - this._saturation / 2}%)`;
+    }
     render() {
-        this.initializeValues();
         const XY = this.getXY();
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
             <div class="wheel-background"
-            style="--grad: ${(0, $d66841a16b153167$export$475133aea461e763)(20)}; --top: ${XY[1]}%; --left: ${XY[0]}%";
+                style="
+                    --grad: ${(0, $d66841a16b153167$export$475133aea461e763)(20)};
+                    --top: ${XY[1]}%;
+                    --left: ${XY[0]}%;
+                    --color: ${this.getColor()};
+                    --scale: ${this._SCALE}px;"
+                @pointerdown=${this.down}
+                @pointerup=${this.up}
+                @pointermove=${this.move}
             >
-                <div class="dot"></div>
+                <div class="dot"
+                ></div>
             </div>
         `;
+    }
+    down(e) {
+        this._isDown = true;
+        this.move(e);
+    }
+    up() {
+        this._isDown = false;
+        const hs_color = [
+            this._hue,
+            this._saturation
+        ];
+        this.dispatchEvent(new CustomEvent('change', {
+            detail: hs_color
+        }));
+    }
+    move(e) {
+        if (this._isDown) {
+            const rect = this._box.getBoundingClientRect();
+            let x = 100 * (e.clientX - rect.left) / this._SCALE - 50;
+            let y = 50 - 100 * (e.clientY - rect.top) / this._SCALE;
+            let saturation = 2 * Math.sqrt(x ** 2 + y ** 2);
+            let hue = 360 * Math.atan2(x, y) / (2 * Math.PI);
+            hue < 0 && (hue = 360 + hue);
+            if (saturation < 100) {
+                this._hue = hue;
+                this._saturation = saturation;
+            } else this.up();
+        }
     }
 }
 customElements.define("color-wheel", $39525fd96e3f385d$export$f80663f808113381);
@@ -8798,6 +8845,14 @@ class $f76fa2dde9e8d076$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$ex
         };
         this.callService('light', 'turn_on', data);
     }
+    handleHS(event) {
+        const entityId = this._light.entity_id;
+        const data = {
+            entity_id: entityId,
+            hs_color: event.detail
+        };
+        this.callService('light', 'turn_on', data);
+    }
     brightnessBar() {
         if (this.isSelected('brightness')) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<slider-bar
                 ._light=${this._light}
@@ -8819,7 +8874,10 @@ class $f76fa2dde9e8d076$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$ex
             ></slider-bar>`;
     }
     colorWheel() {
-        if (this.isSelected('hs')) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<color-wheel ._light = ${this._light} ></color-wheel>`;
+        if (this.isSelected('hs')) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<color-wheel
+                ._light = ${this._light}
+                @change = ${this.handleHS}
+            ></color-wheel>`;
     }
     static styles = (0, $201c56a28a72cc27$export$2e2bcd8739ae039);
     render() {

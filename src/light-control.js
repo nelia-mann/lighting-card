@@ -101,6 +101,15 @@ export class LightControl extends LitElement {
         this.callService('light', 'turn_on', data);
     }
 
+    handleHS(event) {
+        const entityId = this._light.entity_id;
+        const data = {
+            entity_id: entityId,
+            hs_color: event.detail
+        }
+        this.callService('light', 'turn_on', data)
+    }
+
     brightnessBar() {
         if (this.isSelected('brightness')) {
             return html`<slider-bar
@@ -129,7 +138,10 @@ export class LightControl extends LitElement {
 
     colorWheel() {
         if (this.isSelected('hs')) {
-            return html`<color-wheel ._light = ${this._light} ></color-wheel>`
+            return html`<color-wheel
+                ._light = ${this._light}
+                @change = ${this.handleHS}
+            ></color-wheel>`
         }
     }
 
