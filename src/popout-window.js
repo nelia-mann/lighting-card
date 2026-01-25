@@ -2,7 +2,7 @@ import { html, LitElement } from 'lit';
 import { mdiCloseCircleOutline } from '@mdi/js';
 import styles from './popout.styles.js';
 import './light-inner.js';
-import './brightness-bar.js';
+import './slider.js';
 import './light-control.js';
 
 export class PopoutWindow extends LitElement {

@@ -21,7 +21,19 @@ export default css`
         height: 150px;
         border: solid 1px #e5e5e5;
         border-radius: 12px;
+    }
+
+    .shown-slider.brightness {
         background: linear-gradient(to top, rgb(255, 193, 7) var(--height), rgb(255, 193, 7, .1) var(--height));
+    }
+
+    .shown-level {
+        position: absolute;
+        bottom: var(--height);
+        left: 0;
+        width: 100%;
+        height: 1%;
+        background: rgba(0, 0, 0, 1);
     }
 
 

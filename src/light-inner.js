@@ -16,25 +16,6 @@ export class LightComponent extends LitElement {
         this._isSelected = false;
     }
 
-    icons() {
-        let result;
-        const lights = this._light.members;
-        if (lights) {
-            result = lights.map((light) => {
-                return html`
-                    <light-icon ._light=${light}></light-icon>
-                `
-            })
-        }
-        else {
-            result = html`
-                <light-icon ._light=${this._light}></light-icon>
-            `
-        }
-        return result;
-    }
-
-    // pull styles
     static styles = styles;
 
     render() {
@@ -42,7 +23,7 @@ export class LightComponent extends LitElement {
         return html`
             <div class="light-row">
                 <div  class="light-element ${this._isSelected}" @click=${this.onClick}>
-                    ${this.icons()}
+                    <light-icon ._light=${this._light}></light-icon>
                     ${name}
                 </div>
             </div>

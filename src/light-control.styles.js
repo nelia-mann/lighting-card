@@ -46,7 +46,7 @@ export default css`
     }
 
 
-    brightness-bar {
+    slider-bar {
         position: relative;
         width: 25px;
         height: 150px;
