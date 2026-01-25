@@ -58,4 +58,16 @@ export default css`
         align-items: center;
     }
 
+    color-wheel {
+        position: relative;
+        width: 150px;
+        height: 150px;
+        border: none;
+        margin-left: 20px;
+        margin-right: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
 `;

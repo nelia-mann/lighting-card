@@ -1,6 +1,6 @@
 import { html, LitElement } from 'lit';
 import styles from './slider.styles.js';
-import { tempGradient, hsGradient } from './color-util.js';
+import { tempGradient } from './color-util.js';
 
 
 

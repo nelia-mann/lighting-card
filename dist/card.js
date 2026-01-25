@@ -8609,9 +8609,70 @@ var $201c56a28a72cc27$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         align-items: center;
     }
 
+    color-wheel {
+        position: relative;
+        width: 150px;
+        height: 150px;
+        border: none;
+        margin-left: 20px;
+        margin-right: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
 `;
 
 
+
+
+
+
+var $9da7823e99ded1f7$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
+
+    .wheel-background {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        border: solid 1px #e5e5e5;
+        background-image: radial-gradient(circle at center, white 0%, transparent 100%), var(--grad);
+    }
+
+`;
+
+
+
+class $39525fd96e3f385d$export$f80663f808113381 extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
+    static get properties() {
+        return {
+            _light: {
+                state: true
+            },
+            _hue: {
+                state: true
+            },
+            _saturation: {
+                state: true
+            }
+        };
+    }
+    constructor(){
+        super();
+    }
+    static styles = (0, $9da7823e99ded1f7$export$2e2bcd8739ae039);
+    handleOnChange(e) {}
+    handleOnInput(e) {}
+    getHS() {}
+    render() {
+        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+            <div class="wheel-background" style="--grad: ${(0, $d66841a16b153167$export$475133aea461e763)(20)}"></div>
+        `;
+    }
+}
+customElements.define("color-wheel", $39525fd96e3f385d$export$f80663f808113381);
 
 
 class $f76fa2dde9e8d076$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
@@ -8718,6 +8779,9 @@ class $f76fa2dde9e8d076$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$ex
                 ._type=${'ct'}
             ></slider-bar>`;
     }
+    colorWheel() {
+        if (this.isSelected('hs')) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<color-wheel ._light = ${this._light} ></color-wheel>`;
+    }
     static styles = (0, $201c56a28a72cc27$export$2e2bcd8739ae039);
     render() {
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
@@ -8729,6 +8793,7 @@ class $f76fa2dde9e8d076$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$ex
             </div>
             ${this.brightnessBar()}
             ${this.ctBar()}
+            ${this.colorWheel()}
         `;
     }
 }

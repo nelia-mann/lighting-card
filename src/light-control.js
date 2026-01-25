@@ -4,6 +4,7 @@ import { mdiBrightness6 } from '@mdi/js';
 import styles from './light-control.styles.js';
 import './light-icon.js';
 import './slider.js';
+import './color-wheel.js';
 
 
 export class LightControl extends LitElement {
@@ -126,6 +127,12 @@ export class LightControl extends LitElement {
         }
     }
 
+    colorWheel() {
+        if (this.isSelected('hs')) {
+            return html`<color-wheel ._light = ${this._light} ></color-wheel>`
+        }
+    }
+
     static styles = styles;
 
     render() {
@@ -138,6 +145,7 @@ export class LightControl extends LitElement {
             </div>
             ${this.brightnessBar()}
             ${this.ctBar()}
+            ${this.colorWheel()}
         `
     }
 
