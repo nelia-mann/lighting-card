@@ -9152,8 +9152,6 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
         this.setFloors();
         this.setLighting();
     }
-    // pull styles
-    static styles = (0, $24833e213e3419f0$export$2e2bcd8739ae039);
     setFloors() {
         const floorObjects = this._hass.floors;
         const floors = Object.keys(floorObjects);
@@ -9170,11 +9168,26 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
     getAreas() {
         return this._hass.areas;
     }
+    getSelects() {
+        const entities = this._hass.states;
+        let selects = [];
+        Object.values(entities).forEach((entity)=>{
+            if (entity.entity_id.substring(0, 7) === "select.") selects.push(entity);
+        });
+        return selects;
+    }
     getLightEntities() {
         const entities = this._hass.entities;
         let lightEntities = [];
+        let selects = this.getSelects();
         Object.entries(entities).forEach(([key, value])=>{
-            if (key.substring(0, 6) === "light.") lightEntities.push(value);
+            if (key.substring(0, 6) === "light.") {
+                const light_id = value.entity_id.substring(6);
+                selects.forEach((select)=>{
+                    if (select.entity_id.includes(light_id)) value.select = select;
+                });
+                lightEntities.push(value);
+            }
         });
         return lightEntities;
     }
@@ -9318,6 +9331,8 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
         const floors = Object.keys(this._floors);
         return floors.map((floor)=>this.floorButton(floor));
     }
+    // pull styles
+    static styles = (0, $24833e213e3419f0$export$2e2bcd8739ae039);
     // return html
     render() {
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`

@@ -12,7 +12,7 @@ export class MainCard extends LitElement {
         return {
             _floor: { state: true },
             _lighting: { state: true },
-            _floors: { state: true }
+            _floors: { state: true },
         };
     }
 
@@ -32,9 +32,6 @@ export class MainCard extends LitElement {
         this.setLighting();
     }
 
-    // pull styles
-    static styles = styles;
-
     setFloors() {
         const floorObjects = this._hass.floors;
         const floors = Object.keys(floorObjects);
@@ -50,11 +47,29 @@ export class MainCard extends LitElement {
         return this._hass.areas;
     }
 
+    getSelects() {
+        const entities = this._hass.states;
+        let selects = [];
+        Object.values(entities).forEach((entity) => {
+            if (entity.entity_id.substring(0, 7) === "select.") {
+                selects.push(entity);
+            }
+        })
+        return selects;
+    }
+
     getLightEntities() {
         const entities = this._hass.entities;
         let lightEntities = [];
+        let selects = this.getSelects();
         Object.entries(entities).forEach(([key, value]) => {
             if (key.substring(0, 6) === "light.") {
+                const light_id = value.entity_id.substring(6);
+                selects.forEach((select) => {
+                    if (select.entity_id.includes(light_id)) {
+                        value.select = select
+                    }
+                })
                 lightEntities.push(value)
             }
         })
@@ -220,6 +235,9 @@ export class MainCard extends LitElement {
         const floors = Object.keys(this._floors);
         return floors.map((floor) => (this.floorButton(floor)));
     }
+
+    // pull styles
+    static styles = styles;
 
     // return html
     render() {
