@@ -9184,7 +9184,10 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
             if (key.substring(0, 6) === "light.") {
                 const light_id = value.entity_id.substring(6);
                 selects.forEach((select)=>{
-                    if (select.entity_id.includes(light_id)) value.select = select;
+                    if (select.entity_id.includes(light_id)) {
+                        value.select = select;
+                        console.log(value);
+                    }
                 });
                 lightEntities.push(value);
             }
