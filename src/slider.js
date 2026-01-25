@@ -1,5 +1,6 @@
 import { html, LitElement } from 'lit';
 import styles from './slider.styles.js';
+import { tempGradient, hsGradient } from './color-util.js';
 
 
 
@@ -47,10 +48,19 @@ export class SliderBar extends LitElement {
         return 100 * (this.getValue() - this._min) / (this._max - this._min)
     }
 
+    getTempGradient() {
+        const minTemp = this._min;
+        const maxTemp = this._max;
+        const steps = 10;
+        return tempGradient(minTemp, maxTemp, steps);
+    }
+
     render() {
-        console.log(this._light.attributes)
         return html`
-            <div class="shown-slider ${this._type}" style="--height: ${this.getHeight()}%">
+            <div
+                class="shown-slider ${this._type}"
+                style="--height: ${this.getHeight()}%; --grad: ${this.getTempGradient()};"
+            >
                 <div class="shown-level" style="--height: ${this.getHeight()}%"></div>
             </div>
 

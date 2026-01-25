@@ -97,7 +97,6 @@ export class LightControl extends LitElement {
             entity_id: entityId,
             color_temp_kelvin: event.detail
         };
-        console.log(data)
         this.callService('light', 'turn_on', data);
     }
 

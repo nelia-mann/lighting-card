@@ -27,12 +27,16 @@ export default css`
         background: linear-gradient(to top, rgb(255, 193, 7) var(--height), rgb(255, 193, 7, .1) var(--height));
     }
 
+    .shown-slider.ct {
+        background: var(--grad);
+    }
+
     .shown-level {
         position: absolute;
         bottom: var(--height);
-        left: 0;
-        width: 100%;
-        height: 1%;
+        left: -10%;
+        width: 120%;
+        height: 2%;
         background: rgba(0, 0, 0, 1);
     }
 

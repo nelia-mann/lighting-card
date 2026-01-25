@@ -8401,77 +8401,21 @@ var $57a27094fb213e22$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         background: linear-gradient(to top, rgb(255, 193, 7) var(--height), rgb(255, 193, 7, .1) var(--height));
     }
 
+    .shown-slider.ct {
+        background: var(--grad);
+    }
+
     .shown-level {
         position: absolute;
         bottom: var(--height);
-        left: 0;
-        width: 100%;
-        height: 1%;
+        left: -10%;
+        width: 120%;
+        height: 2%;
         background: rgba(0, 0, 0, 1);
     }
 
 
 `;
-
-
-class $6520265339ffabe1$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
-    _max;
-    _min;
-    _startValue;
-    _type;
-    static get properties() {
-        return {
-            _light: {
-                state: true
-            },
-            _value: {
-                state: true
-            }
-        };
-    }
-    constructor(){
-        super();
-    }
-    static styles = (0, $57a27094fb213e22$export$2e2bcd8739ae039);
-    handleOnChange(e) {
-        const value = e.target.value;
-        this.dispatchEvent(new CustomEvent('change', {
-            detail: value
-        }));
-    }
-    handleOnInput(e) {
-        const value = e.target.value;
-        this._value = value;
-    }
-    getValue() {
-        if (this._value) return this._value;
-        else if (this._startValue) return this._startValue;
-        else return this._min;
-    }
-    getHeight() {
-        return 100 * (this.getValue() - this._min) / (this._max - this._min);
-    }
-    render() {
-        console.log(this._light.attributes);
-        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-            <div class="shown-slider ${this._type}" style="--height: ${this.getHeight()}%">
-                <div class="shown-level" style="--height: ${this.getHeight()}%"></div>
-            </div>
-
-            <input
-                class="slider"
-                type="range"
-                max=${this._max}
-                min=${this._min}
-                value="${this.getValue()}"
-                @input="${this.handleOnInput}"
-                @change="${this.handleOnChange}"
-            ></input>
-        `;
-    }
-}
-customElements.define("slider-bar", $6520265339ffabe1$export$5ff34efdd1b9ed54);
-
 
 
 function $d66841a16b153167$var$getTempRed(temp) {
@@ -8534,6 +8478,75 @@ function $d66841a16b153167$export$475133aea461e763(steps) {
     output = output + `)`;
     return output;
 }
+
+
+class $6520265339ffabe1$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
+    _max;
+    _min;
+    _startValue;
+    _type;
+    static get properties() {
+        return {
+            _light: {
+                state: true
+            },
+            _value: {
+                state: true
+            }
+        };
+    }
+    constructor(){
+        super();
+    }
+    static styles = (0, $57a27094fb213e22$export$2e2bcd8739ae039);
+    handleOnChange(e) {
+        const value = e.target.value;
+        this.dispatchEvent(new CustomEvent('change', {
+            detail: value
+        }));
+    }
+    handleOnInput(e) {
+        const value = e.target.value;
+        this._value = value;
+    }
+    getValue() {
+        if (this._value) return this._value;
+        else if (this._startValue) return this._startValue;
+        else return this._min;
+    }
+    getHeight() {
+        return 100 * (this.getValue() - this._min) / (this._max - this._min);
+    }
+    getTempGradient() {
+        const minTemp = this._min;
+        const maxTemp = this._max;
+        const steps = 10;
+        return (0, $d66841a16b153167$export$5b5356aa7e20fd72)(minTemp, maxTemp, steps);
+    }
+    render() {
+        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+            <div
+                class="shown-slider ${this._type}"
+                style="--height: ${this.getHeight()}%; --grad: ${this.getTempGradient()};"
+            >
+                <div class="shown-level" style="--height: ${this.getHeight()}%"></div>
+            </div>
+
+            <input
+                class="slider"
+                type="range"
+                max=${this._max}
+                min=${this._min}
+                value="${this.getValue()}"
+                @input="${this.handleOnInput}"
+                @change="${this.handleOnChange}"
+            ></input>
+        `;
+    }
+}
+customElements.define("slider-bar", $6520265339ffabe1$export$5ff34efdd1b9ed54);
+
+
 
 
 
@@ -8683,7 +8696,6 @@ class $f76fa2dde9e8d076$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$ex
             entity_id: entityId,
             color_temp_kelvin: event.detail
         };
-        console.log(data);
         this.callService('light', 'turn_on', data);
     }
     brightnessBar() {
