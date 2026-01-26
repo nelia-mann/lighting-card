@@ -52,7 +52,9 @@ export class MainCard extends LitElement {
         let selects = [];
         Object.values(entities).forEach((entity) => {
             if (entity.entity_id.substring(0, 7) === "select.") {
-                selects.push(entity);
+                if (entity.entity_id.includes('theme')) {
+                    selects.push(entity);
+                }
             }
         })
         return selects;
@@ -144,8 +146,9 @@ export class MainCard extends LitElement {
                     return newStateDictionary;
                 })
                 let state = { ... this._hass.states[groupId] };
-                state.members = memberStates;
-                this._lighting[floorId]["groups"][groupId] = state;
+                const newState = this.attachSelect(state);
+                newState.members = memberStates;
+                this._lighting[floorId]["groups"][groupId] = newState;
             }
 
         })

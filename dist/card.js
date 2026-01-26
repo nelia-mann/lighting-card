@@ -9182,7 +9182,9 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
         const entities = this._hass.states;
         let selects = [];
         Object.values(entities).forEach((entity)=>{
-            if (entity.entity_id.substring(0, 7) === "select.") selects.push(entity);
+            if (entity.entity_id.substring(0, 7) === "select.") {
+                if (entity.entity_id.includes('theme')) selects.push(entity);
+            }
         });
         return selects;
     }
@@ -9267,8 +9269,9 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
                 let state = {
                     ...this._hass.states[groupId]
                 };
-                state.members = memberStates;
-                this._lighting[floorId]["groups"][groupId] = state;
+                const newState = this.attachSelect(state);
+                newState.members = memberStates;
+                this._lighting[floorId]["groups"][groupId] = newState;
             }
         });
     }
