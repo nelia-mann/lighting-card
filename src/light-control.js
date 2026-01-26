@@ -1,6 +1,6 @@
 import { html, LitElement } from 'lit';
 import { tempGradient, hsGradient } from './color-util.js';
-import { mdiBrightness6 } from '@mdi/js';
+import { mdiBrightness6, mdiMagicStaff } from '@mdi/js';
 import styles from './light-control.styles.js';
 import './light-icon.js';
 import './slider.js';
@@ -65,6 +65,16 @@ export class LightControl extends LitElement {
             style="--grad: ${hsGradient(10)};"
             @click=${() => this.onSelect("hs")}
         ></div>`
+    }
+
+    selectIcon() {
+        return html`<div
+                class="select icon ${this.isSelected("select")}"
+                @click=${() => this.onSelect("select")}
+            >
+                <ha-svg-icon .path=${mdiMagicStaff}></ha-svg-icon>
+            </div>
+        `
     }
 
     onSelect(result) {
@@ -154,6 +164,7 @@ export class LightControl extends LitElement {
                 ${(this.isAttribute('brightness')) ? (this.brightnessIcon()) : ``}
                 ${(this.isAttribute('color_temp_kelvin')) ? (this.ctIcon()) : ``}
                 ${(this.isAttribute('hs_color')) ? (this.hsIcon()) : ``}
+                ${(this.isAttribute('select')) ? (this.selectIcon()) : ``}
             </div>
             ${this.brightnessBar()}
             ${this.ctBar()}

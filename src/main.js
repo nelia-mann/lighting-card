@@ -58,18 +58,23 @@ export class MainCard extends LitElement {
         return selects;
     }
 
+    attachSelect(light) {
+        const light_id = light.entity_id.substring(6);
+        const selects = this.getSelects();
+        const newLight = { ...light };
+        selects.forEach((select) => {
+            if (select.entity_id.includes(light_id)) {
+                newLight.attributes.select = select;
+            }
+        });
+        return newLight;
+    }
+
     getLightEntities() {
         const entities = this._hass.entities;
         let lightEntities = [];
-        let selects = this.getSelects();
         Object.entries(entities).forEach(([key, value]) => {
             if (key.substring(0, 6) === "light.") {
-                const light_id = value.entity_id.substring(6);
-                selects.forEach((select) => {
-                    if (select.entity_id.includes(light_id)) {
-                        value.select = select
-                    }
-                })
                 lightEntities.push(value)
             }
         })
@@ -82,7 +87,7 @@ export class MainCard extends LitElement {
         entities.forEach((entity) => {
             if (entity.platform === "group") {
                 groups.push(entity)
-            }
+            };
         })
         return groups;
     }
@@ -118,7 +123,8 @@ export class MainCard extends LitElement {
                 const floorId = areas[areaId].floor_id;
                 const entityId = entity.entity_id;
                 const state = { ... this._hass.states[entityId] };
-                this._lighting[floorId]["solo"][entityId] = state;
+                const newState = this.attachSelect(state);
+                this._lighting[floorId]["solo"][entityId] = newState;
             }
         })
     }
@@ -134,7 +140,8 @@ export class MainCard extends LitElement {
                 const memberIds = this._hass.states[groupId].attributes.entity_id;
                 const memberStates = memberIds.map((id) => {
                     const stateDictionary = { ... this._hass.states[id] };
-                    return stateDictionary;
+                    const newStateDictionary = this.attachSelect(stateDictionary);
+                    return newStateDictionary;
                 })
                 let state = { ... this._hass.states[groupId] };
                 state.members = memberStates;
