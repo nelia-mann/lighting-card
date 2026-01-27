@@ -9014,7 +9014,8 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
                 type: String
             },
             _light: {
-                state: true
+                state: true,
+                reflect: true
             },
             _lightId: {
                 state: true
@@ -9024,11 +9025,17 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
     constructor(){
         super();
     }
+    firstUpdated() {
+        this.defaultSelect();
+    }
     static styles = (0, $84adf0e0aa3f1db7$export$2e2bcd8739ae039);
+    defaultSelect() {
+        this._lightId = this._light.entity_id;
+    }
     innerLight(light) {
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
             <light-inner
-                id=${light}
+                id=${light.entity_id}
                 ._light=${light}
                 ._isSelected=${this.isSelected(light)}
                 @select=${()=>this.select(light)}
@@ -9052,7 +9059,7 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
             `;
     }
     render() {
-        this.defaultSelect();
+        console.log(this._lightId, this._light);
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
         <dialog @close="${this._handleClose}">
             <div class="modal-header">
@@ -9070,9 +9077,6 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
             </div>
         </dialog>
         `;
-    }
-    defaultSelect() {
-        if (!this._lightId) this._lightId = this._light.entity_id;
     }
     select(light) {
         this._lightId = light.entity_id;
@@ -9094,13 +9098,12 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
     updated(changedProperties) {
         if (changedProperties.has('opened')) {
             const dialog = this.shadowRoot.querySelector('dialog');
-            if (this.opened) dialog.showModal(); // Opens the dialog modally, disabling content behind it
+            if (this.opened) dialog.showModal();
             else dialog.close();
         }
     }
     closeModal() {
         this.opened = false;
-        // Optional: dispatch a custom event when closing from inside the modal
         this.dispatchEvent(new CustomEvent('modal-closed'));
     }
     _handleClose() {
@@ -9134,11 +9137,11 @@ class $046ae152b1d9e254$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
         const lights = this._light.members;
         if (lights) result = lights.map((light)=>{
             return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-                    <light-icon ._light=${light}></light-icon>
+                    <light-icon id=${light.entity_id} ._light=${light}></light-icon>
                 `;
         });
         else result = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-                <light-icon ._light=${this._light}></light-icon>
+                <light-icon id=${this._light.entity_id} ._light=${this._light}></light-icon>
             `;
         return result;
     }
@@ -9150,6 +9153,7 @@ class $046ae152b1d9e254$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
                 ${name}
             </div>
             <popout-window
+                id="${this._light.entity_id}"
                 title="${name}"
                 ?opened="${this.isModalOpen}"
                 @modal-closed="${this.handleModalClosed}"
@@ -9198,20 +9202,22 @@ class $fdede02cbd34666f$export$40073d408f029a0b extends (0, $ab210b2da7b39b9d$ex
     }
     static styles = (0, $fd69d66a3348dfcc$export$2e2bcd8739ae039);
     soloLightDisplays() {
-        return Object.values(this._lights.solo).map((value)=>{
+        return Object.values(this._lights.solo).map((light)=>{
             return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
                 <light-component
-                    ._light=${value}
+                    id=${light.entity_id}
+                    ._light=${light}
                     .callService=${this.callService}
                     ></light-component>
             `;
         });
     }
     groupLightDisplays() {
-        return Object.values(this._lights.groups).map((value)=>{
+        return Object.values(this._lights.groups).map((light)=>{
             return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
                 <light-component
-                    ._light=${value}
+                    id=${light.entity_id}
+                    ._light=${light}
                     .callService=${this.callService}
                 ></light-component>
             `;
@@ -9468,6 +9474,7 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
     content() {
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
             <panel-component
+                id = ${this._floor}
                 ._lights = ${this._lighting[this._floor]}
                 .callService=${this._hass.callService}
             ></panel-component>
@@ -9478,14 +9485,14 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
     }
     // set card size parameters for ha
     getCardSize() {
-        return 4;
+        return 7;
     }
     getGridOptions() {
         return {
-            rows: 6,
-            columns: 21,
-            min_rows: 6,
-            max_rows: 6
+            rows: 7,
+            columns: 24,
+            min_rows: 7,
+            max_rows: 7
         };
     }
 }

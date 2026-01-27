@@ -28,13 +28,13 @@ export class LightComponent extends LitElement {
         if (lights) {
             result = lights.map((light) => {
                 return html`
-                    <light-icon ._light=${light}></light-icon>
+                    <light-icon id=${light.entity_id} ._light=${light}></light-icon>
                 `
             })
         }
         else {
             result = html`
-                <light-icon ._light=${this._light}></light-icon>
+                <light-icon id=${this._light.entity_id} ._light=${this._light}></light-icon>
             `
         }
         return result;
@@ -48,6 +48,7 @@ export class LightComponent extends LitElement {
                 ${name}
             </div>
             <popout-window
+                id="${this._light.entity_id}"
                 title="${name}"
                 ?opened="${this.isModalOpen}"
                 @modal-closed="${this.handleModalClosed}"

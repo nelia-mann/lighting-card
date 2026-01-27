@@ -17,10 +17,11 @@ export class PanelComponent extends LitElement {
     static styles = styles;
 
     soloLightDisplays() {
-        return Object.values(this._lights.solo).map((value) => {
+        return Object.values(this._lights.solo).map((light) => {
             return html`
                 <light-component
-                    ._light=${value}
+                    id=${light.entity_id}
+                    ._light=${light}
                     .callService=${this.callService}
                     ></light-component>
             `
@@ -28,10 +29,11 @@ export class PanelComponent extends LitElement {
     }
 
     groupLightDisplays() {
-        return Object.values(this._lights.groups).map((value) => {
+        return Object.values(this._lights.groups).map((light) => {
             return html`
                 <light-component
-                    ._light=${value}
+                    id=${light.entity_id}
+                    ._light=${light}
                     .callService=${this.callService}
                 ></light-component>
             `

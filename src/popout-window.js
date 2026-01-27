@@ -11,7 +11,7 @@ export class PopoutWindow extends LitElement {
         return {
             opened: { type: Boolean, reflect: true },
             title: { type: String },
-            _light: { state: true },
+            _light: { state: true, reflect: true },
             _lightId: { state: true },
         }
     }
@@ -20,12 +20,20 @@ export class PopoutWindow extends LitElement {
         super();
     }
 
+    firstUpdated() {
+        this.defaultSelect();
+    }
+
     static styles = styles;
+
+    defaultSelect() {
+        this._lightId = this._light.entity_id;
+    }
 
     innerLight(light) {
         return html`
             <light-inner
-                id=${light}
+                id=${light.entity_id}
                 ._light=${light}
                 ._isSelected=${this.isSelected(light)}
                 @select=${() => this.select(light)}
@@ -56,7 +64,7 @@ export class PopoutWindow extends LitElement {
     }
 
     render() {
-        this.defaultSelect();
+        console.log(this._lightId, this._light);
         return html`
         <dialog @close="${this._handleClose}">
             <div class="modal-header">
@@ -74,12 +82,6 @@ export class PopoutWindow extends LitElement {
             </div>
         </dialog>
         `;
-    }
-
-    defaultSelect() {
-        if (!(this._lightId)) {
-            this._lightId = this._light.entity_id;
-        }
     }
 
     select(light) {
@@ -109,7 +111,7 @@ export class PopoutWindow extends LitElement {
         if (changedProperties.has('opened')) {
         const dialog = this.shadowRoot.querySelector('dialog');
         if (this.opened) {
-            dialog.showModal(); // Opens the dialog modally, disabling content behind it
+            dialog.showModal();
         } else {
             dialog.close();
         }
@@ -118,7 +120,6 @@ export class PopoutWindow extends LitElement {
 
     closeModal() {
         this.opened = false;
-        // Optional: dispatch a custom event when closing from inside the modal
         this.dispatchEvent(new CustomEvent('modal-closed'));
     }
 

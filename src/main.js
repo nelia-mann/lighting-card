@@ -271,6 +271,7 @@ export class MainCard extends LitElement {
     content() {
         return html`
             <panel-component
+                id = ${this._floor}
                 ._lights = ${this._lighting[this._floor]}
                 .callService=${this._hass.callService}
             ></panel-component>
@@ -283,15 +284,15 @@ export class MainCard extends LitElement {
 
     // set card size parameters for ha
     getCardSize() {
-        return 4;
+        return 7;
     }
 
     getGridOptions() {
         return {
-            rows: 6,
-            columns: 21,
-            min_rows: 6,
-            max_rows: 6
+            rows: 7,
+            columns: 24,
+            min_rows: 7,
+            max_rows: 7
         }
     }
 
