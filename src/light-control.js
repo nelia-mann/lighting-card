@@ -1,10 +1,11 @@
 import { html, LitElement } from 'lit';
 import { tempGradient, hsGradient } from './color-util.js';
-import { mdiBrightness6, mdiMagicStaff } from '@mdi/js';
+import { mdiBrightness6, mdiMagicStaff, mdiCreationOutline } from '@mdi/js';
 import styles from './light-control.styles.js';
 import './light-icon.js';
 import './slider.js';
 import './color-wheel.js';
+import './theme-select.js';
 
 
 export class LightControl extends LitElement {
@@ -72,7 +73,7 @@ export class LightControl extends LitElement {
                 class="select icon ${this.isSelected("select")}"
                 @click=${() => this.onSelect("select")}
             >
-                <ha-svg-icon .path=${mdiMagicStaff}></ha-svg-icon>
+                <ha-svg-icon .path=${mdiCreationOutline}></ha-svg-icon>
             </div>
         `
     }
@@ -120,6 +121,15 @@ export class LightControl extends LitElement {
         this.callService('light', 'turn_on', data)
     }
 
+    handleSelect(event) {
+        const entityId = this._light.attributes.select.entity_id;
+        const data = {
+            entity_id: entityId,
+            option: event.detail
+        }
+        this.callService('select', 'select_option', data)
+    }
+
     brightnessBar() {
         if (this.isSelected('brightness')) {
             return html`<slider-bar
@@ -155,6 +165,16 @@ export class LightControl extends LitElement {
         }
     }
 
+    themeSelect() {
+        if (this.isSelected('select')) {
+            return html`<theme-select
+                ._light = ${this._light}
+                @change = ${this.handleSelect}
+            ></theme-select>
+            `
+        }
+    }
+
     static styles = styles;
 
     render() {
@@ -169,6 +189,7 @@ export class LightControl extends LitElement {
             ${this.brightnessBar()}
             ${this.ctBar()}
             ${this.colorWheel()}
+            ${this.themeSelect()}
         `
     }
 

@@ -27,7 +27,7 @@ export default css`
     }
 
     .icon.brightness {
-        background: rgba(255, 193, 7, .2);
+        background: rgba(255, 193, 7, .2);∂
     }
 
     .icon.true {
@@ -43,6 +43,10 @@ export default css`
     .icon.hs {
         overflow: hidden;
         background-image: radial-gradient(circle at center, white 0%, transparent 100%), var(--grad);
+    }
+
+    .icon.select {
+        background: rgba(255, 193, 7, .2);
     }
 
 

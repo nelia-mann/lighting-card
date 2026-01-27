@@ -8578,7 +8578,7 @@ var $201c56a28a72cc27$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
     }
 
     .icon.brightness {
-        background: rgba(255, 193, 7, .2);
+        background: rgba(255, 193, 7, .2);∂
     }
 
     .icon.true {
@@ -8594,6 +8594,10 @@ var $201c56a28a72cc27$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
     .icon.hs {
         overflow: hidden;
         background-image: radial-gradient(circle at center, white 0%, transparent 100%), var(--grad);
+    }
+
+    .icon.select {
+        background: rgba(255, 193, 7, .2);
     }
 
 
@@ -8761,6 +8765,105 @@ class $39525fd96e3f385d$export$f80663f808113381 extends (0, $ab210b2da7b39b9d$ex
 customElements.define("color-wheel", $39525fd96e3f385d$export$f80663f808113381);
 
 
+
+
+var $fc4a6c4e4b89c4fa$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
+
+    .select-panel {
+        display: flex;
+        flex-flow: column wrap;
+        justify-content: flex-start;
+        align-items: center;
+        border: solid 1px #e5e5e5;
+        border-radius: 12px;
+        margin-left: 15px;
+        width: 550px;
+        height: 280px;
+    }
+
+    .option {
+        border: solid 1px #e5e5e5;
+        border-radius: 6px;
+        padding: px;
+        margin: 3px;
+        width: 100px;
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+    }
+
+    .option.true {
+        outline: solid rgb(255, 193, 7);
+        outline-offset: -3px;
+    }
+
+    .option:hover {
+        background: rgba(255, 193, 7, .1);
+    }
+
+`;
+
+
+class $a6f01a0d74278018$export$1b9e02e625a724dc extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
+    static get properties() {
+        return {
+            _light: {
+                state: true
+            },
+            _option: {
+                state: true
+            }
+        };
+    }
+    constructor(){
+        super();
+    }
+    static styles = (0, $fc4a6c4e4b89c4fa$export$2e2bcd8739ae039);
+    firstUpdated() {
+        this._option = this.getValue();
+    }
+    onClick(e) {
+        const newOption = e.target.id;
+        this._option = newOption;
+        this.dispatchEvent(new CustomEvent('change', {
+            detail: newOption
+        }));
+    }
+    getValue() {
+        return this._light.attributes.select.state;
+    }
+    getOptions() {
+        const optionList = this._light.attributes.select.attributes.options;
+        return optionList;
+    }
+    isSelected(option) {
+        return option === this._option;
+    }
+    listOptions() {
+        const optionList = this.getOptions();
+        return optionList.map((option)=>{
+            return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<div
+                class="option ${this.isSelected(option)}"
+                id="${option}"
+                @click=${this.onClick}
+             >
+                ${option}
+            </div>`;
+        });
+    }
+    render() {
+        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+            <div class="select-panel">
+                ${this.listOptions()}
+            </div>
+        `;
+    }
+}
+customElements.define("theme-select", $a6f01a0d74278018$export$1b9e02e625a724dc);
+
+
 class $f76fa2dde9e8d076$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
     static get properties() {
         return {
@@ -8821,7 +8924,7 @@ class $f76fa2dde9e8d076$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$ex
                 class="select icon ${this.isSelected("select")}"
                 @click=${()=>this.onSelect("select")}
             >
-                <ha-svg-icon .path=${0, $04557c061247a0a6$export$6c2d483f5f48082b}></ha-svg-icon>
+                <ha-svg-icon .path=${0, $04557c061247a0a6$export$8b91c405b1f98ab9}></ha-svg-icon>
             </div>
         `;
     }
@@ -8862,6 +8965,14 @@ class $f76fa2dde9e8d076$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$ex
         };
         this.callService('light', 'turn_on', data);
     }
+    handleSelect(event) {
+        const entityId = this._light.attributes.select.entity_id;
+        const data = {
+            entity_id: entityId,
+            option: event.detail
+        };
+        this.callService('select', 'select_option', data);
+    }
     brightnessBar() {
         if (this.isSelected('brightness')) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<slider-bar
                 ._light=${this._light}
@@ -8888,6 +8999,13 @@ class $f76fa2dde9e8d076$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$ex
                 @change = ${this.handleHS}
             ></color-wheel>`;
     }
+    themeSelect() {
+        if (this.isSelected('select')) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<theme-select
+                ._light = ${this._light}
+                @change = ${this.handleSelect}
+            ></theme-select>
+            `;
+    }
     static styles = (0, $201c56a28a72cc27$export$2e2bcd8739ae039);
     render() {
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
@@ -8901,6 +9019,7 @@ class $f76fa2dde9e8d076$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$ex
             ${this.brightnessBar()}
             ${this.ctBar()}
             ${this.colorWheel()}
+            ${this.themeSelect()}
         `;
     }
 }
