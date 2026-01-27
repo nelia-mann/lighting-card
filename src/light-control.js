@@ -35,7 +35,7 @@ export class LightControl extends LitElement {
 
     lightIcon() {
         return html`
-        <div class="onoff icon" @click=${this.onOff}>
+        <div class="onoff icon" @click=${() => this.handleLightService('toggle', null, null)}>
             <light-icon ._light=${this._light}></light-icon>
         </div>
         `
@@ -86,39 +86,13 @@ export class LightControl extends LitElement {
         return (this._control === string);
     }
 
-    onOff() {
+    handleLightService(service, key, value) {
         const entityId = this._light.entity_id;
-        const data = {
-            entity_id: entityId,
+        let data = { entity_id: entityId }
+        if (key) {
+            data[key] = value;
         }
-        this.callService('light', 'toggle', data)
-    }
-
-    handleBrighten(event) {
-        const entityId = this._light.entity_id;
-        const data = {
-            entity_id: entityId,
-            brightness: event.detail
-        };
-        this.callService('light', 'turn_on', data);
-    }
-
-    handleCT(event) {
-        const entityId = this._light.entity_id;
-        const data = {
-            entity_id: entityId,
-            color_temp_kelvin: event.detail
-        };
-        this.callService('light', 'turn_on', data);
-    }
-
-    handleHS(event) {
-        const entityId = this._light.entity_id;
-        const data = {
-            entity_id: entityId,
-            hs_color: event.detail
-        }
-        this.callService('light', 'turn_on', data)
+        this.callService('light', service, data)
     }
 
     handleSelect(event) {
@@ -134,7 +108,7 @@ export class LightControl extends LitElement {
         if (this.isSelected('brightness')) {
             return html`<slider-bar
                 ._light=${this._light}
-                @change=${this.handleBrighten}
+                @change=${(e) => this.handleLightService('turn_on', 'brightness', e.detail)}
                 ._max=${255}
                 ._min=${0}
                 ._startValue=${this._light.attributes.brightness}
@@ -147,7 +121,7 @@ export class LightControl extends LitElement {
         if (this.isSelected('ct')) {
             return html`<slider-bar
                 ._light=${this._light}
-                @change=${this.handleCT}
+                @change=${(e) => this.handleLightService('turn_on', 'color_temp_kelvin', e.detail)}
                 ._max=${this._light.attributes.max_color_temp_kelvin}
                 ._min=${this._light.attributes.min_color_temp_kelvin}
                 ._startValue=${this._light.attributes.color_temp_kelvin}
@@ -160,7 +134,7 @@ export class LightControl extends LitElement {
         if (this.isSelected('hs')) {
             return html`<color-wheel
                 ._light = ${this._light}
-                @change = ${this.handleHS}
+                @change = ${(e) => this.handleLightService('turn_on', 'hs_color', e.detail)}
             ></color-wheel>`
         }
     }
