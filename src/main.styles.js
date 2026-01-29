@@ -10,7 +10,8 @@ export default css`
         flex-flow: column nowrap;
         justify-content: space-between;
         align-items: center;
-        height: 100%;
+        height: 500px;
+        width: 900px;
     }
 
     .button-row {
