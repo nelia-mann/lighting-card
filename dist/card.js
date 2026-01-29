@@ -643,9 +643,9 @@ var $24833e213e3419f0$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
     .content-row {
         display: flex;
         flex-flow: row wrap;
-        justify-content: space-around;
-        align-items: center;
-        width: 100;
+        justify-content: flex-start;
+        align-items: flex-start;
+        width: 100%;
         margin: 0px;
         padding: 0px;
     }
@@ -656,6 +656,12 @@ var $24833e213e3419f0$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         width: 22%;
         padding: 0px;
         border-width: 0px;
+        background-color: var(--background);
+    }
+
+    .button.true {
+        outline-offset: -4px;
+        outline: solid var(--outline);
     }
 
     h1 {
@@ -692,6 +698,15 @@ var $fd69d66a3348dfcc$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
     }
 
     light-inner {
+    }
+
+    .area {
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+
+    h1 {
+        font-size: 100%;
     }
 
     .light-row {
@@ -739,9 +754,11 @@ var $fd69d66a3348dfcc$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 
     .panel {
         width: 100%;
-        height: 82%;
+        height: 300px;
         display: flex;
-        flex-flow: row wrap;
+        flex-flow: column wrap;
+        justify-content: flex-start;
+        align-items: flex-start;
     }
 
     .light-element {
@@ -8478,6 +8495,34 @@ function $d66841a16b153167$export$475133aea461e763(steps) {
     output = output + `)`;
     return output;
 }
+function $d66841a16b153167$var$setScale(a, b, t, T) {
+    let result = a;
+    if (T > 0) {
+        if (t > T) result = b;
+        else if (t < 0) result = a;
+        else result = a + (b - a) * t / T;
+    }
+    return result;
+}
+function $d66841a16b153167$var$interpolateRGB(rgbA, rgbB, t, T, opacity) {
+    const red = $d66841a16b153167$var$setScale(rgbA[0], rgbB[0], t, T);
+    const green = $d66841a16b153167$var$setScale(rgbA[1], rgbB[1], t, T);
+    const blue = $d66841a16b153167$var$setScale(rgbA[2], rgbB[2], t, T);
+    return `rgba(${red}, ${green}, ${blue}, ${opacity})`;
+}
+function $d66841a16b153167$export$40735a17910aaee(t, T, opacity) {
+    let off = [
+        158,
+        158,
+        158
+    ];
+    let on = [
+        255,
+        193,
+        7
+    ];
+    return $d66841a16b153167$var$interpolateRGB(off, on, t, T, opacity);
+}
 
 
 class $6520265339ffabe1$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
@@ -9186,9 +9231,10 @@ customElements.define("light-component", $046ae152b1d9e254$export$5e33b198135dff
 
 
 class $fdede02cbd34666f$export$40073d408f029a0b extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
+    _areas;
     static get properties() {
         return {
-            _lights: {
+            _lightBundles: {
                 state: true
             }
         };
@@ -9197,31 +9243,36 @@ class $fdede02cbd34666f$export$40073d408f029a0b extends (0, $ab210b2da7b39b9d$ex
         super();
     }
     static styles = (0, $fd69d66a3348dfcc$export$2e2bcd8739ae039);
-    soloLightDisplays() {
-        return Object.values(this._lights.solo).map((value)=>{
-            return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-                <light-component
-                    ._light=${value}
-                    .callService=${this.callService}
-                    ></light-component>
-            `;
-        });
+    getAreaName(areaId) {
+        return this._areas[areaId].name;
     }
-    groupLightDisplays() {
-        return Object.values(this._lights.groups).map((value)=>{
+    getAreaBundles(areaId) {
+        return this._lightBundles[areaId];
+    }
+    getAreaDisplay(areaId) {
+        const title = this.getAreaName(areaId);
+        const areaBundles = this.getAreaBundles(areaId);
+        const areaComponents = Object.values(areaBundles).map((lightBundle)=>{
             return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
                 <light-component
-                    ._light=${value}
+                    ._light=${lightBundle.state}
                     .callService=${this.callService}
                 ></light-component>
             `;
         });
+        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+            <div class="area">
+                <h1>${title}</h1>
+                ${areaComponents}
+            </div>`;
+    }
+    getAreaDisplays() {
+        return Object.keys(this._lightBundles).map((areaId)=>this.getAreaDisplay(areaId));
     }
     render() {
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
             <div class="panel">
-                ${this.soloLightDisplays()}
-                ${this.groupLightDisplays()}
+                ${this.getAreaDisplays()}
             </div>
         `;
     }
@@ -9229,169 +9280,225 @@ class $fdede02cbd34666f$export$40073d408f029a0b extends (0, $ab210b2da7b39b9d$ex
 customElements.define("panel-component", $fdede02cbd34666f$export$40073d408f029a0b);
 
 
+
 class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
-    // private properties:
+    // private properties
     _hass;
     // internal reactive states
     static get properties() {
         return {
-            _floor: {
+            _floorId: {
                 state: true
             },
-            _lighting: {
-                state: true
-            },
-            _floors: {
+            _lightBundles: {
                 state: true
             }
         };
-    }
-    // initializes clocktype in constructor
-    constructor(){
-        super();
-        this._floor = "main_floor";
     }
     // establish config information for card
     setConfig() {}
+    // gets the hass, and then creates the light bundles to be passed around.
     set hass(hass) {
         this._hass = hass;
-        this.setFloors();
-        this.setLighting();
+        this.setLightBundles();
     }
-    setFloors() {
-        const floorObjects = this._hass.floors;
-        const floors = Object.keys(floorObjects);
-        let lighting = {};
-        floors.forEach((str)=>{
-            lighting[str] = {
-                solo: {},
-                groups: {}
-            };
-        });
-        this._lighting = lighting;
-        this._floors = floorObjects;
+    // upon first render, initializes the selected floor.
+    firstUpdated() {
+        this.initializeFloor();
     }
+    // returns a dictionary of dictionaries.  The outer dictionary's keys are the floor_ids.
+    // the inner dictionary has floor_id and name keys.
+    getFloors() {
+        return this._hass.floors;
+    }
+    // sets the current floor to be the first of the listed floors.
+    initializeFloor() {
+        const floors = this.getFloors();
+        const floorIds = Object.keys(floors);
+        this._floorId = floorIds[0];
+    }
+    // returns a dictionary of dictionaries.  The outer dictionary's keys are the area_ids.
+    // the inner dictionary has area_id, name, and floor_id keys.
     getAreas() {
         return this._hass.areas;
     }
-    getSelects() {
-        const entities = this._hass.states;
-        let selects = [];
-        Object.values(entities).forEach((entity)=>{
-            if (entity.entity_id.substring(0, 7) === "select.") {
-                if (entity.entity_id.includes('theme')) selects.push(entity);
-            }
-        });
-        return selects;
+    // returns true if the entity_id corresponds to a light object
+    isLight(entity_id) {
+        return entity_id.substring(0, 6) === "light.";
     }
-    attachSelect(light) {
-        const light_id = light.entity_id.substring(6);
-        const selects = this.getSelects();
-        const newLight = {
-            ...light
-        };
-        selects.forEach((select)=>{
-            if (select.entity_id.includes(light_id)) newLight.attributes.select = select;
-        });
-        return newLight;
+    // returns true if the entity_id corresponds to a theme select object
+    isTheme(entity_id) {
+        return entity_id.substring(0, 7) === "select." && entity_id.includes("theme");
     }
+    // returns a dictionary of dictionaries.  The outer dictionary's keys are entity_ids that
+    // start with "light."  The inner dictionary has keys that include entity_id, area_id,
+    // platform (wich might be "group"), and name
     getLightEntities() {
         const entities = this._hass.entities;
-        let lightEntities = [];
-        Object.entries(entities).forEach(([key, value])=>{
-            if (key.substring(0, 6) === "light.") lightEntities.push(value);
+        let lightEntities = {};
+        Object.entries(entities).forEach(([entity_id, entity_dictionary])=>{
+            this.isLight(entity_id) && (lightEntities[entity_id] = entity_dictionary);
         });
         return lightEntities;
     }
-    getLightingGroups() {
-        const entities = this.getLightEntities();
-        let groups = [];
-        entities.forEach((entity)=>{
-            if (entity.platform === "group") groups.push(entity);
+    // returns a dictionary of dictionaries.  The outer dictionary's keys are entity_ids for lights.
+    //  The inner dictionary has keys that include entity_id, state, and
+    // attributes.  Attributes is, itself a dictionary which includes supported_color_mode,
+    // and may include keys corresponding to brightness, hs_color, color_temp_kelvin,
+    // if the light object is a group, it includes entity_id (which is an array of ids for members.)
+    getLightStates() {
+        const states = this._hass.states;
+        let lightStates = {};
+        Object.entries(states).forEach(([entity_id, state_dictionary])=>{
+            this.isLight(entity_id) && (lightStates[entity_id] = state_dictionary);
         });
-        return groups;
+        return lightStates;
     }
-    getIndividualLightEntities() {
-        return this.getLightEntities().filter((entity)=>entity.platform != "group");
-    }
-    isInGroup(entity) {
-        let result = false;
-        const groupEntities = this.getLightingGroups();
-        const entityId = entity.entity_id;
-        groupEntities.forEach((group)=>{
-            const groupId = group.entity_id;
-            const members = this._hass.states[groupId].attributes.entity_id;
-            members.includes(entityId) && (result = true);
+    // returns a dictionary of dictionaries.  The outer dictionary's keys are entity_ids for theme select
+    // objects.  The inner dictionary's keys include entity_id, state, and attributes, which is itself
+    // a dictionary including the key "options".
+    getThemeStates() {
+        const states = this._hass.states;
+        let themeStates = {};
+        Object.entries(states).forEach(([entity_id, state_dictionary])=>{
+            this.isTheme(entity_id) && (themeStates[entity_id] = state_dictionary);
         });
-        return result;
+        return themeStates;
     }
-    getSoloLightEntities() {
-        const individualLights = this.getIndividualLightEntities();
-        const soloLights = individualLights.filter((light)=>!this.isInGroup(light));
-        return soloLights;
+    // adds the outer dictionary structure (with floor_ids as keys) to this._lightBundles
+    setFloorStructure() {
+        this._lightBundles = {};
+        const floors = this.getFloors();
+        Object.keys(floors).forEach((floor_id)=>{
+            this._lightBundles[floor_id] = {};
+        });
     }
-    addSoloLights() {
-        const entities = this.getSoloLightEntities();
+    // determines whether a given area_id corresponds to an area on a floor with a given floor id.
+    isOnFloor(floor_id, area_id) {
         const areas = this.getAreas();
-        entities.forEach((entity)=>{
-            const areaId = entity.area_id;
-            if (areaId) {
-                const floorId = areas[areaId].floor_id;
-                const entityId = entity.entity_id;
-                const state = {
-                    ...this._hass.states[entityId]
-                };
-                const newState = this.attachSelect(state);
-                this._lighting[floorId]["solo"][entityId] = newState;
+        const area = areas[area_id];
+        return area.floor_id === floor_id;
+    }
+    // adds the second dictionary structure (with area_ids as keys) to this._lightBundles
+    setAreaStructure() {
+        const areas = this.getAreas();
+        Object.entries(this._lightBundles).forEach(([floor_id, floorDictionary])=>{
+            Object.keys(areas).forEach((area_id)=>{
+                this.isOnFloor(floor_id, area_id) && (floorDictionary[area_id] = {});
+            });
+        });
+    }
+    // returns true if the provided entity_id is a light group, otherwise false.
+    isGroup(entity_id) {
+        const lightEntities = this.getLightEntities();
+        const entityDictionary = lightEntities[entity_id];
+        return entityDictionary.platform === "group";
+    }
+    // returns an array of entity_ids corresponding to lights that are members of groups.
+    getLightMemberIds() {
+        const lightStates = this.getLightStates();
+        let memberIds = [];
+        Object.entries(lightStates).forEach(([entity_id, stateDictionary])=>{
+            if (this.isGroup(entity_id)) {
+                const theseMembers = stateDictionary.attributes.entity_id;
+                memberIds = [
+                    ...memberIds,
+                    ...theseMembers
+                ];
             }
         });
+        return memberIds;
     }
-    addGroupedLights() {
-        const groups = this.getLightingGroups();
-        const areas = this.getAreas();
-        groups.forEach((group)=>{
-            const areaId = group.area_id;
-            if (areaId) {
-                const floorId = areas[areaId].floor_id;
-                const groupId = group.entity_id;
-                const memberIds = this._hass.states[groupId].attributes.entity_id;
-                const memberStates = memberIds.map((id)=>{
-                    const stateDictionary = {
-                        ...this._hass.states[id]
-                    };
-                    const newStateDictionary = this.attachSelect(stateDictionary);
-                    return newStateDictionary;
+    // returns true if the provided entity_id appears as a member of a light group, false otherwise.
+    isInGroup(entity_id) {
+        const lightMemberIds = this.getLightMemberIds();
+        return lightMemberIds.includes(entity_id);
+    }
+    // returns true if the provided entity_id has the given area_id, false otherwise.
+    isInArea(entity_id, area_id) {
+        const lightEntities = this.getLightEntities();
+        const entityDictionary = lightEntities[entity_id];
+        return entityDictionary.area_id === area_id;
+    }
+    // if the provided light entity_id corresponds to valid theme entity_id, returns the theme id.  Otherwise,
+    // returns null,
+    getThemeId(entity_id) {
+        const themeStates = this.getThemeStates();
+        const lightId = entity_id.substring(6);
+        const themeIds = Object.keys(themeStates);
+        let foundId = null;
+        themeIds.forEach((themeId)=>{
+            themeId.includes(lightId) && (foundId = themeId);
+        });
+        return foundId;
+    }
+    // finds the theme state associated with a particular light, and adds that to the light dictionary.
+    addTheme(lightDictionary) {
+        const themeStates = this.getThemeStates();
+        const lightId = lightDictionary.state.entity_id;
+        const themeId = this.getThemeId(lightId);
+        lightDictionary.theme = themeStates[themeId];
+    }
+    // finds the group member states associated with a particular light group, and adds them to the
+    // light dictionary.
+    addMembers(lightDictionary) {
+        const lightStates = this.getLightStates();
+        const memberIds = lightDictionary.state.attributes.entity_id;
+        lightDictionary.members = {};
+        memberIds.forEach((memberId)=>{
+            const memberDictionary = {
+                state: lightStates[memberId]
+            };
+            this.getThemeId(memberId) && this.addTheme(memberDictionary);
+            lightDictionary.members[memberId] = memberDictionary;
+        });
+    }
+    // trawls through each floor and area, finds the lights that belong there, and creates the
+    // light dictionary for each light (adding in theme and members as necessary).
+    bundleLights() {
+        const lightStates = this.getLightStates();
+        Object.values(this._lightBundles).forEach((floorDictionary)=>{
+            Object.entries(floorDictionary).forEach(([area_id, areaDictionary])=>{
+                Object.entries(lightStates).forEach(([entity_id, stateDictionary])=>{
+                    if (this.isInArea(entity_id, area_id) && !this.isInGroup(entity_id)) {
+                        let lightDictionary = {
+                            state: stateDictionary
+                        };
+                        this.isGroup(entity_id) && this.addMembers(lightDictionary);
+                        this.getThemeId(entity_id) && this.addTheme(lightDictionary);
+                        areaDictionary[entity_id] = lightDictionary;
+                    }
                 });
-                let state = {
-                    ...this._hass.states[groupId]
-                };
-                const newState = this.attachSelect(state);
-                newState.members = memberStates;
-                this._lighting[floorId]["groups"][groupId] = newState;
-            }
+            });
         });
     }
-    setLighting() {
-        this.addSoloLights();
-        this.addGroupedLights();
+    // fully creates the this._lightBundles object.
+    setLightBundles() {
+        this.setFloorStructure();
+        this.setAreaStructure();
+        this.bundleLights();
     }
-    // fix me
-    prettyFloor(floor) {
-        let floorObject = this._floors[floor];
-        return floorObject.name;
+    // returns the bundles associated with the currently selected floor.
+    getFloorBundles() {
+        return this._lightBundles[this._floorId];
     }
-    getOnTot(floor) {
-        let lights = this._lighting[floor];
+    // given a floor id, returns the name of the floor.
+    prettyFloor(floorId) {
+        const floors = this.getFloors();
+        const floor = floors[floorId];
+        return floor.name;
+    }
+    // given a particular floor id, returns an array with the total number of lights,
+    // and the number that are on.
+    getLightData(floorId) {
+        const floorDictionary = this._lightBundles[floorId];
         let on = 0;
         let tot = 0;
-        Object.values(lights.solo).forEach((light)=>{
-            if (light.state === "on") on = on + 1;
-            tot = tot + 1;
-        });
-        Object.values(lights.groups).forEach((group)=>{
-            group.members.forEach((light)=>{
-                if (light.state === "on") on = on + 1;
+        Object.values(floorDictionary).forEach((areaDictionary)=>{
+            Object.values(areaDictionary).forEach((lightBundle)=>{
+                const lightState = lightBundle.state;
                 tot = tot + 1;
+                lightState.state === "on" && (on = on + 1);
             });
         });
         return [
@@ -9399,52 +9506,31 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
             tot
         ];
     }
-    setScale(a, b, t, T) {
-        let result = a;
-        if (T > 0) result = a + (b - a) * t / T;
-        return Math.floor(result);
+    // determines the shade of color associated with a particular floor id, based on
+    // the fraction of the lights that are on.
+    getRGB(floorId, opacity) {
+        const onTot = this.getLightData(floorId);
+        return (0, $d66841a16b153167$export$40735a17910aaee)(onTot[0], onTot[1], opacity);
     }
-    getRGB(floor, op) {
-        const onTot = this.getOnTot(floor);
-        const red = this.setScale(158, 255, onTot[0], onTot[1]);
-        const green = this.setScale(158, 193, onTot[0], onTot[1]);
-        const blue = this.setScale(158, 7, onTot[0], onTot[1]);
-        return `rgba(${red}, ${green}, ${blue}, ${op})`;
-    }
-    getStyle(floor) {
-        let result;
-        if (this.isFloor(floor)) result = `
-                background-color: ${this.getRGB(floor, .5)};
-                outline: solid ${this.getRGB(floor, 1)};
-                outline-offset: -4px;
-            `;
-        else result = `
-                background-color: ${this.getRGB(floor, .5)};
-            `;
-        return result;
-    }
-    floorButton(floor) {
-        const onTot = this.getOnTot(floor);
+    // generates the floor button for a particular floor id.
+    floorButton(floorId) {
+        const onTot = this.getLightData(floorId);
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
             <button
-                class="button ${floor}"
-                style="${this.getStyle(floor)}"
-                id="${floor}"
+                class="button ${this.isFloor(floorId)}"
+                style="--outline: ${this.getRGB(floorId, 1)}; --background: ${this.getRGB(floorId, .5)};"
+                id="${floorId}"
                 @click="${this.onClick}"
             >
-            <h1> ${this.prettyFloor(floor)} <h1>
+            <h1> ${this.prettyFloor(floorId)} <h1>
             <p> ${onTot[0]}/${onTot[1]} lights on </p>
             </button>
         `;
     }
-    isNone(floor) {
-        let result = '';
-        if (this.getOnTot(floor)[1] === 0) result = 'none';
-        return result;
-    }
+    // generates the list of floor buttons.
     floorButtons() {
-        const floors = Object.keys(this._floors);
-        return floors.map((floor)=>this.floorButton(floor));
+        const floorIds = Object.keys(this.getFloors());
+        return floorIds.map((floorId)=>this.floorButton(floorId));
     }
     // pull styles
     static styles = (0, $24833e213e3419f0$export$2e2bcd8739ae039);
@@ -9461,20 +9547,23 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
             </ha-card>
         `;
     }
-    // deals with click
+    // deals with click to select floor.
     onClick(e) {
-        this._floor = e.currentTarget.id;
+        this._floorId = e.currentTarget.id;
     }
+    // generates panel content, based on currently selected floor.
     content() {
-        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-            <panel-component
-                ._lights = ${this._lighting[this._floor]}
-                .callService=${this._hass.callService}
-            ></panel-component>
-        `;
+        if (this.getFloorBundles() && this.getAreas()) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+                <panel-component
+                    ._lightBundles = ${this.getFloorBundles()}
+                    ._areas = ${this.getAreas()}
+                    .callService=${this._hass.callService}
+                ></panel-component>
+            `;
     }
-    isFloor(floor) {
-        return this._floor === floor;
+    // determines if the given floor id corresponds to the currently selected floor.
+    isFloor(floorId) {
+        return this._floorId === floorId;
     }
     // set card size parameters for ha
     getCardSize() {
@@ -9482,10 +9571,10 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
     }
     getGridOptions() {
         return {
-            rows: 6,
+            rows: 7,
             columns: 21,
-            min_rows: 6,
-            max_rows: 6
+            min_rows: 7,
+            max_rows: 7
         };
     }
 }

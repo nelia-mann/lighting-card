@@ -8,6 +8,15 @@ export default css`
     light-inner {
     }
 
+    .area {
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+
+    h1 {
+        font-size: 100%;
+    }
+
     .light-row {
         display: flex;
         flex-flow: row nowrap;
@@ -53,9 +62,11 @@ export default css`
 
     .panel {
         width: 100%;
-        height: 82%;
+        height: 300px;
         display: flex;
-        flex-flow: row wrap;
+        flex-flow: column wrap;
+        justify-content: flex-start;
+        align-items: flex-start;
     }
 
     .light-element {

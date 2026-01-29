@@ -27,9 +27,9 @@ export default css`
     .content-row {
         display: flex;
         flex-flow: row wrap;
-        justify-content: space-around;
-        align-items: center;
-        width: 100;
+        justify-content: flex-start;
+        align-items: flex-start;
+        width: 100%;
         margin: 0px;
         padding: 0px;
     }
@@ -40,6 +40,12 @@ export default css`
         width: 22%;
         padding: 0px;
         border-width: 0px;
+        background-color: var(--background);
+    }
+
+    .button.true {
+        outline-offset: -4px;
+        outline: solid var(--outline);
     }
 
     h1 {

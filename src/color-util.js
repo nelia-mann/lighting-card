@@ -69,4 +69,31 @@ function hsGradient(steps) {
     return output;
 }
 
-export { tempGradient, hsGradient }
+function setScale(a, b, t, T) {
+    let result = a;
+    if (T > 0) {
+        if (t > T) {
+            result = b;
+        } else if (t < 0) {
+            result = a
+        } else {
+            result = a + ((b - a) * t / T)
+        }
+    }
+    return result;
+}
+
+function interpolateRGB(rgbA, rgbB, t, T, opacity) {
+    const red = setScale(rgbA[0], rgbB[0], t, T);
+    const green = setScale(rgbA[1], rgbB[1], t, T);
+    const blue = setScale(rgbA[2], rgbB[2], t, T);
+    return `rgba(${red}, ${green}, ${blue}, ${opacity})`
+}
+
+function interpolateLightRGB(t, T, opacity) {
+    let off = [158, 158, 158];
+    let on = [255, 193, 7];
+    return interpolateRGB(off, on, t, T, opacity);
+}
+
+export { tempGradient, hsGradient, interpolateLightRGB }

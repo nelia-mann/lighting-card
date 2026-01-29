@@ -4,9 +4,11 @@ import './light.js';
 
 export class PanelComponent extends LitElement {
 
+    _areas;
+
     static get properties() {
         return {
-            _lights: { state: true },
+            _lightBundles: { state: true }
         }
     }
 
@@ -16,33 +18,41 @@ export class PanelComponent extends LitElement {
 
     static styles = styles;
 
-    soloLightDisplays() {
-        return Object.values(this._lights.solo).map((value) => {
-            return html`
-                <light-component
-                    ._light=${value}
-                    .callService=${this.callService}
-                    ></light-component>
-            `
-        });
+    getAreaName(areaId) {
+        return this._areas[areaId].name;
     }
 
-    groupLightDisplays() {
-        return Object.values(this._lights.groups).map((value) => {
+    getAreaBundles(areaId) {
+        return this._lightBundles[areaId];
+    }
+
+    getAreaDisplay(areaId) {
+        const title = this.getAreaName(areaId);
+        const areaBundles = this.getAreaBundles(areaId);
+        const areaComponents = Object.values(areaBundles).map((lightBundle) => {
             return html`
                 <light-component
-                    ._light=${value}
+                    ._light=${lightBundle.state}
                     .callService=${this.callService}
                 ></light-component>
             `
-        });
+        })
+        return html`
+            <div class="area">
+                <h1>${title}</h1>
+                ${areaComponents}
+            </div>`
+    }
+
+    getAreaDisplays() {
+        return Object.keys(this._lightBundles).map((areaId) =>
+            (this.getAreaDisplay(areaId)))
     }
 
     render() {
         return html`
             <div class="panel">
-                ${this.soloLightDisplays()}
-                ${this.groupLightDisplays()}
+                ${this.getAreaDisplays()}
             </div>
         `
     }
