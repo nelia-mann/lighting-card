@@ -8228,9 +8228,6 @@ class $4356f78c5c3f665b$export$82acdd66a4e4bf90 extends (0, $ab210b2da7b39b9d$ex
             }
         };
     }
-    constructor(){
-        super();
-    }
     isOn() {
         return this._lightBundle.state.state === "on";
     }
@@ -9085,12 +9082,6 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
             }
         };
     }
-    constructor(){
-        super();
-    }
-    firstUpdated() {
-        this.defaultSelect();
-    }
     static styles = (0, $84adf0e0aa3f1db7$export$2e2bcd8739ae039);
     innerLight(lightBundle) {
         if (lightBundle) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
@@ -9119,6 +9110,7 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
             `;
     }
     render() {
+        this.defaultSelect();
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
         <dialog @close="${this._handleClose}">
             <div class="modal-header">
@@ -9137,8 +9129,17 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
         </dialog>
         `;
     }
+    possibleIds() {
+        let ids = [
+            this._lightBundle.state.entity_id
+        ];
+        if (this._lightBundle.members) Object.values(this._lightBundle.members).forEach((memberBundle)=>{
+            ids.push(memberBundle.state.entity_id);
+        });
+        return ids;
+    }
     defaultSelect() {
-        if (!this._lightId) this._lightId = this._lightBundle.state.entity_id;
+        if (!this.possibleIds().includes(this._lightId)) this._lightId = this._lightBundle.state.entity_id;
     }
     select(lightBundle) {
         this._lightId = lightBundle.state.entity_id;

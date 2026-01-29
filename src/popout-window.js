@@ -16,14 +16,6 @@ export class PopoutWindow extends LitElement {
         }
     }
 
-    constructor() {
-        super();
-    }
-
-    firstUpdated() {
-        this.defaultSelect();
-    }
-
     static styles = styles;
 
     innerLight(lightBundle) {
@@ -62,6 +54,7 @@ export class PopoutWindow extends LitElement {
     }
 
     render() {
+        this.defaultSelect();
         return html`
         <dialog @close="${this._handleClose}">
             <div class="modal-header">
@@ -81,8 +74,18 @@ export class PopoutWindow extends LitElement {
         `;
     }
 
+    possibleIds() {
+        let ids = [this._lightBundle.state.entity_id];
+        if (this._lightBundle.members) {
+            Object.values(this._lightBundle.members).forEach((memberBundle) => {
+                ids.push(memberBundle.state.entity_id);
+            })
+        }
+        return ids;
+    }
+
     defaultSelect() {
-        if (!(this._lightId)) {
+        if (!this.possibleIds().includes(this._lightId)) {
             this._lightId = this._lightBundle.state.entity_id;
         }
     }

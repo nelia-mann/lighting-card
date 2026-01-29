@@ -9,10 +9,6 @@ export class LightIcon extends LitElement {
         }
     }
 
-    constructor() {
-        super();
-    }
-
     isOn() {
         return (this._lightBundle.state.state === "on");
     }
