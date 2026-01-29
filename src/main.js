@@ -315,13 +315,13 @@ export class MainCard extends LitElement {
 
     // set card size parameters for ha
     getCardSize() {
-        return 4;
+        return 7;
     }
 
     getGridOptions() {
         return {
             rows: 7,
-            columns: 21,
+            columns: 24,
             min_rows: 7,
             max_rows: 7
         }
