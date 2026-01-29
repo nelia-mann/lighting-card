@@ -5,9 +5,6 @@ export default css`
     light-component {
     }
 
-    light-inner {
-    }
-
     .area {
         margin-left: 10px;
         margin-right: 10px;
@@ -17,59 +14,4 @@ export default css`
         font-size: 100%;
     }
 
-    .light-row {
-        display: flex;
-        flex-flow: row nowrap;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .light-element {
-        border: solid 1px #e5e5e5;
-        width: 215px;
-        border-radius: 12px;
-        height: 21px;
-        padding: 10px;
-        padding-top: 5px;
-        padding-bottom: 5px;
-        margin: 7px;
-    }
-
-    .light-element.true {
-        outline: solid rgb(255, 193, 7);
-        outline-offset: -4px;
-    }
-
-    light-group-component {
-        border: solid 1px #e5e5e5;
-        border-radius: 12px;
-        height: 25px;
-        padding: 10px;
-        padding-top: 5px;
-        padding-bottom: 5px;
-        margin: 10px;
-    }
-
-    light-group-inner {
-        border: solid 1px #e5e5e5;
-        border-radius: 12px;
-        height: 25px;
-        padding: 10px;
-        padding-top: 5px;
-        padding-bottom: 5px;
-        margin: 10px;
-    }
-
-    .panel {
-        width: 100%;
-        height: 300px;
-        display: flex;
-        flex-flow: column wrap;
-        justify-content: flex-start;
-        align-items: flex-start;
-    }
-
-    .light-element {
-        touch-action: none;
-    }
 `;

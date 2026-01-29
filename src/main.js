@@ -280,9 +280,7 @@ export class MainCard extends LitElement {
     render() {
         return html`
             <ha-card>
-                <div class="content-row">
-                    ${this.content()}
-                </div>
+                ${this.content()}
                 <div class="button-row">
                     ${this.floorButtons()}
                 </div>

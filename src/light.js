@@ -1,7 +1,7 @@
 import { html, LitElement } from 'lit';
 import './light-icon.js';
 import './popout-window.js';
-import styles from './panel.styles.js';
+import styles from './light.styles.js';
 
 export class LightComponent extends LitElement {
 

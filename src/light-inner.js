@@ -1,6 +1,6 @@
 import { html, LitElement } from 'lit';
 import './light-icon.js';
-import styles from './panel.styles';
+import styles from './light.styles';
 
 export class LightComponent extends LitElement {
 
@@ -21,11 +21,9 @@ export class LightComponent extends LitElement {
     render() {
         const name = this._lightBundle.state.attributes.friendly_name;
         return html`
-            <div class="light-row">
-                <div  class="light-element ${this._isSelected}" @click=${this.onClick}>
-                    <light-icon ._lightBundle=${this._lightBundle} ></light-icon>
-                    ${name}
-                </div>
+            <div  class="light-element ${this._isSelected}" @click=${this.onClick}>
+                <light-icon ._lightBundle=${this._lightBundle} ></light-icon>
+                ${name}
             </div>
         `
     }

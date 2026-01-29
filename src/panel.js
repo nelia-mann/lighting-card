@@ -49,11 +49,7 @@ export class PanelComponent extends LitElement {
     }
 
     render() {
-        return html`
-            <div class="panel">
-                ${this.getAreaDisplays()}
-            </div>
-        `
+        return html`${this.getAreaDisplays()}`
     }
 
 }

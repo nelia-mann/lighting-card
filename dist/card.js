@@ -630,6 +630,17 @@ var $24833e213e3419f0$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         width: 900px;
     }
 
+    panel-component {
+        width: 100%;
+        height: 300px;
+        margin: 0px;
+        padding: 0px;
+        display: flex;
+        flex-flow: column wrap;
+        justify-content: flex-start;
+        align-items: flex-start;
+    }
+
     .button-row {
         display: flex;
         flex-flow: row nowrap;
@@ -637,16 +648,6 @@ var $24833e213e3419f0$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         align-items: center;
         width: 100%;
         height: 50px;
-        margin: 0px;
-        padding: 0px;
-    }
-
-    .content-row {
-        display: flex;
-        flex-flow: row wrap;
-        justify-content: flex-start;
-        align-items: flex-start;
-        width: 100%;
         margin: 0px;
         padding: 0px;
     }
@@ -698,9 +699,6 @@ var $fd69d66a3348dfcc$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
     light-component {
     }
 
-    light-inner {
-    }
-
     .area {
         margin-left: 10px;
         margin-right: 10px;
@@ -710,61 +708,6 @@ var $fd69d66a3348dfcc$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         font-size: 100%;
     }
 
-    .light-row {
-        display: flex;
-        flex-flow: row nowrap;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .light-element {
-        border: solid 1px #e5e5e5;
-        width: 215px;
-        border-radius: 12px;
-        height: 21px;
-        padding: 10px;
-        padding-top: 5px;
-        padding-bottom: 5px;
-        margin: 7px;
-    }
-
-    .light-element.true {
-        outline: solid rgb(255, 193, 7);
-        outline-offset: -4px;
-    }
-
-    light-group-component {
-        border: solid 1px #e5e5e5;
-        border-radius: 12px;
-        height: 25px;
-        padding: 10px;
-        padding-top: 5px;
-        padding-bottom: 5px;
-        margin: 10px;
-    }
-
-    light-group-inner {
-        border: solid 1px #e5e5e5;
-        border-radius: 12px;
-        height: 25px;
-        padding: 10px;
-        padding-top: 5px;
-        padding-bottom: 5px;
-        margin: 10px;
-    }
-
-    .panel {
-        width: 100%;
-        height: 300px;
-        display: flex;
-        flex-flow: column wrap;
-        justify-content: flex-start;
-        align-items: flex-start;
-    }
-
-    .light-element {
-        touch-action: none;
-    }
 `;
 
 
@@ -8362,6 +8305,29 @@ var $84adf0e0aa3f1db7$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 
 
 
+var $7c12e71e3f07e693$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
+
+    .light-element {
+        border: solid 1px #e5e5e5;
+        width: 215px;
+        border-radius: 8px;
+        height: 25px;
+        padding: 10px;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        margin: 7px;
+        touch-action: none;
+    }
+
+    .light-element.true {
+        outline: solid rgb(255, 193, 7);
+        outline-offset: -4px;
+    }
+
+
+`;
+
+
 class $2b5036ce56cc8e0c$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
     static get properties() {
         return {
@@ -8377,15 +8343,13 @@ class $2b5036ce56cc8e0c$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
         super();
         this._isSelected = false;
     }
-    static styles = (0, $fd69d66a3348dfcc$export$2e2bcd8739ae039);
+    static styles = (0, $7c12e71e3f07e693$export$2e2bcd8739ae039);
     render() {
         const name = this._lightBundle.state.attributes.friendly_name;
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-            <div class="light-row">
-                <div  class="light-element ${this._isSelected}" @click=${this.onClick}>
-                    <light-icon ._lightBundle=${this._lightBundle} ></light-icon>
-                    ${name}
-                </div>
+            <div  class="light-element ${this._isSelected}" @click=${this.onClick}>
+                <light-icon ._lightBundle=${this._lightBundle} ></light-icon>
+                ${name}
             </div>
         `;
     }
@@ -9195,7 +9159,7 @@ class $046ae152b1d9e254$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
         super();
         this.isModalOpen = false;
     }
-    static styles = (0, $fd69d66a3348dfcc$export$2e2bcd8739ae039);
+    static styles = (0, $7c12e71e3f07e693$export$2e2bcd8739ae039);
     icons() {
         let result;
         const lightBundles = this._lightBundle.members;
@@ -9290,11 +9254,7 @@ class $fdede02cbd34666f$export$40073d408f029a0b extends (0, $ab210b2da7b39b9d$ex
         return Object.keys(this._lightBundles).map((areaId)=>this.getAreaDisplay(areaId));
     }
     render() {
-        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-            <div class="panel">
-                ${this.getAreaDisplays()}
-            </div>
-        `;
+        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`${this.getAreaDisplays()}`;
     }
 }
 customElements.define("panel-component", $fdede02cbd34666f$export$40073d408f029a0b);
@@ -9558,9 +9518,7 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
     render() {
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
             <ha-card>
-                <div class="content-row">
-                    ${this.content()}
-                </div>
+                ${this.content()}
                 <div class="button-row">
                     ${this.floorButtons()}
                 </div>

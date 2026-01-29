@@ -14,6 +14,17 @@ export default css`
         width: 900px;
     }
 
+    panel-component {
+        width: 100%;
+        height: 300px;
+        margin: 0px;
+        padding: 0px;
+        display: flex;
+        flex-flow: column wrap;
+        justify-content: flex-start;
+        align-items: flex-start;
+    }
+
     .button-row {
         display: flex;
         flex-flow: row nowrap;
@@ -21,16 +32,6 @@ export default css`
         align-items: center;
         width: 100%;
         height: 50px;
-        margin: 0px;
-        padding: 0px;
-    }
-
-    .content-row {
-        display: flex;
-        flex-flow: row wrap;
-        justify-content: flex-start;
-        align-items: flex-start;
-        width: 100%;
         margin: 0px;
         padding: 0px;
     }
