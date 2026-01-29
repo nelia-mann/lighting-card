@@ -6,7 +6,7 @@ export class LightComponent extends LitElement {
 
     static get properties() {
         return {
-            _light: { state: true },
+            _lightBundle: { state: true },
             _isSelected: {state: true}
         }
     }
@@ -19,11 +19,11 @@ export class LightComponent extends LitElement {
     static styles = styles;
 
     render() {
-        const name = this._light.attributes.friendly_name;
+        const name = this._lightBundle.state.attributes.friendly_name;
         return html`
             <div class="light-row">
                 <div  class="light-element ${this._isSelected}" @click=${this.onClick}>
-                    <light-icon ._light=${this._light}></light-icon>
+                    <light-icon ._lightBundle=${this._lightBundle} ></light-icon>
                     ${name}
                 </div>
             </div>

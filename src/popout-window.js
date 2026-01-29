@@ -11,7 +11,7 @@ export class PopoutWindow extends LitElement {
         return {
             opened: { type: Boolean, reflect: true },
             title: { type: String },
-            _light: { state: true },
+            _lightBundle: { state: true },
             _lightId: { state: true },
         }
     }
@@ -20,25 +20,31 @@ export class PopoutWindow extends LitElement {
         super();
     }
 
+    firstUpdated() {
+        this.defaultSelect();
+    }
+
     static styles = styles;
 
-    innerLight(light) {
-        return html`
-            <light-inner
-                id=${light}
-                ._light=${light}
-                ._isSelected=${this.isSelected(light)}
-                @select=${() => this.select(light)}
-            ></light-inner>
-        `
+    innerLight(lightBundle) {
+        if (lightBundle) {
+            return html`
+                <light-inner
+                    id=${lightBundle.state.entity_id}
+                    ._lightBundle=${lightBundle}
+                    ._isSelected=${this.isSelected(lightBundle)}
+                    @select=${() => this.select(lightBundle)}
+                ></light-inner>
+            `
+        }
     }
 
     lights() {
-        const lights = this._light.members;
+        const lightBundles = this._lightBundle.members;
         let result = html``;
-        if (lights) {
-            result = lights.map((light) => {
-                return this.innerLight(light)
+        if (lightBundles) {
+            result = Object.values(lightBundles).map((lightBundle) => {
+                return this.innerLight(lightBundle)
                 })
         }
         return result;
@@ -48,7 +54,7 @@ export class PopoutWindow extends LitElement {
         if (this.selectedLight()) {
             return html`
                 <light-control
-                    ._light = ${this.selectedLight()}
+                    ._lightBundle = ${this.selectedLight()}
                     .callService=${this.callService}
                 ></light-control>
             `
@@ -56,7 +62,6 @@ export class PopoutWindow extends LitElement {
     }
 
     render() {
-        this.defaultSelect();
         return html`
         <dialog @close="${this._handleClose}">
             <div class="modal-header">
@@ -67,7 +72,7 @@ export class PopoutWindow extends LitElement {
             </div>
             <div class="content-row">
                 <div class="select-lights">
-                    ${this.innerLight(this._light)}
+                    ${this.innerLight(this._lightBundle)}
                     ${this.lights()}
                 </div>
                 ${this.lightControl()}
@@ -78,26 +83,26 @@ export class PopoutWindow extends LitElement {
 
     defaultSelect() {
         if (!(this._lightId)) {
-            this._lightId = this._light.entity_id;
+            this._lightId = this._lightBundle.state.entity_id;
         }
     }
 
-    select(light) {
-        this._lightId = light.entity_id;
+    select(lightBundle) {
+        this._lightId = lightBundle.state.entity_id;
     }
 
-    isSelected(light) {
-        return (this._lightId === light.entity_id);
+    isSelected(lightBundle) {
+        return (this._lightId === lightBundle.state.entity_id);
     }
 
     selectedLight() {
-        if (this._lightId === this._light.entity_id) {
-            return this._light;
-        } else if (this._light.members) {
+        if (this._lightId === this._lightBundle.state.entity_id) {
+            return this._lightBundle;
+        } else if (this._lightBundle.members) {
             let result;
-            this._light.members.forEach((light) => {
-                if (this._lightId === light.entity_id) {
-                    result = light;
+            Object.values(this._lightBundle.members).forEach((lightBundle) => {
+                if (this._lightId === lightBundle.state.entity_id) {
+                    result = lightBundle;
                 }
             })
             return result;

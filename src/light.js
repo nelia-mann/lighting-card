@@ -10,7 +10,7 @@ export class LightComponent extends LitElement {
 
     static get properties() {
         return {
-            _light: { state: true },
+            _lightBundle: { state: true },
             isModalOpen: { type: Boolean},
         }
     }
@@ -24,24 +24,24 @@ export class LightComponent extends LitElement {
 
     icons() {
         let result;
-        const lights = this._light.members;
-        if (lights) {
-            result = lights.map((light) => {
+        const lightBundles = this._lightBundle.members;
+        if (lightBundles) {
+            result = Object.values(lightBundles).map((lightBundle) => {
                 return html`
-                    <light-icon ._light=${light}></light-icon>
+                    <light-icon ._lightBundle=${lightBundle}></light-icon>
                 `
             })
         }
         else {
             result = html`
-                <light-icon ._light=${this._light}></light-icon>
+                <light-icon ._lightBundle=${this._lightBundle}></light-icon>
             `
         }
         return result;
     }
 
     render() {
-        const name = this._light.attributes.friendly_name;
+        const name = this._lightBundle.state.attributes.friendly_name;
         return html`
             <div class="light-element" @pointerup=${this.onUp} @pointerdown=${this.onDown}>
                 ${this.icons()}
@@ -51,7 +51,7 @@ export class LightComponent extends LitElement {
                 title="${name}"
                 ?opened="${this.isModalOpen}"
                 @modal-closed="${this.handleModalClosed}"
-                ._light="${this._light}"
+                ._lightBundle=${this._lightBundle}
                 .callService="${this.callService}"
             ></popout-window>
         `
@@ -80,7 +80,7 @@ export class LightComponent extends LitElement {
     }
 
     onClick() {
-        const entityId = this._light.entity_id;
+        const entityId = this._lightBundle.state.entity_id;
         const data = {
             entity_id: entityId,
         }

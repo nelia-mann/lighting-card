@@ -7,7 +7,7 @@ export class ThemeSelect extends LitElement {
 
     static get properties() {
         return {
-            _light: { state: true },
+            _theme: { state: true },
             _option: { state: true}
         }
     }
@@ -29,11 +29,11 @@ export class ThemeSelect extends LitElement {
     }
 
     getValue() {
-        return this._light.attributes.select.state;
+        return this._theme.state;
     }
 
     getOptions() {
-        const optionList = this._light.attributes.select.attributes.options;
+        const optionList = this._theme.attributes.options;
         return optionList;
     }
 

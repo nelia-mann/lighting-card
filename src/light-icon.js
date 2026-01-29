@@ -5,7 +5,7 @@ export class LightIcon extends LitElement {
 
     static get properties() {
         return {
-            _light: { state: true },
+            _lightBundle: { state: true }
         }
     }
 
@@ -13,29 +13,41 @@ export class LightIcon extends LitElement {
         super();
     }
 
+    isOn() {
+        return (this._lightBundle.state.state === "on");
+    }
+
     lightbulb() {
         let lightbulb;
-        if (this._light.members) {
-            (this._light.state === "on") ? (lightbulb = mdiLightbulbGroup) : (lightbulb = mdiLightbulbGroupOff);
+        if (this._lightBundle.members) {
+            (this.isOn()) ? (lightbulb = mdiLightbulbGroup) : (lightbulb = mdiLightbulbGroupOff);
         } else {
-            (this._light.state === "on") ? (lightbulb = mdiLightbulb) : (lightbulb = mdiLightbulbOff);
+            (this.isOn()) ? (lightbulb = mdiLightbulb) : (lightbulb = mdiLightbulbOff);
         }
         return lightbulb;
     }
 
+    getBrightness() {
+        return (this._lightBundle.state.attributes.brightness);
+    }
+
     getOpacity() {
         let opacity = 1;
-        if (this._light.attributes.brightness) {
-            opacity = this._light.attributes.brightness / 255;
+        if (this.getBrightness()) {
+            opacity = this.getBrightness() / 255;
         }
         return opacity;
     }
 
+    getRGB() {
+        return (this._lightBundle.state.attributes.rgb_color);
+    }
+
     getColor() {
         let rgb = [68, 115, 158];
-        if (this._light.state === "on") {
-            if (this._light.attributes.rgb_color) {
-                rgb = this._light.attributes.rgb_color;
+        if (this.isOn()) {
+            if (this.getRGB()) {
+                rgb = this.getRGB();
             } else {
                 rgb = [255, 193, 7];
             }
@@ -56,9 +68,11 @@ export class LightIcon extends LitElement {
     }
 
     render() {
-        return html`
-            <ha-svg-icon .path=${this.lightbulb()} style="${this.getStyle()}"></ha-svg-icon>
-        `
+        if (this._lightBundle) {
+            return html`
+                <ha-svg-icon .path=${this.lightbulb()} style="${this.getStyle()}"></ha-svg-icon>
+            `
+        }
     }
 
 }

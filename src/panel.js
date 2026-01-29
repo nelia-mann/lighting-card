@@ -12,10 +12,6 @@ export class PanelComponent extends LitElement {
         }
     }
 
-    constructor() {
-        super();
-    }
-
     static styles = styles;
 
     getAreaName(areaId) {
@@ -26,17 +22,20 @@ export class PanelComponent extends LitElement {
         return this._lightBundles[areaId];
     }
 
+    getLightDisplay(lightBundle) {
+        return html`
+            <light-component
+                ._lightBundle = ${lightBundle}
+                .callService=${this.callService}
+            ></light-component>
+        `
+    }
+
     getAreaDisplay(areaId) {
         const title = this.getAreaName(areaId);
         const areaBundles = this.getAreaBundles(areaId);
-        const areaComponents = Object.values(areaBundles).map((lightBundle) => {
-            return html`
-                <light-component
-                    ._light=${lightBundle.state}
-                    .callService=${this.callService}
-                ></light-component>
-            `
-        })
+        const areaComponents = Object.values(areaBundles).map((lightBundle) =>
+            this.getLightDisplay(lightBundle))
         return html`
             <div class="area">
                 <h1>${title}</h1>

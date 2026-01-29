@@ -8222,7 +8222,7 @@ var $04557c061247a0a6$export$a14c803a1714faa3 = "M18.5,19.13C20,17.77 20,15.18 2
 class $4356f78c5c3f665b$export$82acdd66a4e4bf90 extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
     static get properties() {
         return {
-            _light: {
+            _lightBundle: {
                 state: true
             }
         };
@@ -8230,16 +8230,25 @@ class $4356f78c5c3f665b$export$82acdd66a4e4bf90 extends (0, $ab210b2da7b39b9d$ex
     constructor(){
         super();
     }
+    isOn() {
+        return this._lightBundle.state.state === "on";
+    }
     lightbulb() {
         let lightbulb;
-        if (this._light.members) this._light.state === "on" ? lightbulb = (0, $04557c061247a0a6$export$2e6be2b8a537add2) : lightbulb = (0, $04557c061247a0a6$export$da8ede764477ab6a);
-        else this._light.state === "on" ? lightbulb = (0, $04557c061247a0a6$export$dea852a9f40b969) : lightbulb = (0, $04557c061247a0a6$export$aad4bcd9f6406e73);
+        if (this._lightBundle.members) this.isOn() ? lightbulb = (0, $04557c061247a0a6$export$2e6be2b8a537add2) : lightbulb = (0, $04557c061247a0a6$export$da8ede764477ab6a);
+        else this.isOn() ? lightbulb = (0, $04557c061247a0a6$export$dea852a9f40b969) : lightbulb = (0, $04557c061247a0a6$export$aad4bcd9f6406e73);
         return lightbulb;
+    }
+    getBrightness() {
+        return this._lightBundle.state.attributes.brightness;
     }
     getOpacity() {
         let opacity = 1;
-        if (this._light.attributes.brightness) opacity = this._light.attributes.brightness / 255;
+        if (this.getBrightness()) opacity = this.getBrightness() / 255;
         return opacity;
+    }
+    getRGB() {
+        return this._lightBundle.state.attributes.rgb_color;
     }
     getColor() {
         let rgb = [
@@ -8247,8 +8256,8 @@ class $4356f78c5c3f665b$export$82acdd66a4e4bf90 extends (0, $ab210b2da7b39b9d$ex
             115,
             158
         ];
-        if (this._light.state === "on") {
-            if (this._light.attributes.rgb_color) rgb = this._light.attributes.rgb_color;
+        if (this.isOn()) {
+            if (this.getRGB()) rgb = this.getRGB();
             else rgb = [
                 255,
                 193,
@@ -8269,9 +8278,9 @@ class $4356f78c5c3f665b$export$82acdd66a4e4bf90 extends (0, $ab210b2da7b39b9d$ex
         return result;
     }
     render() {
-        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-            <ha-svg-icon .path=${this.lightbulb()} style="${this.getStyle()}"></ha-svg-icon>
-        `;
+        if (this._lightBundle) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+                <ha-svg-icon .path=${this.lightbulb()} style="${this.getStyle()}"></ha-svg-icon>
+            `;
     }
 }
 customElements.define("light-icon", $4356f78c5c3f665b$export$82acdd66a4e4bf90);
@@ -8358,7 +8367,7 @@ var $84adf0e0aa3f1db7$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 class $2b5036ce56cc8e0c$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
     static get properties() {
         return {
-            _light: {
+            _lightBundle: {
                 state: true
             },
             _isSelected: {
@@ -8372,11 +8381,11 @@ class $2b5036ce56cc8e0c$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
     }
     static styles = (0, $fd69d66a3348dfcc$export$2e2bcd8739ae039);
     render() {
-        const name = this._light.attributes.friendly_name;
+        const name = this._lightBundle.state.attributes.friendly_name;
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
             <div class="light-row">
                 <div  class="light-element ${this._isSelected}" @click=${this.onClick}>
-                    <light-icon ._light=${this._light}></light-icon>
+                    <light-icon ._lightBundle=${this._lightBundle} ></light-icon>
                     ${name}
                 </div>
             </div>
@@ -8854,7 +8863,7 @@ var $fc4a6c4e4b89c4fa$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 class $a6f01a0d74278018$export$1b9e02e625a724dc extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
     static get properties() {
         return {
-            _light: {
+            _theme: {
                 state: true
             },
             _option: {
@@ -8877,10 +8886,10 @@ class $a6f01a0d74278018$export$1b9e02e625a724dc extends (0, $ab210b2da7b39b9d$ex
         }));
     }
     getValue() {
-        return this._light.attributes.select.state;
+        return this._theme.state;
     }
     getOptions() {
-        const optionList = this._light.attributes.select.attributes.options;
+        const optionList = this._theme.attributes.options;
         return optionList;
     }
     isSelected(option) {
@@ -8912,7 +8921,7 @@ customElements.define("theme-select", $a6f01a0d74278018$export$1b9e02e625a724dc)
 class $f76fa2dde9e8d076$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
     static get properties() {
         return {
-            _light: {
+            _lightBundle: {
                 state: true
             },
             _control: {
@@ -8929,14 +8938,21 @@ class $f76fa2dde9e8d076$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$ex
         const steps = 10;
         return (0, $d66841a16b153167$export$5b5356aa7e20fd72)(minTemp, maxTemp, steps);
     }
-    isAttribute(attribute) {
-        const result = this._light.attributes[attribute];
-        return !(result === undefined);
+    isOption(property) {
+        let valid;
+        if (property === "theme") {
+            let theme = this._lightBundle.theme;
+            valid = !!theme;
+        } else {
+            let attribute = this._lightBundle.state.attributes[property];
+            valid = !(attribute === undefined);
+        }
+        return valid;
     }
     lightIcon() {
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
         <div class="onoff icon" @click=${()=>this.handleLightService('toggle', null, null)}>
-            <light-icon ._light=${this._light}></light-icon>
+            <light-icon ._lightBundle = ${this._lightBundle}></light-icon>
         </div>
         `;
     }
@@ -8980,7 +8996,7 @@ class $f76fa2dde9e8d076$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$ex
         return this._control === string;
     }
     handleLightService(service, key, value) {
-        const entityId = this._light.entity_id;
+        const entityId = this._lightBundle.state.entity_id;
         let data = {
             entity_id: entityId
         };
@@ -8988,7 +9004,7 @@ class $f76fa2dde9e8d076$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$ex
         this.callService('light', service, data);
     }
     handleSelect(event) {
-        const entityId = this._light.attributes.select.entity_id;
+        const entityId = this._lightBundle.theme.entity_id;
         const data = {
             entity_id: entityId,
             option: event.detail
@@ -8997,46 +9013,48 @@ class $f76fa2dde9e8d076$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$ex
     }
     brightnessBar() {
         if (this.isSelected('brightness')) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<slider-bar
-                ._light=${this._light}
+                ._light=${this._lightBundle.state}
                 @change=${(e)=>this.handleLightService('turn_on', 'brightness', e.detail)}
                 ._max=${255}
                 ._min=${0}
-                ._startValue=${this._light.attributes.brightness}
+                ._startValue=${this._lightBundle.state.attributes.brightness}
                 ._type=${'brightness'}
             ></slider-bar>`;
     }
     ctBar() {
         if (this.isSelected('ct')) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<slider-bar
-                ._light=${this._light}
+                ._light=${this._lightBundle.state}
                 @change=${(e)=>this.handleLightService('turn_on', 'color_temp_kelvin', e.detail)}
-                ._max=${this._light.attributes.max_color_temp_kelvin}
-                ._min=${this._light.attributes.min_color_temp_kelvin}
-                ._startValue=${this._light.attributes.color_temp_kelvin}
+                ._max=${this._lightBundle.state.attributes.max_color_temp_kelvin}
+                ._min=${this._lightBundle.state.attributes.min_color_temp_kelvin}
+                ._startValue=${this._lightBundle.state.attributes.color_temp_kelvin}
                 ._type=${'ct'}
             ></slider-bar>`;
     }
     colorWheel() {
         if (this.isSelected('hs')) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<color-wheel
-                ._light = ${this._light}
+                ._light = ${this._lightBundle.state}
                 @change = ${(e)=>this.handleLightService('turn_on', 'hs_color', e.detail)}
             ></color-wheel>`;
     }
     themeSelect() {
-        if (this.isSelected('select')) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<theme-select
-                ._light = ${this._light}
-                @change = ${this.handleSelect}
-            ></theme-select>
-            `;
+        if (this.isSelected('select')) {
+            if (this._lightBundle.theme) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<theme-select
+                    ._theme = ${this._lightBundle.theme}
+                    @change = ${this.handleSelect}
+                ></theme-select>
+                `;
+        }
     }
     static styles = (0, $201c56a28a72cc27$export$2e2bcd8739ae039);
     render() {
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
             <div class="control-column">
                 ${this.lightIcon()}
-                ${this.isAttribute('brightness') ? this.brightnessIcon() : ``}
-                ${this.isAttribute('color_temp_kelvin') ? this.ctIcon() : ``}
-                ${this.isAttribute('hs_color') ? this.hsIcon() : ``}
-                ${this.isAttribute('select') ? this.selectIcon() : ``}
+                ${this.isOption('brightness') ? this.brightnessIcon() : ``}
+                ${this.isOption('color_temp_kelvin') ? this.ctIcon() : ``}
+                ${this.isOption('hs_color') ? this.hsIcon() : ``}
+                ${this.isOption('theme') ? this.selectIcon() : ``}
             </div>
             ${this.brightnessBar()}
             ${this.ctBar()}
@@ -9058,7 +9076,7 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
             title: {
                 type: String
             },
-            _light: {
+            _lightBundle: {
                 state: true
             },
             _lightId: {
@@ -9069,35 +9087,37 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
     constructor(){
         super();
     }
+    firstUpdated() {
+        this.defaultSelect();
+    }
     static styles = (0, $84adf0e0aa3f1db7$export$2e2bcd8739ae039);
-    innerLight(light) {
-        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-            <light-inner
-                id=${light}
-                ._light=${light}
-                ._isSelected=${this.isSelected(light)}
-                @select=${()=>this.select(light)}
-            ></light-inner>
-        `;
+    innerLight(lightBundle) {
+        if (lightBundle) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+                <light-inner
+                    id=${lightBundle.state.entity_id}
+                    ._lightBundle=${lightBundle}
+                    ._isSelected=${this.isSelected(lightBundle)}
+                    @select=${()=>this.select(lightBundle)}
+                ></light-inner>
+            `;
     }
     lights() {
-        const lights = this._light.members;
+        const lightBundles = this._lightBundle.members;
         let result = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)``;
-        if (lights) result = lights.map((light)=>{
-            return this.innerLight(light);
+        if (lightBundles) result = Object.values(lightBundles).map((lightBundle)=>{
+            return this.innerLight(lightBundle);
         });
         return result;
     }
     lightControl() {
         if (this.selectedLight()) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
                 <light-control
-                    ._light = ${this.selectedLight()}
+                    ._lightBundle = ${this.selectedLight()}
                     .callService=${this.callService}
                 ></light-control>
             `;
     }
     render() {
-        this.defaultSelect();
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
         <dialog @close="${this._handleClose}">
             <div class="modal-header">
@@ -9108,7 +9128,7 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
             </div>
             <div class="content-row">
                 <div class="select-lights">
-                    ${this.innerLight(this._light)}
+                    ${this.innerLight(this._lightBundle)}
                     ${this.lights()}
                 </div>
                 ${this.lightControl()}
@@ -9117,20 +9137,20 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
         `;
     }
     defaultSelect() {
-        if (!this._lightId) this._lightId = this._light.entity_id;
+        if (!this._lightId) this._lightId = this._lightBundle.state.entity_id;
     }
-    select(light) {
-        this._lightId = light.entity_id;
+    select(lightBundle) {
+        this._lightId = lightBundle.state.entity_id;
     }
-    isSelected(light) {
-        return this._lightId === light.entity_id;
+    isSelected(lightBundle) {
+        return this._lightId === lightBundle.state.entity_id;
     }
     selectedLight() {
-        if (this._lightId === this._light.entity_id) return this._light;
-        else if (this._light.members) {
+        if (this._lightId === this._lightBundle.state.entity_id) return this._lightBundle;
+        else if (this._lightBundle.members) {
             let result;
-            this._light.members.forEach((light)=>{
-                if (this._lightId === light.entity_id) result = light;
+            Object.values(this._lightBundle.members).forEach((lightBundle)=>{
+                if (this._lightId === lightBundle.state.entity_id) result = lightBundle;
             });
             return result;
         }
@@ -9161,7 +9181,7 @@ class $046ae152b1d9e254$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
     _HOLD_DURATION = 500;
     static get properties() {
         return {
-            _light: {
+            _lightBundle: {
                 state: true
             },
             isModalOpen: {
@@ -9176,19 +9196,19 @@ class $046ae152b1d9e254$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
     static styles = (0, $fd69d66a3348dfcc$export$2e2bcd8739ae039);
     icons() {
         let result;
-        const lights = this._light.members;
-        if (lights) result = lights.map((light)=>{
+        const lightBundles = this._lightBundle.members;
+        if (lightBundles) result = Object.values(lightBundles).map((lightBundle)=>{
             return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-                    <light-icon ._light=${light}></light-icon>
+                    <light-icon ._lightBundle=${lightBundle}></light-icon>
                 `;
         });
         else result = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-                <light-icon ._light=${this._light}></light-icon>
+                <light-icon ._lightBundle=${this._lightBundle}></light-icon>
             `;
         return result;
     }
     render() {
-        const name = this._light.attributes.friendly_name;
+        const name = this._lightBundle.state.attributes.friendly_name;
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
             <div class="light-element" @pointerup=${this.onUp} @pointerdown=${this.onDown}>
                 ${this.icons()}
@@ -9198,7 +9218,7 @@ class $046ae152b1d9e254$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
                 title="${name}"
                 ?opened="${this.isModalOpen}"
                 @modal-closed="${this.handleModalClosed}"
-                ._light="${this._light}"
+                ._lightBundle=${this._lightBundle}
                 .callService="${this.callService}"
             ></popout-window>
         `;
@@ -9220,7 +9240,7 @@ class $046ae152b1d9e254$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
         this.isModalOpen = false;
     }
     onClick() {
-        const entityId = this._light.entity_id;
+        const entityId = this._lightBundle.state.entity_id;
         const data = {
             entity_id: entityId
         };
@@ -9239,9 +9259,6 @@ class $fdede02cbd34666f$export$40073d408f029a0b extends (0, $ab210b2da7b39b9d$ex
             }
         };
     }
-    constructor(){
-        super();
-    }
     static styles = (0, $fd69d66a3348dfcc$export$2e2bcd8739ae039);
     getAreaName(areaId) {
         return this._areas[areaId].name;
@@ -9249,17 +9266,18 @@ class $fdede02cbd34666f$export$40073d408f029a0b extends (0, $ab210b2da7b39b9d$ex
     getAreaBundles(areaId) {
         return this._lightBundles[areaId];
     }
+    getLightDisplay(lightBundle) {
+        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+            <light-component
+                ._lightBundle = ${lightBundle}
+                .callService=${this.callService}
+            ></light-component>
+        `;
+    }
     getAreaDisplay(areaId) {
         const title = this.getAreaName(areaId);
         const areaBundles = this.getAreaBundles(areaId);
-        const areaComponents = Object.values(areaBundles).map((lightBundle)=>{
-            return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-                <light-component
-                    ._light=${lightBundle.state}
-                    .callService=${this.callService}
-                ></light-component>
-            `;
-        });
+        const areaComponents = Object.values(areaBundles).map((lightBundle)=>this.getLightDisplay(lightBundle));
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
             <div class="area">
                 <h1>${title}</h1>
