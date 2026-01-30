@@ -8367,12 +8367,12 @@ var $57a27094fb213e22$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
     .slider {
         position: absolute;
         opacity: 0;
-        top: 0;
+        top: var(--margin);
         left: 0;
         width: 25px;
         writing-mode: vertical-lr;
         direction: rtl;
-        height: 150px;
+        height: var(--height);
     }
 
     .shown-slider {
@@ -8380,7 +8380,7 @@ var $57a27094fb213e22$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         top: 0;
         left: 0;
         width: 25px;
-        height: 150px;
+        height: var(--total);
         border: solid 1px #e5e5e5;
         border-radius: 12px;
     }
@@ -8501,6 +8501,8 @@ class $6520265339ffabe1$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$ex
     _min;
     _startValue;
     _type;
+    _MARGIN = 5;
+    _HEIGHT = 150;
     static get properties() {
         return {
             _light: {
@@ -8531,7 +8533,8 @@ class $6520265339ffabe1$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$ex
         else return this._min;
     }
     getHeight() {
-        return 100 * (this.getValue() - this._min) / (this._max - this._min);
+        const heightScale = (this.getValue() - this._min) / (this._max - this._min);
+        return this._MARGIN + (100 - 2 * this._MARGIN) * heightScale;
     }
     getTempGradient() {
         const minTemp = this._min;
@@ -8543,7 +8546,9 @@ class $6520265339ffabe1$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$ex
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
             <div
                 class="shown-slider ${this._type}"
-                style="--height: ${this.getHeight()}%; --grad: ${this.getTempGradient()};"
+                style="--height: ${this.getHeight()}%;
+                    --grad: ${this.getTempGradient()};
+                    --total: ${this._HEIGHT}px;"
             >
                 <div class="shown-level" style="--height: ${this.getHeight()}%"></div>
             </div>
@@ -8556,6 +8561,10 @@ class $6520265339ffabe1$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$ex
                 value="${this.getValue()}"
                 @input="${this.handleOnInput}"
                 @change="${this.handleOnChange}"
+                style="--margin: ${this._MARGIN * this._HEIGHT / 100}px;
+                    --height: ${this._HEIGHT * (100 - 2 * this._MARGIN) / 100}px;
+                "
+
             ></input>
         `;
     }

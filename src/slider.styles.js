@@ -5,12 +5,12 @@ export default css`
     .slider {
         position: absolute;
         opacity: 0;
-        top: 0;
+        top: var(--margin);
         left: 0;
         width: 25px;
         writing-mode: vertical-lr;
         direction: rtl;
-        height: 150px;
+        height: var(--height);
     }
 
     .shown-slider {
@@ -18,7 +18,7 @@ export default css`
         top: 0;
         left: 0;
         width: 25px;
-        height: 150px;
+        height: var(--total);
         border: solid 1px #e5e5e5;
         border-radius: 12px;
     }

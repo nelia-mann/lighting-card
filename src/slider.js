@@ -10,6 +10,8 @@ export class SliderBar extends LitElement {
     _min;
     _startValue;
     _type;
+    _MARGIN = 5;
+    _HEIGHT = 150;
 
     static get properties() {
         return {
@@ -45,7 +47,8 @@ export class SliderBar extends LitElement {
     }
 
     getHeight() {
-        return 100 * (this.getValue() - this._min) / (this._max - this._min)
+        const heightScale = (this.getValue() - this._min) / (this._max - this._min);
+        return this._MARGIN + (100 - 2 * this._MARGIN) * heightScale;
     }
 
     getTempGradient() {
@@ -59,7 +62,9 @@ export class SliderBar extends LitElement {
         return html`
             <div
                 class="shown-slider ${this._type}"
-                style="--height: ${this.getHeight()}%; --grad: ${this.getTempGradient()};"
+                style="--height: ${this.getHeight()}%;
+                    --grad: ${this.getTempGradient()};
+                    --total: ${this._HEIGHT}px;"
             >
                 <div class="shown-level" style="--height: ${this.getHeight()}%"></div>
             </div>
@@ -72,6 +77,10 @@ export class SliderBar extends LitElement {
                 value="${this.getValue()}"
                 @input="${this.handleOnInput}"
                 @change="${this.handleOnChange}"
+                style="--margin: ${this._MARGIN * this._HEIGHT / 100}px;
+                    --height: ${this._HEIGHT * (100 - 2 * this._MARGIN) / 100}px;
+                "
+
             ></input>
         `
     }
