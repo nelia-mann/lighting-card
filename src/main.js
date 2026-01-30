@@ -209,11 +209,28 @@ export class MainCard extends LitElement {
         })
     }
 
+    // trawls through the this._lightBundles object and removes any areas or floors that don't have any actual lights.
+    cleanStructure() {
+        Object.entries(this._lightBundles).forEach(([floor_id, floorDictionary]) => {
+            Object.entries(floorDictionary).forEach(([area_id, areaDictionary]) => {
+                const areaKeys = Object.keys(areaDictionary);
+                if (areaKeys.length === 0) {
+                    delete floorDictionary[area_id];
+                }
+            })
+            const floorKeys = Object.keys(floorDictionary);
+            if (floorKeys.length === 0) {
+                delete this._lightBundles[floor_id]
+            }
+        })
+    }
+
     // fully creates the this._lightBundles object.
     setLightBundles() {
         this.setFloorStructure();
         this.setAreaStructure();
         this.bundleLights();
+        this.cleanStructure();
     }
 
     // returns the bundles associated with the currently selected floor.
