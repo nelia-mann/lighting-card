@@ -8364,7 +8364,22 @@ customElements.define("light-inner", $2b5036ce56cc8e0c$export$5e33b198135dff7b);
 
 var $57a27094fb213e22$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
 
+    .values {
+        width: 35px;
+        height: 100%;
+        display: flex;
+        flex-flow: column nowrap;
+        align-items: flex-end;
+        justify-content: space-between;
+    }
+
     .slider {
+        position: relative;
+        height: 100%;
+        margin: 5px;
+    }
+
+    .actual-slider {
         position: absolute;
         opacity: 0;
         top: var(--margin);
@@ -8386,7 +8401,7 @@ var $57a27094fb213e22$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
     }
 
     .shown-slider.brightness {
-        background: linear-gradient(to top, rgb(255, 193, 7) var(--height), rgb(255, 193, 7, .1) var(--height));
+        background: linear-gradient(to top, rgb(255, 193, 7) var(--height), rgba(255, 193, 7, .1) var(--height));
     }
 
     .shown-slider.ct {
@@ -8402,6 +8417,40 @@ var $57a27094fb213e22$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         background: rgba(0, 0, 0, 1);
     }
 
+    .shown-bottom {
+        position: absolute;
+        bottom: var(--height);
+        left: 0%;
+        width: 100%;
+        height: 1%;
+        background: rgba(0, 0, 0, .2);
+    }
+    .shown-top {
+        position: absolute;
+        bottom: var(--height);
+        left: 0%;
+        width: 100%;
+        height: 1%;
+        background: rgba(0, 0, 0, .2);
+    }
+
+    .bottom-value {
+        margin-bottom: -5px;
+    }
+
+    .top-value {
+        margin-top: -2px;
+    }
+
+    .current-box {
+        position: absolute;
+        bottom: var(--height);
+        left: 35px;
+    }
+
+    .current-value {
+        margin-bottom: -10px;
+    }
 
 `;
 
@@ -8496,6 +8545,7 @@ function $d66841a16b153167$export$40735a17910aaee(t, T, opacity) {
 }
 
 
+
 class $6520265339ffabe1$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
     _max;
     _min;
@@ -8518,7 +8568,8 @@ class $6520265339ffabe1$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$ex
     }
     static styles = (0, $57a27094fb213e22$export$2e2bcd8739ae039);
     handleOnChange(e) {
-        const value = e.target.value;
+        let value = e.target.value;
+        this._type === "brightness" && (value = Math.round(value * 255 / 100));
         this.dispatchEvent(new CustomEvent('change', {
             detail: value
         }));
@@ -8532,6 +8583,12 @@ class $6520265339ffabe1$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$ex
         else if (this._startValue) return this._startValue;
         else return this._min;
     }
+    addUnits(value) {
+        let newValue = String(value);
+        if (this._type === "brightness") newValue = newValue + '%';
+        else if (this._type === "ct") newValue = newValue + 'K';
+        return newValue;
+    }
     getHeight() {
         const heightScale = (this.getValue() - this._min) / (this._max - this._min);
         return this._MARGIN + (100 - 2 * this._MARGIN) * heightScale;
@@ -8544,28 +8601,37 @@ class $6520265339ffabe1$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$ex
     }
     render() {
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-            <div
-                class="shown-slider ${this._type}"
-                style="--height: ${this.getHeight()}%;
-                    --grad: ${this.getTempGradient()};
-                    --total: ${this._HEIGHT}px;"
-            >
-                <div class="shown-level" style="--height: ${this.getHeight()}%"></div>
+            <div class="values">
+                <div class="top-value"> ${this.addUnits(this._max)} </div>
+                <div class="bottom-value"> ${this.addUnits(this._min)} </div>
             </div>
-
-            <input
-                class="slider"
-                type="range"
-                max=${this._max}
-                min=${this._min}
-                value="${this.getValue()}"
-                @input="${this.handleOnInput}"
-                @change="${this.handleOnChange}"
-                style="--margin: ${this._MARGIN * this._HEIGHT / 100}px;
-                    --height: ${this._HEIGHT * (100 - 2 * this._MARGIN) / 100}px;
-                "
-
-            ></input>
+            <div class="slider">
+                <div
+                    class="shown-slider ${this._type}"
+                    style="--height: ${this.getHeight()}%;
+                        --grad: ${this.getTempGradient()};
+                        --total: ${this._HEIGHT}px;"
+                >
+                    <div class="shown-level" style="--height: ${this.getHeight()}%"></div>
+                    <div class="shown-bottom" style="--height: ${this._MARGIN}%"></div>
+                    <div class="shown-top" style="--height: ${100 - this._MARGIN}%"></div>
+                </div>
+                <input
+                    class="actual-slider"
+                    type="range"
+                    max=${this._max}
+                    min=${this._min}
+                    value="${this.getValue()}"
+                    @input="${this.handleOnInput}"
+                    @change="${this.handleOnChange}"
+                    style="--margin: ${this._MARGIN * this._HEIGHT / 100}px;
+                        --height: ${this._HEIGHT * (100 - 2 * this._MARGIN) / 100}px;
+                    "
+                ></input>
+                <div class="current-box" style="--height: ${this.getHeight()}%">
+                    <div class="current-value"> ${this.addUnits(this.getValue())} </div>
+                </div>
+            </div>
         `;
     }
 }
@@ -8628,26 +8694,31 @@ var $201c56a28a72cc27$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 
     slider-bar {
         position: relative;
-        width: 25px;
-        height: 150px;
-        border: none;
         margin-left: 20px;
         margin-right: 10px;
+        width: 105px;
+        height: 150px;
         display: flex;
-        justify-content: center;
+        flex-flow: row nowrap;
+        justify-content: flex-start;
         align-items: center;
+        border: solid 1px #e5e5e5;
+        border-radius: 12px;
+        padding: 20px;
     }
 
     color-wheel {
         position: relative;
         width: 150px;
         height: 150px;
-        border: none;
+        border: solid 1px #e5e5e5;
+        border-radius: 12px;
         margin-left: 20px;
         margin-right: 10px;
         display: flex;
         justify-content: center;
         align-items: center;
+        padding: 20px;
     }
 
 `;
@@ -8659,12 +8730,18 @@ var $201c56a28a72cc27$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 
 var $9da7823e99ded1f7$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
 
+    .wheel {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+
     .wheel-background {
         position: absolute;
         top: 0;
         left: 0;
-        width: var(--scale);
-        height: var(--scale);
+        width: 100%;
+        height: 100%;
         border-radius: 50%;
         border: solid 1px #e5e5e5;
         background-image: radial-gradient(circle at center, white 0%, transparent 100%), var(--grad);
@@ -8742,19 +8819,20 @@ class $39525fd96e3f385d$export$f80663f808113381 extends (0, $ab210b2da7b39b9d$ex
     render() {
         const XY = this.getXY();
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-            <div class="wheel-background"
-                style="
-                    --grad: ${(0, $d66841a16b153167$export$475133aea461e763)(20)};
-                    --top: ${XY[1]}%;
-                    --left: ${XY[0]}%;
-                    --color: ${this.getColor()};
-                    --scale: ${this._SCALE}px;"
-                @pointerdown=${this.down}
-                @pointerup=${this.up}
-                @pointermove=${this.move}
-            >
-                <div class="dot"
-                ></div>
+            <div class="wheel">
+                <div class="wheel-background"
+                    style="
+                        --grad: ${(0, $d66841a16b153167$export$475133aea461e763)(20)};
+                        --top: ${XY[1]}%;
+                        --left: ${XY[0]}%;
+                        --color: ${this.getColor()};
+                        --scale: ${this._SCALE}px;"
+                    @pointerdown=${this.down}
+                    @pointerup=${this.up}
+                    @pointermove=${this.move}
+                >
+                    <div class="dot"></div>
+                </div>
             </div>
         `;
     }
@@ -8803,7 +8881,8 @@ var $fc4a6c4e4b89c4fa$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         border-radius: 12px;
         margin-left: 15px;
         width: 550px;
-        height: 280px;
+        height: 350px;
+        padding: 20px;
     }
 
     .option {
@@ -8986,7 +9065,7 @@ class $f76fa2dde9e8d076$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$ex
         if (this.isSelected('brightness')) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<slider-bar
                 ._light=${this._lightBundle.state}
                 @change=${(e)=>this.handleLightService('turn_on', 'brightness', e.detail)}
-                ._max=${255}
+                ._max=${100}
                 ._min=${0}
                 ._startValue=${this._lightBundle.state.attributes.brightness}
                 ._type=${'brightness'}

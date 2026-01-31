@@ -2,12 +2,18 @@ import { css } from 'lit';
 
 export default css`
 
+    .wheel {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+
     .wheel-background {
         position: absolute;
         top: 0;
         left: 0;
-        width: var(--scale);
-        height: var(--scale);
+        width: 100%;
+        height: 100%;
         border-radius: 50%;
         border: solid 1px #e5e5e5;
         background-image: radial-gradient(circle at center, white 0%, transparent 100%), var(--grad);

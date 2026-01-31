@@ -1,6 +1,6 @@
 import { html, LitElement } from 'lit';
 import { tempGradient, hsGradient } from './color-util.js';
-import { mdiBrightness6, mdiMagicStaff, mdiCreationOutline } from '@mdi/js';
+import { mdiBrightness6, mdiCreationOutline } from '@mdi/js';
 import styles from './light-control.styles.js';
 import './light-icon.js';
 import './slider.js';
@@ -116,7 +116,7 @@ export class LightControl extends LitElement {
             return html`<slider-bar
                 ._light=${this._lightBundle.state}
                 @change=${(e) => this.handleLightService('turn_on', 'brightness', e.detail)}
-                ._max=${255}
+                ._max=${100}
                 ._min=${0}
                 ._startValue=${this._lightBundle.state.attributes.brightness}
                 ._type=${'brightness'}

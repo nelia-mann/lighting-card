@@ -58,19 +58,20 @@ export class ColorWheel extends LitElement {
     render() {
         const XY = this.getXY();
         return html`
-            <div class="wheel-background"
-                style="
-                    --grad: ${hsGradient(20)};
-                    --top: ${XY[1]}%;
-                    --left: ${XY[0]}%;
-                    --color: ${this.getColor()};
-                    --scale: ${this._SCALE}px;"
-                @pointerdown=${this.down}
-                @pointerup=${this.up}
-                @pointermove=${this.move}
-            >
-                <div class="dot"
-                ></div>
+            <div class="wheel">
+                <div class="wheel-background"
+                    style="
+                        --grad: ${hsGradient(20)};
+                        --top: ${XY[1]}%;
+                        --left: ${XY[0]}%;
+                        --color: ${this.getColor()};
+                        --scale: ${this._SCALE}px;"
+                    @pointerdown=${this.down}
+                    @pointerup=${this.up}
+                    @pointermove=${this.move}
+                >
+                    <div class="dot"></div>
+                </div>
             </div>
         `
     }

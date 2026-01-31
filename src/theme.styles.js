@@ -11,7 +11,8 @@ export default css`
         border-radius: 12px;
         margin-left: 15px;
         width: 550px;
-        height: 280px;
+        height: 350px;
+        padding: 20px;
     }
 
     .option {

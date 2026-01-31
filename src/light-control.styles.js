@@ -52,26 +52,31 @@ export default css`
 
     slider-bar {
         position: relative;
-        width: 25px;
-        height: 150px;
-        border: none;
         margin-left: 20px;
         margin-right: 10px;
+        width: 105px;
+        height: 150px;
         display: flex;
-        justify-content: center;
+        flex-flow: row nowrap;
+        justify-content: flex-start;
         align-items: center;
+        border: solid 1px #e5e5e5;
+        border-radius: 12px;
+        padding: 20px;
     }
 
     color-wheel {
         position: relative;
         width: 150px;
         height: 150px;
-        border: none;
+        border: solid 1px #e5e5e5;
+        border-radius: 12px;
         margin-left: 20px;
         margin-right: 10px;
         display: flex;
         justify-content: center;
         align-items: center;
+        padding: 20px;
     }
 
 `;
