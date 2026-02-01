@@ -20,6 +20,7 @@ export default css`
 
     .modal-header {
         display: flex;
+        flex-flow: row nowrap;
         justify-content: space-between;
         align-items: center;
         margin: 20px;

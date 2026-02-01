@@ -59,6 +59,7 @@ export class PopoutWindow extends LitElement {
         return html`
         <dialog class="outlined" @close="${this._handleClose}">
             <div class="modal-header">
+                <div></div>
                 <div class="large-heading">${this.title}</div>
                 <button class="close-button" @click="${this.closeModal}" aria-label="Close modal">
                     <ha-svg-icon .path=${mdiCloseCircleOutline}"></ha-svg-icon>

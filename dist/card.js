@@ -8365,6 +8365,7 @@ var $84adf0e0aa3f1db7$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 
     .modal-header {
         display: flex;
+        flex-flow: row nowrap;
         justify-content: space-between;
         align-items: center;
         margin: 20px;
@@ -9235,6 +9236,7 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
         <dialog class="outlined" @close="${this._handleClose}">
             <div class="modal-header">
+                <div></div>
                 <div class="large-heading">${this.title}</div>
                 <button class="close-button" @click="${this.closeModal}" aria-label="Close modal">
                     <ha-svg-icon .path=${0, $04557c061247a0a6$export$cdf8f7e64334eb05}"></ha-svg-icon>
