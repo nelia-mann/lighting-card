@@ -10,7 +10,6 @@ export default css`
         flex-flow: row nowrap;
         justify-content: center;
         align-items: center;
-        cursor: pointer;
     }
 
     .option.true {

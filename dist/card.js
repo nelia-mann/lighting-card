@@ -8952,7 +8952,6 @@ var $fc4a6c4e4b89c4fa$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         flex-flow: row nowrap;
         justify-content: center;
         align-items: center;
-        cursor: pointer;
     }
 
     .option.true {
