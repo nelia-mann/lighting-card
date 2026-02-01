@@ -1,5 +1,6 @@
 import { html, LitElement } from 'lit';
 import styles from './theme.styles.js';
+import sharedStyles from './shared-styles.js';
 
 
 
@@ -16,7 +17,7 @@ export class ThemeSelect extends LitElement {
         super();
     }
 
-    static styles = styles;
+    static styles = [sharedStyles, styles];
 
     firstUpdated() {
         this._option = this.getValue();
@@ -45,7 +46,7 @@ export class ThemeSelect extends LitElement {
         const optionList = this.getOptions();
         return optionList.map((option) => {
             return html`<div
-                class="option ${this.isSelected(option)}"
+                class="option ${this.isSelected(option)} outlined"
                 id="${option}"
                 @click=${this.onClick}
              >
@@ -56,9 +57,7 @@ export class ThemeSelect extends LitElement {
 
     render() {
         return html`
-            <div class="select-panel">
-                ${this.listOptions()}
-            </div>
+            ${this.listOptions()}
         `
     }
 

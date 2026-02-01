@@ -1,6 +1,7 @@
 import { html, LitElement } from 'lit';
 import './light-icon.js';
-import styles from './light.styles';
+import styles from './light.styles.js';
+import sharedStyles from './shared-styles.js';
 
 export class LightComponent extends LitElement {
 
@@ -17,7 +18,7 @@ export class LightComponent extends LitElement {
         this._isSelected = false;
     }
 
-    static styles = styles;
+    static styles = [sharedStyles, styles];
 
     getMember() {
         let result = '';
@@ -28,7 +29,12 @@ export class LightComponent extends LitElement {
     render() {
         const name = this._lightBundle.state.attributes.friendly_name;
         return html`
-            <div  class="light-element ${this._isSelected} ${this.getMember()}" @click=${this.onClick}>
+            <div  class="light-element
+                    ${this._isSelected}
+                    ${this.getMember()}
+                    outlined"
+                @click=${this.onClick}
+            >
                 <div class="icons">
                     <light-icon ._lightBundle=${this._lightBundle} ></light-icon>
                 </div>

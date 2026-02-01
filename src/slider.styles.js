@@ -35,8 +35,6 @@ export default css`
         left: 0;
         width: var(--width);
         height: 100%;
-        border: solid 1px #e5e5e5;
-        border-radius: 10px;
     }
 
     .shown-slider.brightness {

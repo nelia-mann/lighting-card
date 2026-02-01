@@ -1,5 +1,6 @@
 import { html, LitElement } from 'lit';
 import styles from './panel.styles.js';
+import sharedStyles from './shared-styles.js';
 import './light.js';
 
 export class PanelComponent extends LitElement {
@@ -12,7 +13,7 @@ export class PanelComponent extends LitElement {
         }
     }
 
-    static styles = styles;
+    static styles = [sharedStyles, styles];
 
     getAreaName(areaId) {
         return this._areas[areaId].name;
@@ -38,7 +39,7 @@ export class PanelComponent extends LitElement {
             this.getLightDisplay(lightBundle))
         return html`
             <div class="area">
-                <h1>${title}</h1>
+                <div class="small-heading">${title}</div>
                 ${areaComponents}
             </div>`
     }

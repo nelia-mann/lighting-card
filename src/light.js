@@ -2,6 +2,7 @@ import { html, LitElement } from 'lit';
 import './light-icon.js';
 import './popout-window.js';
 import styles from './light.styles.js';
+import sharedStyles from './shared-styles.js';
 
 export class LightComponent extends LitElement {
 
@@ -20,7 +21,7 @@ export class LightComponent extends LitElement {
         this.isModalOpen = false;
     }
 
-    static styles = styles;
+    static styles = [sharedStyles, styles];
 
     icons() {
         let result;
@@ -43,7 +44,7 @@ export class LightComponent extends LitElement {
     render() {
         const name = this._lightBundle.state.attributes.friendly_name;
         return html`
-            <div class="light-element" @pointerup=${this.onUp} @pointerdown=${this.onDown}>
+            <div class="light-element outlined" @pointerup=${this.onUp} @pointerdown=${this.onDown}>
                 <div class="icons">
                     ${this.icons()}
                 </div>

@@ -2,11 +2,7 @@ import { css } from 'lit';
 
 export default css`
     dialog {
-        border: 1px solid #ccc;
         padding: 20px;
-        border-radius: 12px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        /* Backdrop styling using ::backdrop pseudo-element */
     }
 
     dialog[open] {
@@ -15,10 +11,6 @@ export default css`
         justify-content: center;
         align-items: center;
         overflow: hidden;
-    }
-
-    h1 {
-        font-weight: 400;
     }
 
     dialog::backdrop {
@@ -35,16 +27,13 @@ export default css`
         padding-top: none;
         padding-bottom: none;
         height: 40px;
+        width: 100%;
     }
 
     .close-button {
-        background: none;
         font-size: 15px;
-        padding: none;
-        cursor: pointer;
-        margin-left: 20px;
-        margin-right: -30px;
         border: none;
+        background: none;
     }
 
     .content-row {

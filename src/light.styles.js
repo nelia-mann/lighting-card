@@ -2,10 +2,11 @@ import { css } from 'lit';
 
 export default css`
 
+    popout-window {
+    }
+
     .light-element {
-        border: solid 1px #e5e5e5;
         width: 205px;
-        border-radius: 8px;
         height: 25px;
         padding: 10px;
         padding-top: 8px;

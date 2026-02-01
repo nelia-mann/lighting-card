@@ -2,6 +2,7 @@ import { html, LitElement } from 'lit';
 import { tempGradient, hsGradient } from './color-util.js';
 import { mdiBrightness6, mdiCreationOutline } from '@mdi/js';
 import styles from './light-control.styles.js';
+import sharedStyles from './shared-styles.js';
 import './light-icon.js';
 import './slider.js';
 import './color-wheel.js';
@@ -42,7 +43,7 @@ export class LightControl extends LitElement {
 
     lightIcon() {
         return html`
-        <div class="onoff icon" @click=${() => this.handleLightService('toggle', null, null)}>
+        <div class="onoff icon outlined" @click=${() => this.handleLightService('toggle', null, null)}>
             <light-icon ._lightBundle = ${this._lightBundle}></light-icon>
         </div>
         `
@@ -51,7 +52,7 @@ export class LightControl extends LitElement {
     brightnessIcon() {
         return html`
                 <div
-                    class="brightness icon ${this.isSelected("brightness")}"
+                    class="brightness icon ${this.isSelected("brightness")} outlined"
                     @click=${() => this.onSelect("brightness")}
                 >
                     <ha-svg-icon .path=${mdiBrightness6}></ha-svg-icon>
@@ -61,7 +62,7 @@ export class LightControl extends LitElement {
 
     ctIcon() {
         return html`<div
-            class="ct icon ${this.isSelected("ct")}"
+            class="ct icon ${this.isSelected("ct")} outlined"
             style="--grad: ${this.getTempGradient()};"
             @click=${() => this.onSelect("ct")}
         ></div>`
@@ -69,7 +70,7 @@ export class LightControl extends LitElement {
 
     hsIcon() {
         return html`<div
-            class="hs icon ${this.isSelected("hs")}"
+            class="hs icon ${this.isSelected("hs")} outlined"
             style="--grad: ${hsGradient(10)};"
             @click=${() => this.onSelect("hs")}
         ></div>`
@@ -77,7 +78,7 @@ export class LightControl extends LitElement {
 
     selectIcon() {
         return html`<div
-                class="select icon ${this.isSelected("select")}"
+                class="select icon ${this.isSelected("select")} outlined"
                 @click=${() => this.onSelect("select")}
             >
                 <ha-svg-icon .path=${mdiCreationOutline}></ha-svg-icon>
@@ -114,6 +115,7 @@ export class LightControl extends LitElement {
     brightnessBar() {
         if (this.isSelected('brightness')) {
             return html`<slider-bar
+                class="outlined"
                 ._light=${this._lightBundle.state}
                 @change=${(e) => this.handleLightService('turn_on', 'brightness', e.detail)}
                 ._max=${100}
@@ -127,6 +129,7 @@ export class LightControl extends LitElement {
     ctBar() {
         if (this.isSelected('ct')) {
             return html`<slider-bar
+                class="outlined"
                 ._light=${this._lightBundle.state}
                 @change=${(e) => this.handleLightService('turn_on', 'color_temp_kelvin', e.detail)}
                 ._max=${this._lightBundle.state.attributes.max_color_temp_kelvin}
@@ -140,6 +143,7 @@ export class LightControl extends LitElement {
     colorWheel() {
         if (this.isSelected('hs')) {
             return html`<color-wheel
+                class="outlined"
                 ._light = ${this._lightBundle.state}
                 @change = ${(e) => this.handleLightService('turn_on', 'hs_color', e.detail)}
             ></color-wheel>`
@@ -150,6 +154,7 @@ export class LightControl extends LitElement {
         if (this.isSelected('select')) {
             if (this._lightBundle.theme) {
                 return html`<theme-select
+                    class="outlined"
                     ._theme = ${this._lightBundle.theme}
                     @change = ${this.handleSelect}
                 ></theme-select>
@@ -158,11 +163,11 @@ export class LightControl extends LitElement {
         }
     }
 
-    static styles = styles;
+    static styles = [sharedStyles, styles];
 
     render() {
         return html`
-            <div class="control-column">
+            <div class="control-column outlined">
                 ${this.lightIcon()}
                 ${(this.isOption('brightness')) ? (this.brightnessIcon()) : ``}
                 ${(this.isOption('color_temp_kelvin')) ? (this.ctIcon()) : ``}

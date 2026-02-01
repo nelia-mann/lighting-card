@@ -1,5 +1,6 @@
 import { html, LitElement } from 'lit';
 import styles from './slider.styles.js';
+import sharedStyles from './shared-styles.js';
 import { tempGradient } from './color-util.js';
 
 export class SliderBar extends LitElement {
@@ -23,7 +24,7 @@ export class SliderBar extends LitElement {
         super();
     }
 
-    static styles = styles;
+    static styles = [sharedStyles, styles];
 
     handleOnChange(e) {
         let value = e.target.value;
@@ -80,7 +81,7 @@ export class SliderBar extends LitElement {
             </div>
             <div class="slider">
                 <div
-                    class="shown-slider ${this._type}"
+                    class="shown-slider ${this._type} outlined"
                     style="--height: ${this.getHeight()}%;
                         --grad: ${this.getTempGradient()};
                         --width: ${this._WIDTH}px;"

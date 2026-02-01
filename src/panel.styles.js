@@ -8,10 +8,7 @@ export default css`
     .area {
         margin-left: 10px;
         margin-right: 10px;
-    }
-
-    h1 {
-        font-size: 100%;
+        margin-top: 20px;
     }
 
 `;

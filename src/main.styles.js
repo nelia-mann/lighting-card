@@ -2,8 +2,6 @@ import { css } from 'lit';
 
 export default css`
     ha-card {
-        font-family: "Roboto", "Noto", sans-serif;
-        font-weight: 400;
         padding: 25px;
         padding-top: 15px;
         margin: 0px;
@@ -38,31 +36,15 @@ export default css`
     }
 
     .button {
-        border-radius: 12px;
         height: 100%;
-        width: 22%;
+        width: 200px;
         padding: 0px;
-        border-width: 0px;
         background-color: var(--background);
     }
 
     .button.true {
         outline-offset: -4px;
         outline: solid var(--outline);
-    }
-
-    h1 {
-        font-weight: 600;
-        font-size: 100%;
-        margin: 0px;
-        padding: 0px;
-    }
-
-    p {
-        padding: 0px;
-        margin: 0px;
-        font-weight: 400;
-        font-size: 100%;
     }
 
     @media (prefers-color-scheme: dark) {

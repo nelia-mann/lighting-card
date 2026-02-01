@@ -618,8 +618,6 @@ const $ab210b2da7b39b9d$export$f5c524615a7708d6 = {
 
 var $24833e213e3419f0$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
     ha-card {
-        font-family: "Roboto", "Noto", sans-serif;
-        font-weight: 400;
         padding: 25px;
         padding-top: 15px;
         margin: 0px;
@@ -654,31 +652,15 @@ var $24833e213e3419f0$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
     }
 
     .button {
-        border-radius: 12px;
         height: 100%;
-        width: 22%;
+        width: 200px;
         padding: 0px;
-        border-width: 0px;
         background-color: var(--background);
     }
 
     .button.true {
         outline-offset: -4px;
         outline: solid var(--outline);
-    }
-
-    h1 {
-        font-weight: 600;
-        font-size: 100%;
-        margin: 0px;
-        padding: 0px;
-    }
-
-    p {
-        padding: 0px;
-        margin: 0px;
-        font-weight: 400;
-        font-size: 100%;
     }
 
     @media (prefers-color-scheme: dark) {
@@ -694,6 +676,43 @@ var $24833e213e3419f0$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 
 
 
+var $65e9333b9a0c9dfd$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
+
+    * {
+        font-family: "Roboto", "Noto", sans-serif;
+    }
+
+    .outlined {
+        border: 1px solid rgba(0, 0, 0, .1);
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .small-heading {
+        font-weight: 700;
+        font-size: 100%;
+        margin: 0px;
+        padding: 0px;
+    }
+
+    .large-heading {
+        font-weight: 600;
+        font-size: 200%;
+        margin: 0px;
+        padding: 0px;
+    }
+
+    .sub-info {
+        padding: 0px;
+        margin: 0px;
+        font-weight: 400;
+        font-size: 80%;
+    }
+
+`;
+
+
+
 
 var $fd69d66a3348dfcc$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
 
@@ -703,13 +722,11 @@ var $fd69d66a3348dfcc$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
     .area {
         margin-left: 10px;
         margin-right: 10px;
-    }
-
-    h1 {
-        font-size: 100%;
+        margin-top: 20px;
     }
 
 `;
+
 
 
 
@@ -8327,11 +8344,7 @@ customElements.define("light-icon", $4356f78c5c3f665b$export$82acdd66a4e4bf90);
 
 var $84adf0e0aa3f1db7$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
     dialog {
-        border: 1px solid #ccc;
         padding: 20px;
-        border-radius: 12px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        /* Backdrop styling using ::backdrop pseudo-element */
     }
 
     dialog[open] {
@@ -8340,10 +8353,6 @@ var $84adf0e0aa3f1db7$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         justify-content: center;
         align-items: center;
         overflow: hidden;
-    }
-
-    h1 {
-        font-weight: 400;
     }
 
     dialog::backdrop {
@@ -8360,16 +8369,13 @@ var $84adf0e0aa3f1db7$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         padding-top: none;
         padding-bottom: none;
         height: 40px;
+        width: 100%;
     }
 
     .close-button {
-        background: none;
         font-size: 15px;
-        padding: none;
-        cursor: pointer;
-        margin-left: 20px;
-        margin-right: -30px;
         border: none;
+        background: none;
     }
 
     .content-row {
@@ -8400,12 +8406,14 @@ var $84adf0e0aa3f1db7$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 
 
 
+
 var $7c12e71e3f07e693$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
 
+    popout-window {
+    }
+
     .light-element {
-        border: solid 1px #e5e5e5;
         width: 205px;
-        border-radius: 8px;
         height: 25px;
         padding: 10px;
         padding-top: 8px;
@@ -8437,6 +8445,7 @@ var $7c12e71e3f07e693$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 `;
 
 
+
 class $2b5036ce56cc8e0c$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
     static get properties() {
         return {
@@ -8455,7 +8464,10 @@ class $2b5036ce56cc8e0c$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
         super();
         this._isSelected = false;
     }
-    static styles = (0, $7c12e71e3f07e693$export$2e2bcd8739ae039);
+    static styles = [
+        (0, $65e9333b9a0c9dfd$export$2e2bcd8739ae039),
+        (0, $7c12e71e3f07e693$export$2e2bcd8739ae039)
+    ];
     getMember() {
         let result = '';
         this._isMember && (result = 'member');
@@ -8464,7 +8476,12 @@ class $2b5036ce56cc8e0c$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
     render() {
         const name = this._lightBundle.state.attributes.friendly_name;
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-            <div  class="light-element ${this._isSelected} ${this.getMember()}" @click=${this.onClick}>
+            <div  class="light-element
+                    ${this._isSelected}
+                    ${this.getMember()}
+                    outlined"
+                @click=${this.onClick}
+            >
                 <div class="icons">
                     <light-icon ._lightBundle=${this._lightBundle} ></light-icon>
                 </div>
@@ -8516,8 +8533,6 @@ var $57a27094fb213e22$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         left: 0;
         width: var(--width);
         height: 100%;
-        border: solid 1px #e5e5e5;
-        border-radius: 10px;
     }
 
     .shown-slider.brightness {
@@ -8586,6 +8601,7 @@ var $57a27094fb213e22$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 
 
 
+
 class $6520265339ffabe1$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
     _max;
     _min;
@@ -8607,7 +8623,10 @@ class $6520265339ffabe1$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$ex
     constructor(){
         super();
     }
-    static styles = (0, $57a27094fb213e22$export$2e2bcd8739ae039);
+    static styles = [
+        (0, $65e9333b9a0c9dfd$export$2e2bcd8739ae039),
+        (0, $57a27094fb213e22$export$2e2bcd8739ae039)
+    ];
     handleOnChange(e) {
         let value = e.target.value;
         this._type === "brightness" && (value = Math.round(value * 255 / 100));
@@ -8652,7 +8671,7 @@ class $6520265339ffabe1$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$ex
             </div>
             <div class="slider">
                 <div
-                    class="shown-slider ${this._type}"
+                    class="shown-slider ${this._type} outlined"
                     style="--height: ${this.getHeight()}%;
                         --grad: ${this.getTempGradient()};
                         --width: ${this._WIDTH}px;"
@@ -8695,15 +8714,12 @@ var $201c56a28a72cc27$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         flex-flow: column nowrap;
         justify-content: space-around;
         align-items: center;
-        border: solid 1px #e5e5e5;
-        border-radius: 12px;
         margin-left: 10px;
     }
 
     .icon {
         width: 30px;
         height: 30px;
-        border: solid 1px #e5e5e5;
         border-radius: 50%;
         display: flex;
         justify-content: center;
@@ -8745,8 +8761,6 @@ var $201c56a28a72cc27$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         flex-flow: row nowrap;
         justify-content: flex-start;
         align-items: center;
-        border: solid 1px #e5e5e5;
-        border-radius: 12px;
         padding: 20px;
     }
 
@@ -8754,8 +8768,6 @@ var $201c56a28a72cc27$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         position: relative;
         width: 150px;
         height: 150px;
-        border: solid 1px #e5e5e5;
-        border-radius: 12px;
         margin-left: 20px;
         margin-right: 10px;
         display: flex;
@@ -8764,7 +8776,19 @@ var $201c56a28a72cc27$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         padding: 20px;
     }
 
+    theme-select {
+        display: flex;
+        flex-flow: column wrap;
+        justify-content: flex-start;
+        align-items: center;
+        margin-left: 15px;
+        width: 450px;
+        height: 360px;
+        padding: 15px;
+    }
+
 `;
+
 
 
 
@@ -8786,7 +8810,6 @@ var $9da7823e99ded1f7$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         width: 100%;
         height: 100%;
         border-radius: 50%;
-        border: solid 1px #e5e5e5;
         background-image: radial-gradient(circle at center, white 0%, transparent 100%), var(--grad);
     }
 
@@ -8800,10 +8823,10 @@ var $9da7823e99ded1f7$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         margin-top: -10px;
         border-radius: 50%;
         background: var(--color);
-        border: solid 2px #e5e5e5;
     }
 
 `;
+
 
 
 
@@ -8834,7 +8857,10 @@ class $39525fd96e3f385d$export$f80663f808113381 extends (0, $ab210b2da7b39b9d$ex
         this._box = this.renderRoot.querySelector('.wheel-background');
         this.initializeValues();
     }
-    static styles = (0, $9da7823e99ded1f7$export$2e2bcd8739ae039);
+    static styles = [
+        (0, $65e9333b9a0c9dfd$export$2e2bcd8739ae039),
+        (0, $9da7823e99ded1f7$export$2e2bcd8739ae039)
+    ];
     initializeValues() {
         const hs_values = this._light.attributes.hs_color;
         if (hs_values) {
@@ -8863,7 +8889,7 @@ class $39525fd96e3f385d$export$f80663f808113381 extends (0, $ab210b2da7b39b9d$ex
         const XY = this.getXY();
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
             <div class="wheel">
-                <div class="wheel-background"
+                <div class="wheel-background outlined"
                     style="
                         --grad: ${(0, $d66841a16b153167$export$475133aea461e763)(20)};
                         --top: ${XY[1]}%;
@@ -8874,7 +8900,7 @@ class $39525fd96e3f385d$export$f80663f808113381 extends (0, $ab210b2da7b39b9d$ex
                     @pointerup=${this.up}
                     @pointermove=${this.move}
                 >
-                    <div class="dot"></div>
+                    <div class="dot outlined"></div>
                 </div>
             </div>
         `;
@@ -8915,23 +8941,8 @@ customElements.define("color-wheel", $39525fd96e3f385d$export$f80663f808113381);
 
 var $fc4a6c4e4b89c4fa$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
 
-    .select-panel {
-        display: flex;
-        flex-flow: column wrap;
-        justify-content: flex-start;
-        align-items: center;
-        border: solid 1px #e5e5e5;
-        border-radius: 12px;
-        margin-left: 15px;
-        width: 450px;
-        height: 360px;
-        padding: 15px;
-    }
-
     .option {
-        border: solid 1px #e5e5e5;
-        border-radius: 6px;
-        padding: px;
+        padding: 0px;
         margin: 4px;
         width: 100px;
         display: flex;
@@ -8953,6 +8964,7 @@ var $fc4a6c4e4b89c4fa$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 `;
 
 
+
 class $a6f01a0d74278018$export$1b9e02e625a724dc extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
     static get properties() {
         return {
@@ -8967,7 +8979,10 @@ class $a6f01a0d74278018$export$1b9e02e625a724dc extends (0, $ab210b2da7b39b9d$ex
     constructor(){
         super();
     }
-    static styles = (0, $fc4a6c4e4b89c4fa$export$2e2bcd8739ae039);
+    static styles = [
+        (0, $65e9333b9a0c9dfd$export$2e2bcd8739ae039),
+        (0, $fc4a6c4e4b89c4fa$export$2e2bcd8739ae039)
+    ];
     firstUpdated() {
         this._option = this.getValue();
     }
@@ -8992,7 +9007,7 @@ class $a6f01a0d74278018$export$1b9e02e625a724dc extends (0, $ab210b2da7b39b9d$ex
         const optionList = this.getOptions();
         return optionList.map((option)=>{
             return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<div
-                class="option ${this.isSelected(option)}"
+                class="option ${this.isSelected(option)} outlined"
                 id="${option}"
                 @click=${this.onClick}
              >
@@ -9002,9 +9017,7 @@ class $a6f01a0d74278018$export$1b9e02e625a724dc extends (0, $ab210b2da7b39b9d$ex
     }
     render() {
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-            <div class="select-panel">
-                ${this.listOptions()}
-            </div>
+            ${this.listOptions()}
         `;
     }
 }
@@ -9044,7 +9057,7 @@ class $f76fa2dde9e8d076$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$ex
     }
     lightIcon() {
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-        <div class="onoff icon" @click=${()=>this.handleLightService('toggle', null, null)}>
+        <div class="onoff icon outlined" @click=${()=>this.handleLightService('toggle', null, null)}>
             <light-icon ._lightBundle = ${this._lightBundle}></light-icon>
         </div>
         `;
@@ -9052,7 +9065,7 @@ class $f76fa2dde9e8d076$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$ex
     brightnessIcon() {
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
                 <div
-                    class="brightness icon ${this.isSelected("brightness")}"
+                    class="brightness icon ${this.isSelected("brightness")} outlined"
                     @click=${()=>this.onSelect("brightness")}
                 >
                     <ha-svg-icon .path=${0, $04557c061247a0a6$export$6ace9c955f434b80}></ha-svg-icon>
@@ -9061,21 +9074,21 @@ class $f76fa2dde9e8d076$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$ex
     }
     ctIcon() {
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<div
-            class="ct icon ${this.isSelected("ct")}"
+            class="ct icon ${this.isSelected("ct")} outlined"
             style="--grad: ${this.getTempGradient()};"
             @click=${()=>this.onSelect("ct")}
         ></div>`;
     }
     hsIcon() {
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<div
-            class="hs icon ${this.isSelected("hs")}"
+            class="hs icon ${this.isSelected("hs")} outlined"
             style="--grad: ${(0, $d66841a16b153167$export$475133aea461e763)(10)};"
             @click=${()=>this.onSelect("hs")}
         ></div>`;
     }
     selectIcon() {
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<div
-                class="select icon ${this.isSelected("select")}"
+                class="select icon ${this.isSelected("select")} outlined"
                 @click=${()=>this.onSelect("select")}
             >
                 <ha-svg-icon .path=${0, $04557c061247a0a6$export$8b91c405b1f98ab9}></ha-svg-icon>
@@ -9106,6 +9119,7 @@ class $f76fa2dde9e8d076$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$ex
     }
     brightnessBar() {
         if (this.isSelected('brightness')) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<slider-bar
+                class="outlined"
                 ._light=${this._lightBundle.state}
                 @change=${(e)=>this.handleLightService('turn_on', 'brightness', e.detail)}
                 ._max=${100}
@@ -9116,6 +9130,7 @@ class $f76fa2dde9e8d076$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$ex
     }
     ctBar() {
         if (this.isSelected('ct')) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<slider-bar
+                class="outlined"
                 ._light=${this._lightBundle.state}
                 @change=${(e)=>this.handleLightService('turn_on', 'color_temp_kelvin', e.detail)}
                 ._max=${this._lightBundle.state.attributes.max_color_temp_kelvin}
@@ -9126,6 +9141,7 @@ class $f76fa2dde9e8d076$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$ex
     }
     colorWheel() {
         if (this.isSelected('hs')) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<color-wheel
+                class="outlined"
                 ._light = ${this._lightBundle.state}
                 @change = ${(e)=>this.handleLightService('turn_on', 'hs_color', e.detail)}
             ></color-wheel>`;
@@ -9133,16 +9149,20 @@ class $f76fa2dde9e8d076$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$ex
     themeSelect() {
         if (this.isSelected('select')) {
             if (this._lightBundle.theme) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<theme-select
+                    class="outlined"
                     ._theme = ${this._lightBundle.theme}
                     @change = ${this.handleSelect}
                 ></theme-select>
                 `;
         }
     }
-    static styles = (0, $201c56a28a72cc27$export$2e2bcd8739ae039);
+    static styles = [
+        (0, $65e9333b9a0c9dfd$export$2e2bcd8739ae039),
+        (0, $201c56a28a72cc27$export$2e2bcd8739ae039)
+    ];
     render() {
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-            <div class="control-column">
+            <div class="control-column outlined">
                 ${this.lightIcon()}
                 ${this.isOption('brightness') ? this.brightnessIcon() : ``}
                 ${this.isOption('color_temp_kelvin') ? this.ctIcon() : ``}
@@ -9177,7 +9197,10 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
             }
         };
     }
-    static styles = (0, $84adf0e0aa3f1db7$export$2e2bcd8739ae039);
+    static styles = [
+        (0, $65e9333b9a0c9dfd$export$2e2bcd8739ae039),
+        (0, $84adf0e0aa3f1db7$export$2e2bcd8739ae039)
+    ];
     innerLight(lightBundle, isMember) {
         if (lightBundle) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
                 <light-inner
@@ -9208,9 +9231,9 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
     render() {
         this.defaultSelect();
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-        <dialog @close="${this._handleClose}">
+        <dialog class="outlined" @close="${this._handleClose}">
             <div class="modal-header">
-                <h1>${this.title}</h1>
+                <div class="large-heading">${this.title}</div>
                 <button class="close-button" @click="${this.closeModal}" aria-label="Close modal">
                     <ha-svg-icon .path=${0, $04557c061247a0a6$export$cdf8f7e64334eb05}"></ha-svg-icon>
                 </button>
@@ -9274,6 +9297,7 @@ customElements.define("popout-window", $4b68482a6361126c$export$506b69e3dcbd131b
 
 
 
+
 class $046ae152b1d9e254$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
     _holding = false;
     _HOLD_DURATION = 500;
@@ -9291,7 +9315,10 @@ class $046ae152b1d9e254$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
         super();
         this.isModalOpen = false;
     }
-    static styles = (0, $7c12e71e3f07e693$export$2e2bcd8739ae039);
+    static styles = [
+        (0, $65e9333b9a0c9dfd$export$2e2bcd8739ae039),
+        (0, $7c12e71e3f07e693$export$2e2bcd8739ae039)
+    ];
     icons() {
         let result;
         const lightBundles = this._lightBundle.members;
@@ -9308,7 +9335,7 @@ class $046ae152b1d9e254$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
     render() {
         const name = this._lightBundle.state.attributes.friendly_name;
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-            <div class="light-element" @pointerup=${this.onUp} @pointerdown=${this.onDown}>
+            <div class="light-element outlined" @pointerup=${this.onUp} @pointerdown=${this.onDown}>
                 <div class="icons">
                     ${this.icons()}
                 </div>
@@ -9359,7 +9386,10 @@ class $fdede02cbd34666f$export$40073d408f029a0b extends (0, $ab210b2da7b39b9d$ex
             }
         };
     }
-    static styles = (0, $fd69d66a3348dfcc$export$2e2bcd8739ae039);
+    static styles = [
+        (0, $65e9333b9a0c9dfd$export$2e2bcd8739ae039),
+        (0, $fd69d66a3348dfcc$export$2e2bcd8739ae039)
+    ];
     getAreaName(areaId) {
         return this._areas[areaId].name;
     }
@@ -9380,7 +9410,7 @@ class $fdede02cbd34666f$export$40073d408f029a0b extends (0, $ab210b2da7b39b9d$ex
         const areaComponents = Object.values(areaBundles).map((lightBundle)=>this.getLightDisplay(lightBundle));
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
             <div class="area">
-                <h1>${title}</h1>
+                <div class="small-heading">${title}</div>
                 ${areaComponents}
             </div>`;
     }
@@ -9643,13 +9673,13 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
         const onTot = this.getLightData(floorId);
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
             <button
-                class="button ${this.isFloor(floorId)}"
+                class="button ${this.isFloor(floorId)} outlined"
                 style="--outline: ${this.getRGB(floorId, 1)}; --background: ${this.getRGB(floorId, .5)};"
                 id="${floorId}"
                 @click="${this.onClick}"
             >
-            <h1> ${this.prettyFloor(floorId)} <h1>
-            <p> ${onTot[0]}/${onTot[1]} lights on </p>
+                <div class="small-heading"> ${this.prettyFloor(floorId)} <div>
+                <div class="sub-info"> ${onTot[0]}/${onTot[1]} lights on </div>
             </button>
         `;
     }
@@ -9659,7 +9689,10 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
         return floorIds.map((floorId)=>this.floorButton(floorId));
     }
     // pull styles
-    static styles = (0, $24833e213e3419f0$export$2e2bcd8739ae039);
+    static styles = [
+        (0, $65e9333b9a0c9dfd$export$2e2bcd8739ae039),
+        (0, $24833e213e3419f0$export$2e2bcd8739ae039)
+    ];
     // return html
     render() {
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`

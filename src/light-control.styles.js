@@ -7,15 +7,12 @@ export default css`
         flex-flow: column nowrap;
         justify-content: space-around;
         align-items: center;
-        border: solid 1px #e5e5e5;
-        border-radius: 12px;
         margin-left: 10px;
     }
 
     .icon {
         width: 30px;
         height: 30px;
-        border: solid 1px #e5e5e5;
         border-radius: 50%;
         display: flex;
         justify-content: center;
@@ -57,8 +54,6 @@ export default css`
         flex-flow: row nowrap;
         justify-content: flex-start;
         align-items: center;
-        border: solid 1px #e5e5e5;
-        border-radius: 12px;
         padding: 20px;
     }
 
@@ -66,14 +61,23 @@ export default css`
         position: relative;
         width: 150px;
         height: 150px;
-        border: solid 1px #e5e5e5;
-        border-radius: 12px;
         margin-left: 20px;
         margin-right: 10px;
         display: flex;
         justify-content: center;
         align-items: center;
         padding: 20px;
+    }
+
+    theme-select {
+        display: flex;
+        flex-flow: column wrap;
+        justify-content: flex-start;
+        align-items: center;
+        margin-left: 15px;
+        width: 450px;
+        height: 360px;
+        padding: 15px;
     }
 
 `;

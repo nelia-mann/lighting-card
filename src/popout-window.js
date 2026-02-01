@@ -1,6 +1,7 @@
 import { html, LitElement } from 'lit';
 import { mdiCloseCircleOutline } from '@mdi/js';
 import styles from './popout.styles.js';
+import sharedStyles from './shared-styles.js';
 import './light-inner.js';
 import './slider.js';
 import './light-control.js';
@@ -16,7 +17,7 @@ export class PopoutWindow extends LitElement {
         }
     }
 
-    static styles = styles;
+    static styles = [sharedStyles, styles];
 
     innerLight(lightBundle, isMember) {
         if (lightBundle) {
@@ -57,9 +58,9 @@ export class PopoutWindow extends LitElement {
     render() {
         this.defaultSelect();
         return html`
-        <dialog @close="${this._handleClose}">
+        <dialog class="outlined" @close="${this._handleClose}">
             <div class="modal-header">
-                <h1>${this.title}</h1>
+                <div class="large-heading">${this.title}</div>
                 <button class="close-button" @click="${this.closeModal}" aria-label="Close modal">
                     <ha-svg-icon .path=${mdiCloseCircleOutline}"></ha-svg-icon>
                 </button>

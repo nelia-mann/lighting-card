@@ -1,5 +1,6 @@
 import { html, LitElement } from 'lit';
 import styles from './wheel.styles.js';
+import sharedStyles from './shared-styles';
 import { hsGradient } from './color-util.js';
 
 
@@ -28,7 +29,7 @@ export class ColorWheel extends LitElement {
         this.initializeValues();
     }
 
-    static styles = styles;
+    static styles = [sharedStyles, styles];
 
     initializeValues() {
         const hs_values = this._light.attributes.hs_color;
@@ -59,7 +60,7 @@ export class ColorWheel extends LitElement {
         const XY = this.getXY();
         return html`
             <div class="wheel">
-                <div class="wheel-background"
+                <div class="wheel-background outlined"
                     style="
                         --grad: ${hsGradient(20)};
                         --top: ${XY[1]}%;
@@ -70,7 +71,7 @@ export class ColorWheel extends LitElement {
                     @pointerup=${this.up}
                     @pointermove=${this.move}
                 >
-                    <div class="dot"></div>
+                    <div class="dot outlined"></div>
                 </div>
             </div>
         `

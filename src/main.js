@@ -1,5 +1,6 @@
 import { html, LitElement } from 'lit';
 import styles from './main.styles.js';
+import sharedStyles from './shared-styles.js';
 import "./panel.js";
 import { interpolateLightRGB } from './color-util.js';
 
@@ -273,13 +274,13 @@ export class MainCard extends LitElement {
         const onTot = this.getLightData(floorId);
         return html`
             <button
-                class="button ${this.isFloor(floorId)}"
+                class="button ${this.isFloor(floorId)} outlined"
                 style="--outline: ${this.getRGB(floorId, 1)}; --background: ${this.getRGB(floorId, .5)};"
                 id="${floorId}"
                 @click="${this.onClick}"
             >
-            <h1> ${this.prettyFloor(floorId)} <h1>
-            <p> ${onTot[0]}/${onTot[1]} lights on </p>
+                <div class="small-heading"> ${this.prettyFloor(floorId)} <div>
+                <div class="sub-info"> ${onTot[0]}/${onTot[1]} lights on </div>
             </button>
         `
     }
@@ -291,7 +292,7 @@ export class MainCard extends LitElement {
     }
 
     // pull styles
-    static styles = styles;
+    static styles = [sharedStyles, styles];
 
     // return html
     render() {
