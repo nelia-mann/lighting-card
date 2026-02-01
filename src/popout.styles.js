@@ -3,6 +3,7 @@ import { css } from 'lit';
 export default css`
     dialog {
         padding: 20px;
+        border: none;
     }
 
     dialog[open] {

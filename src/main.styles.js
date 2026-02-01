@@ -40,6 +40,7 @@ export default css`
         width: 200px;
         padding: 0px;
         background-color: var(--background);
+        border: none;
     }
 
     .button.true {

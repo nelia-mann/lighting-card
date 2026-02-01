@@ -7,9 +7,10 @@ export default css`
     }
 
     .outlined {
-        border: 1px solid rgba(0, 0, 0, .1);
+        outline: .5px solid rgba(0, 0, 0, .1);
+        outline-offset: .1px;
         border-radius: 10px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
     }
 
     .small-heading {

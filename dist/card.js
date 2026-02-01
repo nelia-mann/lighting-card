@@ -656,6 +656,7 @@ var $24833e213e3419f0$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         width: 200px;
         padding: 0px;
         background-color: var(--background);
+        border: none;
     }
 
     .button.true {
@@ -683,9 +684,10 @@ var $65e9333b9a0c9dfd$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
     }
 
     .outlined {
-        border: 1px solid rgba(0, 0, 0, .1);
+        outline: .5px solid rgba(0, 0, 0, .1);
+        outline-offset: .1px;
         border-radius: 10px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
     }
 
     .small-heading {
@@ -8196,6 +8198,21 @@ var $c87b1b47755af4d8$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 `;
 
 
+const $d66841a16b153167$export$a004fc522c1a4845 = [
+    255,
+    193,
+    7
+]; // color in rgb (yellow)
+const $d66841a16b153167$export$173de64b5ad0d5b4 = [
+    158,
+    158,
+    158
+]; // color in rgb (gray)
+const $d66841a16b153167$export$f353bac13bc8bab2 = [
+    68,
+    115,
+    158
+]; // color in rgb (steel blue)
 function $d66841a16b153167$var$getTempRed(temp) {
     let red;
     if (temp <= 6600) red = 255;
@@ -8233,14 +8250,18 @@ function $d66841a16b153167$var$getTempBlue(temp) {
     return blue;
 }
 function $d66841a16b153167$var$getTempColor(temp) {
-    return `rgb(${$d66841a16b153167$var$getTempRed(temp)}, ${$d66841a16b153167$var$getTempGreen(temp)}, ${$d66841a16b153167$var$getTempBlue(temp)})`;
+    return [
+        $d66841a16b153167$var$getTempRed(temp),
+        $d66841a16b153167$var$getTempGreen(temp),
+        $d66841a16b153167$var$getTempBlue(temp)
+    ];
 }
 function $d66841a16b153167$export$5b5356aa7e20fd72(minTemp, maxTemp, steps) {
-    const min = $d66841a16b153167$var$getTempColor(minTemp);
-    const max = $d66841a16b153167$var$getTempColor(maxTemp);
     let output = `linear-gradient(to top`;
     for(let step = 0; step <= steps; step++){
-        const result = $d66841a16b153167$var$getTempColor((minTemp * (steps - step) + maxTemp * step) / steps);
+        const temp = (minTemp * (steps - step) + maxTemp * step) / steps;
+        const rgb = $d66841a16b153167$var$getTempColor(temp);
+        const result = $d66841a16b153167$export$4e46ac54fc82cf3b(rgb, 1);
         const percent = Math.round(step * 100 / steps);
         output = output + `, ` + result + ` ${percent}%`;
     }
@@ -8256,33 +8277,25 @@ function $d66841a16b153167$export$475133aea461e763(steps) {
     output = output + `)`;
     return output;
 }
-function $d66841a16b153167$var$setScale(a, b, t, T) {
+function $d66841a16b153167$var$setScale(a, b, t) {
     let result = a;
-    if (T > 0) {
-        if (t > T) result = b;
-        else if (t < 0) result = a;
-        else result = a + (b - a) * t / T;
-    }
+    if (t > 1) result = b;
+    else if (t < 0) result = a;
+    else result = a + (b - a) * t;
     return result;
 }
-function $d66841a16b153167$export$dd0fba3206c57e56(rgbA, rgbB, t, T, opacity) {
-    const red = $d66841a16b153167$var$setScale(rgbA[0], rgbB[0], t, T);
-    const green = $d66841a16b153167$var$setScale(rgbA[1], rgbB[1], t, T);
-    const blue = $d66841a16b153167$var$setScale(rgbA[2], rgbB[2], t, T);
-    return `rgba(${red}, ${green}, ${blue}, ${opacity})`;
+function $d66841a16b153167$export$4e46ac54fc82cf3b(rgbArray, opacity) {
+    return `rgba(${rgbArray[0]}, ${rgbArray[1]}, ${rgbArray[2]}, ${opacity})`;
 }
-function $d66841a16b153167$export$40735a17910aaee(t, T, opacity) {
-    let off = [
-        158,
-        158,
-        158
+function $d66841a16b153167$export$dd0fba3206c57e56(rgbA, rgbB, t) {
+    const red = $d66841a16b153167$var$setScale(rgbA[0], rgbB[0], t);
+    const green = $d66841a16b153167$var$setScale(rgbA[1], rgbB[1], t);
+    const blue = $d66841a16b153167$var$setScale(rgbA[2], rgbB[2], t);
+    return [
+        red,
+        green,
+        blue
     ];
-    let on = [
-        255,
-        193,
-        7
-    ];
-    return $d66841a16b153167$export$dd0fba3206c57e56(off, on, t, T, opacity);
 }
 
 
@@ -8312,22 +8325,12 @@ class $4356f78c5c3f665b$export$82acdd66a4e4bf90 extends (0, $ab210b2da7b39b9d$ex
         return this._lightBundle.state.attributes.rgb_color;
     }
     getColor() {
-        const rgbOff = [
-            68,
-            115,
-            158
-        ];
-        const rgbOn = [
-            255,
-            193,
-            7
-        ];
-        let rgb = (0, $d66841a16b153167$export$dd0fba3206c57e56)(rgbOff, rgbOff, this.getBrightness(), 1, 1);
+        let rgb = (0, $d66841a16b153167$export$f353bac13bc8bab2);
         if (this.isOn()) {
-            if (this.getRGB()) rgb = (0, $d66841a16b153167$export$dd0fba3206c57e56)(rgbOff, this.getRGB(), this.getBrightness(), 1, 1);
-            else rgb = (0, $d66841a16b153167$export$dd0fba3206c57e56)(rgbOff, rgbOn, this.getBrightness(), 1, 1);
+            if (this.getRGB()) rgb = (0, $d66841a16b153167$export$dd0fba3206c57e56)((0, $d66841a16b153167$export$f353bac13bc8bab2), this.getRGB(), this.getBrightness());
+            else rgb = (0, $d66841a16b153167$export$dd0fba3206c57e56)((0, $d66841a16b153167$export$f353bac13bc8bab2), (0, $d66841a16b153167$export$a004fc522c1a4845), this.getBrightness());
         }
-        return rgb;
+        return (0, $d66841a16b153167$export$4e46ac54fc82cf3b)(rgb, 1);
     }
     static styles = (0, $c87b1b47755af4d8$export$2e2bcd8739ae039);
     render() {
@@ -8345,6 +8348,7 @@ customElements.define("light-icon", $4356f78c5c3f665b$export$82acdd66a4e4bf90);
 var $84adf0e0aa3f1db7$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
     dialog {
         padding: 20px;
+        border: none;
     }
 
     dialog[open] {
@@ -8494,6 +8498,95 @@ class $2b5036ce56cc8e0c$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
     }
 }
 customElements.define("light-inner", $2b5036ce56cc8e0c$export$5e33b198135dff7b);
+
+
+
+
+
+
+var $201c56a28a72cc27$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
+
+    .control-column {
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: space-around;
+        align-items: center;
+        margin-left: 10px;
+    }
+
+    .icon {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 10px;
+    }
+
+    .icon.onoff {
+    }
+
+    .icon.brightness {
+        background: rgba(255, 193, 7, .2);
+    }
+
+    .icon.true {
+        outline: solid rgb(255, 193, 7);
+        outline-offset: -1px;
+    }
+
+    .icon.ct {
+        background: var(--grad);
+    }
+
+    .icon.hs {
+        background-image: radial-gradient(circle at center, white 0%, transparent 100%), var(--grad);
+    }
+
+    .icon.select {
+        background: rgba(255, 193, 7, .2);
+    }
+
+
+    slider-bar {
+        margin-left: 20px;
+        margin-right: 10px;
+        width: 115px;
+        height: 150px;
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: flex-start;
+        align-items: center;
+        padding: 20px;
+    }
+
+    color-wheel {
+        position: relative;
+        width: 150px;
+        height: 150px;
+        margin-left: 20px;
+        margin-right: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+    }
+
+    theme-select {
+        display: flex;
+        flex-flow: column wrap;
+        justify-content: flex-start;
+        align-items: center;
+        margin-left: 15px;
+        width: 450px;
+        height: 360px;
+        padding: 15px;
+    }
+
+`;
+
+
 
 
 
@@ -8701,96 +8794,6 @@ class $6520265339ffabe1$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$ex
     }
 }
 customElements.define("slider-bar", $6520265339ffabe1$export$5ff34efdd1b9ed54);
-
-
-
-
-
-
-var $201c56a28a72cc27$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
-
-    .control-column {
-        display: flex;
-        flex-flow: column nowrap;
-        justify-content: space-around;
-        align-items: center;
-        margin-left: 10px;
-    }
-
-    .icon {
-        width: 30px;
-        height: 30px;
-        border-radius: 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin: 10px;
-    }
-
-    .icon.onoff {
-    }
-
-    .icon.brightness {
-        background: rgba(255, 193, 7, .2);
-    }
-
-    .icon.true {
-        outline: solid rgb(255, 193, 7);
-        outline-offset: -1px;
-    }
-
-    .icon.ct {
-        background: var(--grad);
-    }
-
-    .icon.hs {
-        background-image: radial-gradient(circle at center, white 0%, transparent 100%), var(--grad);
-    }
-
-    .icon.select {
-        background: rgba(255, 193, 7, .2);
-    }
-
-
-    slider-bar {
-        margin-left: 20px;
-        margin-right: 10px;
-        width: 115px;
-        height: 150px;
-        display: flex;
-        flex-flow: row nowrap;
-        justify-content: flex-start;
-        align-items: center;
-        padding: 20px;
-    }
-
-    color-wheel {
-        position: relative;
-        width: 150px;
-        height: 150px;
-        margin-left: 20px;
-        margin-right: 10px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 20px;
-    }
-
-    theme-select {
-        display: flex;
-        flex-flow: column wrap;
-        justify-content: flex-start;
-        align-items: center;
-        margin-left: 15px;
-        width: 450px;
-        height: 360px;
-        padding: 15px;
-    }
-
-`;
-
-
-
 
 
 
@@ -9666,7 +9669,8 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
     // the fraction of the lights that are on.
     getRGB(floorId, opacity) {
         const onTot = this.getLightData(floorId);
-        return (0, $d66841a16b153167$export$40735a17910aaee)(onTot[0], onTot[1], opacity);
+        const rgb = (0, $d66841a16b153167$export$dd0fba3206c57e56)((0, $d66841a16b153167$export$173de64b5ad0d5b4), (0, $d66841a16b153167$export$a004fc522c1a4845), onTot[0] / onTot[1]);
+        return (0, $d66841a16b153167$export$4e46ac54fc82cf3b)(rgb, opacity);
     }
     // generates the floor button for a particular floor id.
     floorButton(floorId) {

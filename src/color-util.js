@@ -1,3 +1,7 @@
+const ONLIGHT = [255, 193, 7]; // color in rgb (yellow)
+const OFF = [158, 158, 158]; // color in rgb (gray)
+const OFFLIGHT = [68, 115, 158]; // color in rgb (steel blue)
+
 function getTempRed(temp) {
     let red;
     if (temp <= 6600) {
@@ -43,15 +47,15 @@ function getTempBlue(temp) {
 }
 
 function getTempColor(temp) {
-    return `rgb(${getTempRed(temp)}, ${getTempGreen(temp)}, ${getTempBlue(temp)})`
+    return [getTempRed(temp), getTempGreen(temp), getTempBlue(temp)]
 }
 
 function tempGradient(minTemp, maxTemp, steps) {
-    const min = getTempColor(minTemp);
-    const max = getTempColor(maxTemp);
     let output = `linear-gradient(to top`
     for (let step = 0; step <= steps; step++) {
-        const result = getTempColor((minTemp * (steps - step) + maxTemp * step) / steps);
+        const temp = (minTemp * (steps - step) + maxTemp * step) / steps;
+        const rgb = getTempColor(temp);
+        const result = rgba(rgb, 1);
         const percent = Math.round(step * 100 / steps);
         output = output + `, ` + result + ` ${percent}%`;
     }
@@ -69,31 +73,35 @@ function hsGradient(steps) {
     return output;
 }
 
-function setScale(a, b, t, T) {
+function setScale(a, b, t) {
     let result = a;
-    if (T > 0) {
-        if (t > T) {
-            result = b;
-        } else if (t < 0) {
-            result = a
-        } else {
-            result = a + ((b - a) * t / T)
-        }
+    if (t > 1) {
+        result = b;
+    } else if (t < 0) {
+        result = a
+    } else {
+        result = a + ((b - a) * t )
     }
     return result;
 }
 
-function interpolateRGB(rgbA, rgbB, t, T, opacity) {
-    const red = setScale(rgbA[0], rgbB[0], t, T);
-    const green = setScale(rgbA[1], rgbB[1], t, T);
-    const blue = setScale(rgbA[2], rgbB[2], t, T);
-    return `rgba(${red}, ${green}, ${blue}, ${opacity})`
+function rgba(rgbArray, opacity) {
+    return `rgba(${rgbArray[0]}, ${rgbArray[1]}, ${rgbArray[2]}, ${opacity})`
 }
 
-function interpolateLightRGB(t, T, opacity) {
-    let off = [158, 158, 158];
-    let on = [255, 193, 7];
-    return interpolateRGB(off, on, t, T, opacity);
+function interpolateRGB(rgbA, rgbB, t) {
+    const red = setScale(rgbA[0], rgbB[0], t);
+    const green = setScale(rgbA[1], rgbB[1], t);
+    const blue = setScale(rgbA[2], rgbB[2], t);
+    return [red, green, blue]
 }
 
-export { tempGradient, hsGradient, interpolateRGB, interpolateLightRGB }
+export {
+    tempGradient,
+    hsGradient,
+    interpolateRGB,
+    rgba,
+    OFFLIGHT,
+    ONLIGHT,
+    OFF
+}

@@ -2,7 +2,7 @@ import { html, LitElement } from 'lit';
 import styles from './main.styles.js';
 import sharedStyles from './shared-styles.js';
 import "./panel.js";
-import { interpolateLightRGB } from './color-util.js';
+import { interpolateRGB, OFF, ONLIGHT, rgba } from './color-util.js';
 
 export class MainCard extends LitElement {
 
@@ -266,7 +266,8 @@ export class MainCard extends LitElement {
     // the fraction of the lights that are on.
     getRGB(floorId, opacity) {
         const onTot = this.getLightData(floorId);
-        return interpolateLightRGB(onTot[0], onTot[1], opacity)
+        const rgb = interpolateRGB(OFF, ONLIGHT, onTot[0] / onTot[1])
+        return rgba(rgb, opacity);
     }
 
     // generates the floor button for a particular floor id.

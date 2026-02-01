@@ -1,7 +1,7 @@
 import { html, LitElement } from 'lit';
 import { mdiLightbulb, mdiLightbulbOff, mdiLightbulbGroup, mdiLightbulbGroupOff } from '@mdi/js';
 import styles from './icon.styles.js';
-import { interpolateRGB }  from './color-util.js';
+import { interpolateRGB, rgba, OFFLIGHT, ONLIGHT }  from './color-util.js';
 
 export class LightIcon extends LitElement {
 
@@ -38,17 +38,15 @@ export class LightIcon extends LitElement {
     }
 
     getColor() {
-        const rgbOff = [68, 115, 158];
-        const rgbOn = [255, 193, 7];
-        let rgb = interpolateRGB(rgbOff, rgbOff, this.getBrightness(), 1, 1);;
+        let rgb = OFFLIGHT;
         if (this.isOn()) {
             if (this.getRGB()) {
-                rgb = interpolateRGB(rgbOff, this.getRGB(), this.getBrightness(), 1, 1);
+                rgb = interpolateRGB(OFFLIGHT, this.getRGB(), this.getBrightness());
             } else {
-                rgb = interpolateRGB(rgbOff, rgbOn, this.getBrightness(), 1, 1);
+                rgb = interpolateRGB(OFFLIGHT, ONLIGHT, this.getBrightness());
             }
         }
-        return rgb
+        return rgba(rgb, 1)
     }
 
     static styles = styles;

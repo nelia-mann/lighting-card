@@ -3,7 +3,6 @@ import { mdiCloseCircleOutline } from '@mdi/js';
 import styles from './popout.styles.js';
 import sharedStyles from './shared-styles.js';
 import './light-inner.js';
-import './slider.js';
 import './light-control.js';
 
 export class PopoutWindow extends LitElement {
