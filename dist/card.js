@@ -8163,6 +8163,108 @@ var $04557c061247a0a6$export$b85070968a4444f5 = "M15.59,9C17.7,7.74 19,5.46 19,3
 var $04557c061247a0a6$export$a14c803a1714faa3 = "M18.5,19.13C20,17.77 20,15.18 20,14A4,4 0 0,0 16,10C15.3,10 14.6,10.2 14,10.56V6A3,3 0 0,0 11,3C10.25,3 9.55,3.29 9,3.78C7.86,2.76 6.14,2.76 5,3.78C4.45,3.28 3.74,3 3,3V5A1,1 0 0,1 4,6V16H6V6A1,1 0 0,1 7,5A1,1 0 0,1 8,6V16H10V6A1,1 0 0,1 11,5A1,1 0 0,1 12,6V14C12,15.18 12,17.77 13.5,19.13C12.72,19.54 11.88,19.84 11,20V22C12.29,22 14.84,20.74 16,20.13C17.16,20.74 19.71,22 21,22V20C20.12,19.84 19.28,19.54 18.5,19.13M16,12A2,2 0 0,1 18,14C18,16.92 17.46,18 16,18C14.54,18 14,16.92 14,14A2,2 0 0,1 16,12Z";
 
 
+
+var $c87b1b47755af4d8$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
+
+    ha-svg-icon {
+        padding: 0%;
+        margin: 0%;
+        color: var(--color);
+    }
+
+`;
+
+
+function $d66841a16b153167$var$getTempRed(temp) {
+    let red;
+    if (temp <= 6600) red = 255;
+    else {
+        red = temp / 100 - 60;
+        red = Math.round(329.698727446 * red ** -0.1332047592);
+    }
+    red < 0 && (red = 0);
+    red > 255 && (red = 255);
+    return red;
+}
+function $d66841a16b153167$var$getTempGreen(temp) {
+    let green;
+    if (temp <= 6600) {
+        green = temp / 100;
+        green = Math.round(99.4708025861 * Math.log(green) - 161.1195681661);
+    } else {
+        green = temp / 100 - 60;
+        green = Math.round(288.1221695283 * green ** -0.0755148492);
+    }
+    green < 0 && (green = 0);
+    green > 255 && (green = 255);
+    return green;
+}
+function $d66841a16b153167$var$getTempBlue(temp) {
+    let blue;
+    if (temp > 6600) blue = 255;
+    else if (temp <= 1900) blue = 0;
+    else {
+        blue = temp / 100 - 10;
+        blue = Math.round(138.5177312231 * Math.log(blue) - 305.0447927307);
+    }
+    blue < 0 && (blue = 0);
+    blue > 255 && (blue = 255);
+    return blue;
+}
+function $d66841a16b153167$var$getTempColor(temp) {
+    return `rgb(${$d66841a16b153167$var$getTempRed(temp)}, ${$d66841a16b153167$var$getTempGreen(temp)}, ${$d66841a16b153167$var$getTempBlue(temp)})`;
+}
+function $d66841a16b153167$export$5b5356aa7e20fd72(minTemp, maxTemp, steps) {
+    const min = $d66841a16b153167$var$getTempColor(minTemp);
+    const max = $d66841a16b153167$var$getTempColor(maxTemp);
+    let output = `linear-gradient(to top`;
+    for(let step = 0; step <= steps; step++){
+        const result = $d66841a16b153167$var$getTempColor((minTemp * (steps - step) + maxTemp * step) / steps);
+        const percent = Math.round(step * 100 / steps);
+        output = output + `, ` + result + ` ${percent}%`;
+    }
+    output = output + `)`;
+    return output;
+}
+function $d66841a16b153167$export$475133aea461e763(steps) {
+    let output = `conic-gradient( from 0deg`;
+    for(let step = 0; step <= steps; step++){
+        const angle = Math.round(step * 360 / steps);
+        output = output + `, hsl(${angle}, 100%, 50%)`;
+    }
+    output = output + `)`;
+    return output;
+}
+function $d66841a16b153167$var$setScale(a, b, t, T) {
+    let result = a;
+    if (T > 0) {
+        if (t > T) result = b;
+        else if (t < 0) result = a;
+        else result = a + (b - a) * t / T;
+    }
+    return result;
+}
+function $d66841a16b153167$export$dd0fba3206c57e56(rgbA, rgbB, t, T, opacity) {
+    const red = $d66841a16b153167$var$setScale(rgbA[0], rgbB[0], t, T);
+    const green = $d66841a16b153167$var$setScale(rgbA[1], rgbB[1], t, T);
+    const blue = $d66841a16b153167$var$setScale(rgbA[2], rgbB[2], t, T);
+    return `rgba(${red}, ${green}, ${blue}, ${opacity})`;
+}
+function $d66841a16b153167$export$40735a17910aaee(t, T, opacity) {
+    let off = [
+        158,
+        158,
+        158
+    ];
+    let on = [
+        255,
+        193,
+        7
+    ];
+    return $d66841a16b153167$export$dd0fba3206c57e56(off, on, t, T, opacity);
+}
+
+
 class $4356f78c5c3f665b$export$82acdd66a4e4bf90 extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
     static get properties() {
         return {
@@ -8181,46 +8283,36 @@ class $4356f78c5c3f665b$export$82acdd66a4e4bf90 extends (0, $ab210b2da7b39b9d$ex
         return lightbulb;
     }
     getBrightness() {
-        return this._lightBundle.state.attributes.brightness;
-    }
-    getOpacity() {
-        let opacity = 1;
-        if (this.getBrightness()) opacity = this.getBrightness() / 255;
-        return opacity;
+        let brightness = 1;
+        if (this._lightBundle.state.attributes.brightness) brightness = this._lightBundle.state.attributes.brightness / 255;
+        return brightness;
     }
     getRGB() {
         return this._lightBundle.state.attributes.rgb_color;
     }
     getColor() {
-        let rgb = [
+        const rgbOff = [
             68,
             115,
             158
         ];
+        const rgbOn = [
+            255,
+            193,
+            7
+        ];
+        let rgb = (0, $d66841a16b153167$export$dd0fba3206c57e56)(rgbOff, rgbOff, this.getBrightness(), 1, 1);
         if (this.isOn()) {
-            if (this.getRGB()) rgb = this.getRGB();
-            else rgb = [
-                255,
-                193,
-                7
-            ];
+            if (this.getRGB()) rgb = (0, $d66841a16b153167$export$dd0fba3206c57e56)(rgbOff, this.getRGB(), this.getBrightness(), 1, 1);
+            else rgb = (0, $d66841a16b153167$export$dd0fba3206c57e56)(rgbOff, rgbOn, this.getBrightness(), 1, 1);
         }
-        return `
-            rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})
-        `;
+        console.log(rgb);
+        return rgb;
     }
-    getStyle() {
-        const result = `
-            padding: 0%;
-            margin: 0%;
-            color: ${this.getColor()};
-            opacity: ${this.getOpacity()};
-        `;
-        return result;
-    }
+    static styles = (0, $c87b1b47755af4d8$export$2e2bcd8739ae039);
     render() {
         if (this._lightBundle) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-                <ha-svg-icon .path=${this.lightbulb()} style="${this.getStyle()}"></ha-svg-icon>
+                <ha-svg-icon .path=${this.lightbulb()} style="--color: ${this.getColor()}"></ha-svg-icon>
             `;
     }
 }
@@ -8365,12 +8457,13 @@ customElements.define("light-inner", $2b5036ce56cc8e0c$export$5e33b198135dff7b);
 var $57a27094fb213e22$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
 
     .values {
-        width: 35px;
+        position: relative;
         height: 100%;
         display: flex;
         flex-flow: column nowrap;
         align-items: flex-end;
         justify-content: space-between;
+        width: 35px;
     }
 
     .slider {
@@ -8384,7 +8477,7 @@ var $57a27094fb213e22$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         opacity: 0;
         top: var(--margin);
         left: 0;
-        width: 25px;
+        width: var(--width);
         writing-mode: vertical-lr;
         direction: rtl;
         height: var(--height);
@@ -8394,10 +8487,10 @@ var $57a27094fb213e22$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         position: absolute;
         top: 0;
         left: 0;
-        width: 25px;
-        height: var(--total);
+        width: var(--width);
+        height: 100%;
         border: solid 1px #e5e5e5;
-        border-radius: 12px;
+        border-radius: 10px;
     }
 
     .shown-slider.brightness {
@@ -8434,18 +8527,28 @@ var $57a27094fb213e22$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         background: rgba(0, 0, 0, .2);
     }
 
+    .bottom-box {
+        position: absolute;
+        bottom: var(--margin);
+    }
+
     .bottom-value {
-        margin-bottom: -5px;
+        margin-bottom: -10px;
+    }
+
+    .top-box {
+        position: absolute;
+        bottom: var(--margin);
     }
 
     .top-value {
-        margin-top: -2px;
+        margin-bottom: -10px;
     }
 
     .current-box {
         position: absolute;
         bottom: var(--height);
-        left: 35px;
+        left: var(--width);
     }
 
     .current-value {
@@ -8455,104 +8558,15 @@ var $57a27094fb213e22$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 `;
 
 
-function $d66841a16b153167$var$getTempRed(temp) {
-    let red;
-    if (temp <= 6600) red = 255;
-    else {
-        red = temp / 100 - 60;
-        red = Math.round(329.698727446 * red ** -0.1332047592);
-    }
-    red < 0 && (red = 0);
-    red > 255 && (red = 255);
-    return red;
-}
-function $d66841a16b153167$var$getTempGreen(temp) {
-    let green;
-    if (temp <= 6600) {
-        green = temp / 100;
-        green = Math.round(99.4708025861 * Math.log(green) - 161.1195681661);
-    } else {
-        green = temp / 100 - 60;
-        green = Math.round(288.1221695283 * green ** -0.0755148492);
-    }
-    green < 0 && (green = 0);
-    green > 255 && (green = 255);
-    return green;
-}
-function $d66841a16b153167$var$getTempBlue(temp) {
-    let blue;
-    if (temp > 6600) blue = 255;
-    else if (temp <= 1900) blue = 0;
-    else {
-        blue = temp / 100 - 10;
-        blue = Math.round(138.5177312231 * Math.log(blue) - 305.0447927307);
-    }
-    blue < 0 && (blue = 0);
-    blue > 255 && (blue = 255);
-    return blue;
-}
-function $d66841a16b153167$var$getTempColor(temp) {
-    return `rgb(${$d66841a16b153167$var$getTempRed(temp)}, ${$d66841a16b153167$var$getTempGreen(temp)}, ${$d66841a16b153167$var$getTempBlue(temp)})`;
-}
-function $d66841a16b153167$export$5b5356aa7e20fd72(minTemp, maxTemp, steps) {
-    const min = $d66841a16b153167$var$getTempColor(minTemp);
-    const max = $d66841a16b153167$var$getTempColor(maxTemp);
-    let output = `linear-gradient(to top`;
-    for(let step = 0; step <= steps; step++){
-        const result = $d66841a16b153167$var$getTempColor((minTemp * (steps - step) + maxTemp * step) / steps);
-        const percent = Math.round(step * 100 / steps);
-        output = output + `, ` + result + ` ${percent}%`;
-    }
-    output = output + `)`;
-    return output;
-}
-function $d66841a16b153167$export$475133aea461e763(steps) {
-    let output = `conic-gradient( from 0deg`;
-    for(let step = 0; step <= steps; step++){
-        const angle = Math.round(step * 360 / steps);
-        output = output + `, hsl(${angle}, 100%, 50%)`;
-    }
-    output = output + `)`;
-    return output;
-}
-function $d66841a16b153167$var$setScale(a, b, t, T) {
-    let result = a;
-    if (T > 0) {
-        if (t > T) result = b;
-        else if (t < 0) result = a;
-        else result = a + (b - a) * t / T;
-    }
-    return result;
-}
-function $d66841a16b153167$var$interpolateRGB(rgbA, rgbB, t, T, opacity) {
-    const red = $d66841a16b153167$var$setScale(rgbA[0], rgbB[0], t, T);
-    const green = $d66841a16b153167$var$setScale(rgbA[1], rgbB[1], t, T);
-    const blue = $d66841a16b153167$var$setScale(rgbA[2], rgbB[2], t, T);
-    return `rgba(${red}, ${green}, ${blue}, ${opacity})`;
-}
-function $d66841a16b153167$export$40735a17910aaee(t, T, opacity) {
-    let off = [
-        158,
-        158,
-        158
-    ];
-    let on = [
-        255,
-        193,
-        7
-    ];
-    return $d66841a16b153167$var$interpolateRGB(off, on, t, T, opacity);
-}
-
-
 
 class $6520265339ffabe1$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
     _max;
     _min;
     _startValue;
     _type;
-    _MARGIN = 5;
-    _HEIGHT = 150;
+    _MB = 5;
+    _MT = 6;
+    _WIDTH = 30;
     static get properties() {
         return {
             _light: {
@@ -8584,14 +8598,14 @@ class $6520265339ffabe1$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$ex
         else return this._min;
     }
     addUnits(value) {
-        let newValue = String(value);
+        let newValue = String(Math.round(value));
         if (this._type === "brightness") newValue = newValue + '%';
         else if (this._type === "ct") newValue = newValue + 'K';
         return newValue;
     }
     getHeight() {
         const heightScale = (this.getValue() - this._min) / (this._max - this._min);
-        return this._MARGIN + (100 - 2 * this._MARGIN) * heightScale;
+        return this._MB + (100 - this._MB - this._MT) * heightScale;
     }
     getTempGradient() {
         const minTemp = this._min;
@@ -8602,19 +8616,23 @@ class $6520265339ffabe1$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$ex
     render() {
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
             <div class="values">
-                <div class="top-value"> ${this.addUnits(this._max)} </div>
-                <div class="bottom-value"> ${this.addUnits(this._min)} </div>
+                <div class="top-box" style="--margin: ${100 - this._MT}%">
+                    <div class="top-value"> ${this.addUnits(this._max)} </div>
+                </div>
+                <div class="bottom-box" style="--margin: ${this._MB}%">
+                    <div class="bottom-value"> ${this.addUnits(this._min)} </div>
+                </div>
             </div>
             <div class="slider">
                 <div
                     class="shown-slider ${this._type}"
                     style="--height: ${this.getHeight()}%;
                         --grad: ${this.getTempGradient()};
-                        --total: ${this._HEIGHT}px;"
+                        --width: ${this._WIDTH}px;"
                 >
                     <div class="shown-level" style="--height: ${this.getHeight()}%"></div>
-                    <div class="shown-bottom" style="--height: ${this._MARGIN}%"></div>
-                    <div class="shown-top" style="--height: ${100 - this._MARGIN}%"></div>
+                    <div class="shown-bottom" style="--height: ${this._MB}%"></div>
+                    <div class="shown-top" style="--height: ${100 - this._MT}%"></div>
                 </div>
                 <input
                     class="actual-slider"
@@ -8624,11 +8642,12 @@ class $6520265339ffabe1$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$ex
                     value="${this.getValue()}"
                     @input="${this.handleOnInput}"
                     @change="${this.handleOnChange}"
-                    style="--margin: ${this._MARGIN * this._HEIGHT / 100}px;
-                        --height: ${this._HEIGHT * (100 - 2 * this._MARGIN) / 100}px;
-                    "
+                    style="--margin: ${this._MB}%;
+                        --height: ${100 - this._MB - this._MT}%;
+                        --width: ${this._WIDTH}px;"
                 ></input>
-                <div class="current-box" style="--height: ${this.getHeight()}%">
+                <div class="current-box"
+                    style="--height: ${this.getHeight()}%; --width: ${this._WIDTH + 10}px">
                     <div class="current-value"> ${this.addUnits(this.getValue())} </div>
                 </div>
             </div>
@@ -8669,21 +8688,19 @@ var $201c56a28a72cc27$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
     }
 
     .icon.brightness {
-        background: rgba(255, 193, 7, .2);∂
+        background: rgba(255, 193, 7, .2);
     }
 
     .icon.true {
-        outline: solid rgb(0,0,0);
-        outline-offset: -3px;
+        outline: solid rgb(255, 193, 7);
+        outline-offset: -1px;
     }
 
     .icon.ct {
-        overflow: hidden;
         background: var(--grad);
     }
 
     .icon.hs {
-        overflow: hidden;
         background-image: radial-gradient(circle at center, white 0%, transparent 100%), var(--grad);
     }
 
@@ -8693,10 +8710,9 @@ var $201c56a28a72cc27$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 
 
     slider-bar {
-        position: relative;
         margin-left: 20px;
         margin-right: 10px;
-        width: 105px;
+        width: 115px;
         height: 150px;
         display: flex;
         flex-flow: row nowrap;
@@ -8880,16 +8896,16 @@ var $fc4a6c4e4b89c4fa$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         border: solid 1px #e5e5e5;
         border-radius: 12px;
         margin-left: 15px;
-        width: 550px;
-        height: 350px;
-        padding: 20px;
+        width: 450px;
+        height: 360px;
+        padding: 15px;
     }
 
     .option {
         border: solid 1px #e5e5e5;
         border-radius: 6px;
         padding: px;
-        margin: 3px;
+        margin: 4px;
         width: 100px;
         display: flex;
         flex-flow: row nowrap;
@@ -9067,7 +9083,7 @@ class $f76fa2dde9e8d076$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$ex
                 @change=${(e)=>this.handleLightService('turn_on', 'brightness', e.detail)}
                 ._max=${100}
                 ._min=${0}
-                ._startValue=${this._lightBundle.state.attributes.brightness}
+                ._startValue=${this._lightBundle.state.attributes.brightness * 100 / 255}
                 ._type=${'brightness'}
             ></slider-bar>`;
     }

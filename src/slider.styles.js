@@ -3,12 +3,13 @@ import { css } from 'lit';
 export default css`
 
     .values {
-        width: 35px;
+        position: relative;
         height: 100%;
         display: flex;
         flex-flow: column nowrap;
         align-items: flex-end;
         justify-content: space-between;
+        width: 35px;
     }
 
     .slider {
@@ -22,7 +23,7 @@ export default css`
         opacity: 0;
         top: var(--margin);
         left: 0;
-        width: 25px;
+        width: var(--width);
         writing-mode: vertical-lr;
         direction: rtl;
         height: var(--height);
@@ -32,10 +33,10 @@ export default css`
         position: absolute;
         top: 0;
         left: 0;
-        width: 25px;
-        height: var(--total);
+        width: var(--width);
+        height: 100%;
         border: solid 1px #e5e5e5;
-        border-radius: 12px;
+        border-radius: 10px;
     }
 
     .shown-slider.brightness {
@@ -72,18 +73,28 @@ export default css`
         background: rgba(0, 0, 0, .2);
     }
 
+    .bottom-box {
+        position: absolute;
+        bottom: var(--margin);
+    }
+
     .bottom-value {
-        margin-bottom: -5px;
+        margin-bottom: -10px;
+    }
+
+    .top-box {
+        position: absolute;
+        bottom: var(--margin);
     }
 
     .top-value {
-        margin-top: -2px;
+        margin-bottom: -10px;
     }
 
     .current-box {
         position: absolute;
         bottom: var(--height);
-        left: 35px;
+        left: var(--width);
     }
 
     .current-value {

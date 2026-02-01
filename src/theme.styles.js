@@ -10,16 +10,16 @@ export default css`
         border: solid 1px #e5e5e5;
         border-radius: 12px;
         margin-left: 15px;
-        width: 550px;
-        height: 350px;
-        padding: 20px;
+        width: 450px;
+        height: 360px;
+        padding: 15px;
     }
 
     .option {
         border: solid 1px #e5e5e5;
         border-radius: 6px;
         padding: px;
-        margin: 3px;
+        margin: 4px;
         width: 100px;
         display: flex;
         flex-flow: row nowrap;

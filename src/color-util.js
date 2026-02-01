@@ -96,4 +96,4 @@ function interpolateLightRGB(t, T, opacity) {
     return interpolateRGB(off, on, t, T, opacity);
 }
 
-export { tempGradient, hsGradient, interpolateLightRGB }
+export { tempGradient, hsGradient, interpolateRGB, interpolateLightRGB }

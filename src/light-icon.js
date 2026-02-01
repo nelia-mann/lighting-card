@@ -1,5 +1,7 @@
 import { html, LitElement } from 'lit';
 import { mdiLightbulb, mdiLightbulbOff, mdiLightbulbGroup, mdiLightbulbGroupOff } from '@mdi/js';
+import styles from './icon.styles.js';
+import { interpolateRGB }  from './color-util.js';
 
 export class LightIcon extends LitElement {
 
@@ -24,15 +26,11 @@ export class LightIcon extends LitElement {
     }
 
     getBrightness() {
-        return (this._lightBundle.state.attributes.brightness);
-    }
-
-    getOpacity() {
-        let opacity = 1;
-        if (this.getBrightness()) {
-            opacity = this.getBrightness() / 255;
+        let brightness = 1;
+        if (this._lightBundle.state.attributes.brightness) {
+            brightness = this._lightBundle.state.attributes.brightness / 255;
         }
-        return opacity;
+        return brightness;
     }
 
     getRGB() {
@@ -40,33 +38,26 @@ export class LightIcon extends LitElement {
     }
 
     getColor() {
-        let rgb = [68, 115, 158];
+        const rgbOff = [68, 115, 158];
+        const rgbOn = [255, 193, 7];
+        let rgb = interpolateRGB(rgbOff, rgbOff, this.getBrightness(), 1, 1);;
         if (this.isOn()) {
             if (this.getRGB()) {
-                rgb = this.getRGB();
+                rgb = interpolateRGB(rgbOff, this.getRGB(), this.getBrightness(), 1, 1);
             } else {
-                rgb = [255, 193, 7];
+                rgb = interpolateRGB(rgbOff, rgbOn, this.getBrightness(), 1, 1);
             }
         }
-        return `
-            rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})
-        `
+        console.log(rgb);
+        return rgb
     }
 
-    getStyle() {
-        const result = `
-            padding: 0%;
-            margin: 0%;
-            color: ${this.getColor()};
-            opacity: ${this.getOpacity()};
-        `
-        return result;
-    }
+    static styles = styles;
 
     render() {
         if (this._lightBundle) {
             return html`
-                <ha-svg-icon .path=${this.lightbulb()} style="${this.getStyle()}"></ha-svg-icon>
+                <ha-svg-icon .path=${this.lightbulb()} style="--color: ${this.getColor()}"></ha-svg-icon>
             `
         }
     }

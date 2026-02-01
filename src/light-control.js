@@ -118,7 +118,7 @@ export class LightControl extends LitElement {
                 @change=${(e) => this.handleLightService('turn_on', 'brightness', e.detail)}
                 ._max=${100}
                 ._min=${0}
-                ._startValue=${this._lightBundle.state.attributes.brightness}
+                ._startValue=${this._lightBundle.state.attributes.brightness * 100 / 255}
                 ._type=${'brightness'}
             ></slider-bar>`
         }

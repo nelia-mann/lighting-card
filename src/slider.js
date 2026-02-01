@@ -1,9 +1,6 @@
 import { html, LitElement } from 'lit';
 import styles from './slider.styles.js';
 import { tempGradient } from './color-util.js';
-import { mdiTempleBuddhistOutline } from '@mdi/js';
-
-
 
 export class SliderBar extends LitElement {
 
@@ -11,8 +8,9 @@ export class SliderBar extends LitElement {
     _min;
     _startValue;
     _type;
-    _MARGIN = 5;
-    _HEIGHT = 150;
+    _MB = 5;
+    _MT = 6;
+    _WIDTH = 30;
 
     static get properties() {
         return {
@@ -49,7 +47,7 @@ export class SliderBar extends LitElement {
     }
 
     addUnits(value) {
-        let newValue = String(value);
+        let newValue = String(Math.round(value));
         if (this._type === "brightness") {
             newValue = newValue + '%';
         } else if (this._type === "ct") {
@@ -60,7 +58,7 @@ export class SliderBar extends LitElement {
 
     getHeight() {
         const heightScale = (this.getValue() - this._min) / (this._max - this._min);
-        return this._MARGIN + (100 - 2 * this._MARGIN) * heightScale;
+        return this._MB+ (100 - this._MB - this._MT) * heightScale;
     }
 
     getTempGradient() {
@@ -73,19 +71,23 @@ export class SliderBar extends LitElement {
     render() {
         return html`
             <div class="values">
-                <div class="top-value"> ${this.addUnits(this._max)} </div>
-                <div class="bottom-value"> ${this.addUnits(this._min)} </div>
+                <div class="top-box" style="--margin: ${100 - this._MT}%">
+                    <div class="top-value"> ${this.addUnits(this._max)} </div>
+                </div>
+                <div class="bottom-box" style="--margin: ${this._MB}%">
+                    <div class="bottom-value"> ${this.addUnits(this._min)} </div>
+                </div>
             </div>
             <div class="slider">
                 <div
                     class="shown-slider ${this._type}"
                     style="--height: ${this.getHeight()}%;
                         --grad: ${this.getTempGradient()};
-                        --total: ${this._HEIGHT}px;"
+                        --width: ${this._WIDTH}px;"
                 >
                     <div class="shown-level" style="--height: ${this.getHeight()}%"></div>
-                    <div class="shown-bottom" style="--height: ${this._MARGIN}%"></div>
-                    <div class="shown-top" style="--height: ${100 - this._MARGIN}%"></div>
+                    <div class="shown-bottom" style="--height: ${this._MB}%"></div>
+                    <div class="shown-top" style="--height: ${100 - this._MT}%"></div>
                 </div>
                 <input
                     class="actual-slider"
@@ -95,11 +97,12 @@ export class SliderBar extends LitElement {
                     value="${this.getValue()}"
                     @input="${this.handleOnInput}"
                     @change="${this.handleOnChange}"
-                    style="--margin: ${this._MARGIN * this._HEIGHT / 100}px;
-                        --height: ${this._HEIGHT * (100 - 2 * this._MARGIN) / 100}px;
-                    "
+                    style="--margin: ${this._MB}%;
+                        --height: ${(100 - this._MB - this._MT)}%;
+                        --width: ${this._WIDTH}px;"
                 ></input>
-                <div class="current-box" style="--height: ${this.getHeight()}%">
+                <div class="current-box"
+                    style="--height: ${this.getHeight()}%; --width: ${this._WIDTH + 10}px">
                     <div class="current-value"> ${this.addUnits(this.getValue())} </div>
                 </div>
             </div>

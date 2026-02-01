@@ -27,21 +27,19 @@ export default css`
     }
 
     .icon.brightness {
-        background: rgba(255, 193, 7, .2);∂
+        background: rgba(255, 193, 7, .2);
     }
 
     .icon.true {
-        outline: solid rgb(0,0,0);
-        outline-offset: -3px;
+        outline: solid rgb(255, 193, 7);
+        outline-offset: -1px;
     }
 
     .icon.ct {
-        overflow: hidden;
         background: var(--grad);
     }
 
     .icon.hs {
-        overflow: hidden;
         background-image: radial-gradient(circle at center, white 0%, transparent 100%), var(--grad);
     }
 
@@ -51,10 +49,9 @@ export default css`
 
 
     slider-bar {
-        position: relative;
         margin-left: 20px;
         margin-right: 10px;
-        width: 105px;
+        width: 115px;
         height: 150px;
         display: flex;
         flex-flow: row nowrap;
