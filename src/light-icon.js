@@ -48,7 +48,6 @@ export class LightIcon extends LitElement {
                 rgb = interpolateRGB(rgbOff, rgbOn, this.getBrightness(), 1, 1);
             }
         }
-        console.log(rgb);
         return rgb
     }
 

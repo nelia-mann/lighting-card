@@ -620,7 +620,8 @@ var $24833e213e3419f0$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
     ha-card {
         font-family: "Roboto", "Noto", sans-serif;
         font-weight: 400;
-        padding: 3%;
+        padding: 25px;
+        padding-top: 15px;
         margin: 0px;
         display: flex;
         flex-flow: column nowrap;
@@ -632,7 +633,7 @@ var $24833e213e3419f0$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 
     panel-component {
         width: 100%;
-        height: 300px;
+        height: 400px;
         margin: 0px;
         padding: 0px;
         display: flex;
@@ -8170,6 +8171,9 @@ var $c87b1b47755af4d8$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         padding: 0%;
         margin: 0%;
         color: var(--color);
+        --mdc-icon-size: 20px;
+        height: 20px;
+        width: 20px;
     }
 
 `;
@@ -8306,7 +8310,6 @@ class $4356f78c5c3f665b$export$82acdd66a4e4bf90 extends (0, $ab210b2da7b39b9d$ex
             if (this.getRGB()) rgb = (0, $d66841a16b153167$export$dd0fba3206c57e56)(rgbOff, this.getRGB(), this.getBrightness(), 1, 1);
             else rgb = (0, $d66841a16b153167$export$dd0fba3206c57e56)(rgbOff, rgbOn, this.getBrightness(), 1, 1);
         }
-        console.log(rgb);
         return rgb;
     }
     static styles = (0, $c87b1b47755af4d8$export$2e2bcd8739ae039);
@@ -8401,19 +8404,33 @@ var $7c12e71e3f07e693$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 
     .light-element {
         border: solid 1px #e5e5e5;
-        width: 215px;
+        width: 205px;
         border-radius: 8px;
         height: 25px;
         padding: 10px;
-        padding-top: 5px;
+        padding-top: 8px;
         padding-bottom: 5px;
-        margin: 7px;
+        margin: 10px;
         touch-action: none;
+        display: flex;
+        flex-flow: row nowrap;
     }
 
     .light-element.true {
         outline: solid rgb(255, 193, 7);
         outline-offset: -4px;
+    }
+
+    .light-element.member {
+        width: 155px;
+        margin-left: 35px;
+    }
+
+    .icons {
+        margin-right: 10px;
+        margin-left: 0px;
+        display: flex;
+        flex-flow: row nowrap;
     }
 
 
@@ -8428,6 +8445,9 @@ class $2b5036ce56cc8e0c$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
             },
             _isSelected: {
                 state: true
+            },
+            _isMember: {
+                state: true
             }
         };
     }
@@ -8436,11 +8456,18 @@ class $2b5036ce56cc8e0c$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
         this._isSelected = false;
     }
     static styles = (0, $7c12e71e3f07e693$export$2e2bcd8739ae039);
+    getMember() {
+        let result = '';
+        this._isMember && (result = 'member');
+        return result;
+    }
     render() {
         const name = this._lightBundle.state.attributes.friendly_name;
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-            <div  class="light-element ${this._isSelected}" @click=${this.onClick}>
-                <light-icon ._lightBundle=${this._lightBundle} ></light-icon>
+            <div  class="light-element ${this._isSelected} ${this.getMember()}" @click=${this.onClick}>
+                <div class="icons">
+                    <light-icon ._lightBundle=${this._lightBundle} ></light-icon>
+                </div>
                 ${name}
             </div>
         `;
@@ -9151,12 +9178,13 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
         };
     }
     static styles = (0, $84adf0e0aa3f1db7$export$2e2bcd8739ae039);
-    innerLight(lightBundle) {
+    innerLight(lightBundle, isMember) {
         if (lightBundle) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
                 <light-inner
                     id=${lightBundle.state.entity_id}
                     ._lightBundle=${lightBundle}
                     ._isSelected=${this.isSelected(lightBundle)}
+                    ._isMember=${isMember}
                     @select=${()=>this.select(lightBundle)}
                 ></light-inner>
             `;
@@ -9165,7 +9193,7 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
         const lightBundles = this._lightBundle.members;
         let result = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)``;
         if (lightBundles) result = Object.values(lightBundles).map((lightBundle)=>{
-            return this.innerLight(lightBundle);
+            return this.innerLight(lightBundle, true);
         });
         return result;
     }
@@ -9189,7 +9217,7 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
             </div>
             <div class="content-row">
                 <div class="select-lights">
-                    ${this.innerLight(this._lightBundle)}
+                    ${this.innerLight(this._lightBundle, false)}
                     ${this.lights()}
                 </div>
                 ${this.lightControl()}
@@ -9281,7 +9309,9 @@ class $046ae152b1d9e254$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
         const name = this._lightBundle.state.attributes.friendly_name;
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
             <div class="light-element" @pointerup=${this.onUp} @pointerdown=${this.onDown}>
-                ${this.icons()}
+                <div class="icons">
+                    ${this.icons()}
+                </div>
                 ${name}
             </div>
             <popout-window

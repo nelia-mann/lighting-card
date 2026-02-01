@@ -4,7 +4,8 @@ export default css`
     ha-card {
         font-family: "Roboto", "Noto", sans-serif;
         font-weight: 400;
-        padding: 3%;
+        padding: 25px;
+        padding-top: 15px;
         margin: 0px;
         display: flex;
         flex-flow: column nowrap;
@@ -16,7 +17,7 @@ export default css`
 
     panel-component {
         width: 100%;
-        height: 300px;
+        height: 400px;
         margin: 0px;
         padding: 0px;
         display: flex;

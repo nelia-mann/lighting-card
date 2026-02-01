@@ -18,13 +18,14 @@ export class PopoutWindow extends LitElement {
 
     static styles = styles;
 
-    innerLight(lightBundle) {
+    innerLight(lightBundle, isMember) {
         if (lightBundle) {
             return html`
                 <light-inner
                     id=${lightBundle.state.entity_id}
                     ._lightBundle=${lightBundle}
                     ._isSelected=${this.isSelected(lightBundle)}
+                    ._isMember=${isMember}
                     @select=${() => this.select(lightBundle)}
                 ></light-inner>
             `
@@ -36,7 +37,7 @@ export class PopoutWindow extends LitElement {
         let result = html``;
         if (lightBundles) {
             result = Object.values(lightBundles).map((lightBundle) => {
-                return this.innerLight(lightBundle)
+                return this.innerLight(lightBundle, true)
                 })
         }
         return result;
@@ -65,7 +66,7 @@ export class PopoutWindow extends LitElement {
             </div>
             <div class="content-row">
                 <div class="select-lights">
-                    ${this.innerLight(this._lightBundle)}
+                    ${this.innerLight(this._lightBundle, false)}
                     ${this.lights()}
                 </div>
                 ${this.lightControl()}
