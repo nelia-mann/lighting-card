@@ -1,4 +1,5 @@
 import { html, LitElement } from 'lit';
+import { styleMap } from 'lit/directives/style-map.js';
 import styles from './main.styles.js';
 import sharedStyles from './shared-styles.js';
 import "./panel.js";
@@ -270,13 +271,24 @@ export class MainCard extends LitElement {
         return rgba(rgb, opacity);
     }
 
+    getStyles(floorId) {
+        let styles = {
+            'background-color': this.getRGB(floorId, 0.5)
+        }
+        if (this.isFloor(floorId)) {
+            styles['outline'] = `solid ${this.getRGB(floorId, 1)}`;
+            styles['outline-offset'] = '-4px';
+        }
+        return styles;
+    }
+
     // generates the floor button for a particular floor id.
     floorButton(floorId) {
         const onTot = this.getLightData(floorId);
         return html`
             <button
-                class="button ${this.isFloor(floorId)} outlined"
-                style="--outline: ${this.getRGB(floorId, 1)}; --background: ${this.getRGB(floorId, .5)};"
+                class="button outlined"
+                style="${styleMap(this.getStyles(floorId))}"
                 id="${floorId}"
                 @click="${this.onClick}"
             >
@@ -294,6 +306,8 @@ export class MainCard extends LitElement {
 
     // pull styles
     static styles = [sharedStyles, styles];
+
+
 
     // return html
     render() {

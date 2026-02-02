@@ -22,6 +22,7 @@ export class PopoutWindow extends LitElement {
         if (lightBundle) {
             return html`
                 <light-inner
+                    class="outlined"
                     id=${lightBundle.state.entity_id}
                     ._lightBundle=${lightBundle}
                     ._isSelected=${this.isSelected(lightBundle)}

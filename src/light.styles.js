@@ -6,25 +6,10 @@ export default css`
     }
 
     .light-element {
-        width: 205px;
-        height: 25px;
-        padding: 10px;
-        padding-top: 8px;
-        padding-bottom: 5px;
-        margin: 10px;
-        touch-action: none;
+        width: 100%;
+        height: 100%;
         display: flex;
         flex-flow: row nowrap;
-    }
-
-    .light-element.true {
-        outline: solid rgb(255, 193, 7);
-        outline-offset: -4px;
-    }
-
-    .light-element.member {
-        width: 155px;
-        margin-left: 35px;
     }
 
     .icons {

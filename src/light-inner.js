@@ -1,7 +1,9 @@
 import { html, LitElement } from 'lit';
+import { styleMap } from 'lit/directives/style-map.js';
 import './light-icon.js';
 import styles from './light.styles.js';
 import sharedStyles from './shared-styles.js';
+import { SELECTEDLIGHT, rgba } from './color-util.js';
 
 export class LightComponent extends LitElement {
 
@@ -20,19 +22,20 @@ export class LightComponent extends LitElement {
 
     static styles = [sharedStyles, styles];
 
-    getMember() {
-        let result = '';
-        (this._isMember) && (result = 'member');
-        return result;
+    getStyles() {
+        let styles = {};
+        if (this._isSelected) {
+            styles['outline'] = 'solid ' + rgba(SELECTEDLIGHT, 1);
+            styles['outline-offset'] = '-4px'
+        }
+        return styles;
     }
 
     render() {
         const name = this._lightBundle.state.attributes.friendly_name;
         return html`
-            <div  class="light-element
-                    ${this._isSelected}
-                    ${this.getMember()}
-                    outlined"
+            <div  class="light-element"
+                style="${styleMap(this.getStyles())}"
                 @click=${this.onClick}
             >
                 <div class="icons">

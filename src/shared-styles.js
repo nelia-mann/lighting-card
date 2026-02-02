@@ -34,4 +34,14 @@ export default css`
         font-size: 80%;
     }
 
+    @media (prefers-color-scheme: dark) {
+        ha-card {
+            color: #ffffff;
+        }
+
+        .button {
+            color: #ffffff;
+        }
+    }
+
 `

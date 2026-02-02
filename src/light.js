@@ -44,7 +44,7 @@ export class LightComponent extends LitElement {
     render() {
         const name = this._lightBundle.state.attributes.friendly_name;
         return html`
-            <div class="light-element outlined" @pointerup=${this.onUp} @pointerdown=${this.onDown}>
+            <div class="light-element" @pointerup=${this.onUp} @pointerdown=${this.onDown}>
                 <div class="icons">
                     ${this.icons()}
                 </div>

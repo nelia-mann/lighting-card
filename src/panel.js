@@ -26,6 +26,7 @@ export class PanelComponent extends LitElement {
     getLightDisplay(lightBundle) {
         return html`
             <light-component
+                class="outlined"
                 ._lightBundle = ${lightBundle}
                 .callService=${this.callService}
             ></light-component>

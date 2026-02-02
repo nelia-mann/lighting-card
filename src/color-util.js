@@ -1,6 +1,7 @@
 const ONLIGHT = [255, 193, 7]; // color in rgb (yellow)
 const OFF = [158, 158, 158]; // color in rgb (gray)
 const OFFLIGHT = [68, 115, 158]; // color in rgb (steel blue)
+const SELECTEDLIGHT = [255, 193, 7]; // (yellow)
 
 function getTempRed(temp) {
     let red;
@@ -103,5 +104,6 @@ export {
     rgba,
     OFFLIGHT,
     ONLIGHT,
-    OFF
+    OFF,
+    SELECTEDLIGHT
 }

@@ -39,22 +39,8 @@ export default css`
         height: 100%;
         width: 200px;
         padding: 0px;
-        background-color: var(--background);
         border: none;
     }
 
-    .button.true {
-        outline-offset: -4px;
-        outline: solid var(--outline);
-    }
 
-    @media (prefers-color-scheme: dark) {
-        ha-card {
-            color: #ffffff;
-        }
-
-        .button {
-            color: #ffffff;
-        }
-    }
 `;
