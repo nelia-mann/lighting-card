@@ -13,27 +13,36 @@ export default css`
     }
 
     .slider {
-        position: relative;
         height: 100%;
         margin: 5px;
+        width: 30px;
+        padding-top: 6%;
+    }
+
+    .inner-slider {
+        position: relative;
+        height: 89%;
+        width: 100%;
+        border-top: solid 2px rgba(0, 0, 0, .2);
+        border-bottom: solid 2px rgba(0, 0, 0, .2);
     }
 
     .actual-slider {
         position: absolute;
         opacity: 0;
-        top: var(--margin);
+        top: 0;
         left: 0;
-        width: var(--width);
+        width: 100%;
         writing-mode: vertical-lr;
         direction: rtl;
-        height: var(--height);
+        height: 100%;
     }
 
     .shown-slider {
         position: absolute;
-        top: 0;
-        left: 0;
-        width: var(--width);
+        top: 0%;
+        left: 0%;
+        width: 100%;
         height: 100%;
     }
 
@@ -54,26 +63,11 @@ export default css`
         background: rgba(0, 0, 0, 1);
     }
 
-    .shown-bottom {
-        position: absolute;
-        bottom: var(--height);
-        left: 0%;
-        width: 100%;
-        height: 1%;
-        background: rgba(0, 0, 0, .2);
-    }
-    .shown-top {
-        position: absolute;
-        bottom: var(--height);
-        left: 0%;
-        width: 100%;
-        height: 1%;
-        background: rgba(0, 0, 0, .2);
-    }
+
 
     .bottom-box {
         position: absolute;
-        bottom: var(--margin);
+        bottom: 5%;
     }
 
     .bottom-value {
@@ -82,7 +76,7 @@ export default css`
 
     .top-box {
         position: absolute;
-        bottom: var(--margin);
+        bottom: 94%;
     }
 
     .top-value {
@@ -92,7 +86,7 @@ export default css`
     .current-box {
         position: absolute;
         bottom: var(--height);
-        left: var(--width);
+        left: 0px;
     }
 
     .current-value {

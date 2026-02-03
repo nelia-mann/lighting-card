@@ -8600,27 +8600,36 @@ var $57a27094fb213e22$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
     }
 
     .slider {
-        position: relative;
         height: 100%;
         margin: 5px;
+        width: 30px;
+        padding-top: 6%;
+    }
+
+    .inner-slider {
+        position: relative;
+        height: 89%;
+        width: 100%;
+        border-top: solid 2px rgba(0, 0, 0, .2);
+        border-bottom: solid 2px rgba(0, 0, 0, .2);
     }
 
     .actual-slider {
         position: absolute;
         opacity: 0;
-        top: var(--margin);
+        top: 0;
         left: 0;
-        width: var(--width);
+        width: 100%;
         writing-mode: vertical-lr;
         direction: rtl;
-        height: var(--height);
+        height: 100%;
     }
 
     .shown-slider {
         position: absolute;
-        top: 0;
-        left: 0;
-        width: var(--width);
+        top: 0%;
+        left: 0%;
+        width: 100%;
         height: 100%;
     }
 
@@ -8641,26 +8650,11 @@ var $57a27094fb213e22$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         background: rgba(0, 0, 0, 1);
     }
 
-    .shown-bottom {
-        position: absolute;
-        bottom: var(--height);
-        left: 0%;
-        width: 100%;
-        height: 1%;
-        background: rgba(0, 0, 0, .2);
-    }
-    .shown-top {
-        position: absolute;
-        bottom: var(--height);
-        left: 0%;
-        width: 100%;
-        height: 1%;
-        background: rgba(0, 0, 0, .2);
-    }
+
 
     .bottom-box {
         position: absolute;
-        bottom: var(--margin);
+        bottom: 5%;
     }
 
     .bottom-value {
@@ -8669,7 +8663,7 @@ var $57a27094fb213e22$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 
     .top-box {
         position: absolute;
-        bottom: var(--margin);
+        bottom: 94%;
     }
 
     .top-value {
@@ -8679,7 +8673,7 @@ var $57a27094fb213e22$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
     .current-box {
         position: absolute;
         bottom: var(--height);
-        left: var(--width);
+        left: 0px;
     }
 
     .current-value {
@@ -8698,7 +8692,6 @@ class $6520265339ffabe1$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$ex
     _type;
     _MB = 5;
     _MT = 6;
-    _WIDTH = 30;
     static get properties() {
         return {
             _light: {
@@ -8740,7 +8733,7 @@ class $6520265339ffabe1$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$ex
     }
     getHeight() {
         const heightScale = (this.getValue() - this._min) / (this._max - this._min);
-        return this._MB + (100 - this._MB - this._MT) * heightScale;
+        return 100 * heightScale;
     }
     getTempGradient() {
         const minTemp = this._min;
@@ -8751,38 +8744,36 @@ class $6520265339ffabe1$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$ex
     render() {
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
             <div class="values">
-                <div class="top-box" style="--margin: ${100 - this._MT}%">
+                <div class="top-box">
                     <div class="top-value"> ${this.addUnits(this._max)} </div>
                 </div>
-                <div class="bottom-box" style="--margin: ${this._MB}%">
+                <div class="bottom-box">
                     <div class="bottom-value"> ${this.addUnits(this._min)} </div>
                 </div>
             </div>
-            <div class="slider">
-                <div
-                    class="shown-slider ${this._type} outlined"
-                    style="--height: ${this.getHeight()}%;
-                        --grad: ${this.getTempGradient()};
-                        --width: ${this._WIDTH}px;"
-                >
-                    <div class="shown-level" style="--height: ${this.getHeight()}%"></div>
-                    <div class="shown-bottom" style="--height: ${this._MB}%"></div>
-                    <div class="shown-top" style="--height: ${100 - this._MT}%"></div>
+            <div class="slider outlined">
+                <div class="inner-slider">
+                    <div
+                        class="shown-slider ${this._type}"
+                        style="--height: ${this.getHeight()}%;
+                            --grad: ${this.getTempGradient()};"
+                    >
+                        <div class="shown-level" style="--height: ${this.getHeight()}%"></div>
+                    </div>
+                    <input
+                        class="actual-slider"
+                        type="range"
+                        max=${this._max}
+                        min=${this._min}
+                        value="${this.getValue()}"
+                        @input="${this.handleOnInput}"
+                        @change="${this.handleOnChange}"
+                    ></input>
                 </div>
-                <input
-                    class="actual-slider"
-                    type="range"
-                    max=${this._max}
-                    min=${this._min}
-                    value="${this.getValue()}"
-                    @input="${this.handleOnInput}"
-                    @change="${this.handleOnChange}"
-                    style="--margin: ${this._MB}%;
-                        --height: ${100 - this._MB - this._MT}%;
-                        --width: ${this._WIDTH}px;"
-                ></input>
+            </div>
+            <div class="values">
                 <div class="current-box"
-                    style="--height: ${this.getHeight()}%; --width: ${this._WIDTH + 10}px">
+                    style="--height: ${this.getHeight()}%;">
                     <div class="current-value"> ${this.addUnits(this.getValue())} </div>
                 </div>
             </div>

@@ -11,7 +11,6 @@ export class SliderBar extends LitElement {
     _type;
     _MB = 5;
     _MT = 6;
-    _WIDTH = 30;
 
     static get properties() {
         return {
@@ -59,7 +58,7 @@ export class SliderBar extends LitElement {
 
     getHeight() {
         const heightScale = (this.getValue() - this._min) / (this._max - this._min);
-        return this._MB+ (100 - this._MB - this._MT) * heightScale;
+        return 100 * heightScale;
     }
 
     getTempGradient() {
@@ -72,38 +71,36 @@ export class SliderBar extends LitElement {
     render() {
         return html`
             <div class="values">
-                <div class="top-box" style="--margin: ${100 - this._MT}%">
+                <div class="top-box">
                     <div class="top-value"> ${this.addUnits(this._max)} </div>
                 </div>
-                <div class="bottom-box" style="--margin: ${this._MB}%">
+                <div class="bottom-box">
                     <div class="bottom-value"> ${this.addUnits(this._min)} </div>
                 </div>
             </div>
-            <div class="slider">
-                <div
-                    class="shown-slider ${this._type} outlined"
-                    style="--height: ${this.getHeight()}%;
-                        --grad: ${this.getTempGradient()};
-                        --width: ${this._WIDTH}px;"
-                >
-                    <div class="shown-level" style="--height: ${this.getHeight()}%"></div>
-                    <div class="shown-bottom" style="--height: ${this._MB}%"></div>
-                    <div class="shown-top" style="--height: ${100 - this._MT}%"></div>
+            <div class="slider outlined">
+                <div class="inner-slider">
+                    <div
+                        class="shown-slider ${this._type}"
+                        style="--height: ${this.getHeight()}%;
+                            --grad: ${this.getTempGradient()};"
+                    >
+                        <div class="shown-level" style="--height: ${this.getHeight()}%"></div>
+                    </div>
+                    <input
+                        class="actual-slider"
+                        type="range"
+                        max=${this._max}
+                        min=${this._min}
+                        value="${this.getValue()}"
+                        @input="${this.handleOnInput}"
+                        @change="${this.handleOnChange}"
+                    ></input>
                 </div>
-                <input
-                    class="actual-slider"
-                    type="range"
-                    max=${this._max}
-                    min=${this._min}
-                    value="${this.getValue()}"
-                    @input="${this.handleOnInput}"
-                    @change="${this.handleOnChange}"
-                    style="--margin: ${this._MB}%;
-                        --height: ${(100 - this._MB - this._MT)}%;
-                        --width: ${this._WIDTH}px;"
-                ></input>
+            </div>
+            <div class="values">
                 <div class="current-box"
-                    style="--height: ${this.getHeight()}%; --width: ${this._WIDTH + 10}px">
+                    style="--height: ${this.getHeight()}%;">
                     <div class="current-value"> ${this.addUnits(this.getValue())} </div>
                 </div>
             </div>
