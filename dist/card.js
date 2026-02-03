@@ -8345,7 +8345,8 @@ function $d66841a16b153167$export$5b5356aa7e20fd72(minTemp, maxTemp, steps) {
     return output;
 }
 function $d66841a16b153167$export$475133aea461e763(steps) {
-    let output = `conic-gradient( from 0deg`;
+    let output = 'radial-gradient(circle at center, white 0%, transparent 100%), ';
+    output = output + 'conic-gradient( from 0deg';
     for(let step = 0; step <= steps; step++){
         const angle = Math.round(step * 360 / steps);
         output = output + `, hsl(${angle}, 100%, 50%)`;
@@ -8427,6 +8428,7 @@ customElements.define("light-icon", $4356f78c5c3f665b$export$82acdd66a4e4bf90);
 
 
 
+
 var $84adf0e0aa3f1db7$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
     dialog {
         padding: 20px;
@@ -8480,14 +8482,7 @@ var $84adf0e0aa3f1db7$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         justify-content: center;
     }
 
-    light-control {
-        display: flex;
-        flex-flow: row nowrap;
-        justify-content: space-around;
-        align-items: center;
-    }
-
-    light-inner {
+    .light-inner {
         width: 205px;
         height: 25px;
         padding: 10px;
@@ -8499,26 +8494,6 @@ var $84adf0e0aa3f1db7$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         flex-flow: row nowrap;
     }
 
-`;
-
-
-
-
-
-
-
-var $7c12e71e3f07e693$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
-
-    popout-window {
-    }
-
-    .light-element {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        flex-flow: row nowrap;
-    }
-
     .icons {
         margin-right: 10px;
         margin-left: 0px;
@@ -8526,61 +8501,16 @@ var $7c12e71e3f07e693$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         flex-flow: row nowrap;
     }
 
+    light-control {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-around;
+        align-items: center;
+    }
 
 `;
 
 
-
-
-class $2b5036ce56cc8e0c$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
-    static get properties() {
-        return {
-            _lightBundle: {
-                state: true
-            },
-            _isSelected: {
-                state: true
-            },
-            _isMember: {
-                state: true
-            }
-        };
-    }
-    constructor(){
-        super();
-        this._isSelected = false;
-    }
-    static styles = [
-        (0, $65e9333b9a0c9dfd$export$2e2bcd8739ae039),
-        (0, $7c12e71e3f07e693$export$2e2bcd8739ae039)
-    ];
-    getStyles() {
-        let styles = {};
-        if (this._isSelected) {
-            styles['outline'] = 'solid ' + (0, $d66841a16b153167$export$4e46ac54fc82cf3b)((0, $d66841a16b153167$export$b65e08a6803cf040), 1);
-            styles['outline-offset'] = '-4px';
-        }
-        return styles;
-    }
-    render() {
-        const name = this._lightBundle.state.attributes.friendly_name;
-        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-            <div  class="light-element"
-                style="${(0, $19f464fcda7d2482$export$1e5b4ce2fa884e6a)(this.getStyles())}"
-                @click=${this.onClick}
-            >
-                <div class="icons">
-                    <light-icon ._lightBundle=${this._lightBundle} ></light-icon>
-                </div>
-                ${name}
-            </div>
-        `;
-    }
-    onClick() {
-        this.dispatchEvent(new CustomEvent('select'));
-    }
-}
-customElements.define("light-inner", $2b5036ce56cc8e0c$export$5e33b198135dff7b);
 
 
 
@@ -8606,31 +8536,6 @@ var $201c56a28a72cc27$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         align-items: center;
         margin: 10px;
     }
-
-    .icon.onoff {
-    }
-
-    .icon.brightness {
-        background: rgba(255, 193, 7, .2);
-    }
-
-    .icon.true {
-        outline: solid rgb(255, 193, 7);
-        outline-offset: -1px;
-    }
-
-    .icon.ct {
-        background: var(--grad);
-    }
-
-    .icon.hs {
-        background-image: radial-gradient(circle at center, white 0%, transparent 100%), var(--grad);
-    }
-
-    .icon.select {
-        background: rgba(255, 193, 7, .2);
-    }
-
 
     slider-bar {
         margin-left: 20px;
@@ -8665,6 +8570,14 @@ var $201c56a28a72cc27$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         width: 450px;
         height: 360px;
         padding: 15px;
+    }
+
+    ha-svg-icon {
+        padding: 0%;
+        margin: 0%;
+        --mdc-icon-size: 20px;
+        height: 20px;
+        width: 20px;
     }
 
 `;
@@ -9110,6 +9023,13 @@ customElements.define("theme-select", $a6f01a0d74278018$export$1b9e02e625a724dc)
 
 
 class $f76fa2dde9e8d076$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
+    _TYPES = [
+        'onOff',
+        'brightness',
+        'ct',
+        'hs',
+        'theme'
+    ];
     static get properties() {
         return {
             _lightBundle: {
@@ -9129,62 +9049,84 @@ class $f76fa2dde9e8d076$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$ex
         const steps = 10;
         return (0, $d66841a16b153167$export$5b5356aa7e20fd72)(minTemp, maxTemp, steps);
     }
-    isOption(property) {
+    isOption(type) {
         let valid;
-        if (property === "theme") {
-            let theme = this._lightBundle.theme;
-            valid = !!theme;
-        } else {
-            let attribute = this._lightBundle.state.attributes[property];
-            valid = !(attribute === undefined);
+        let attribute;
+        switch(type){
+            case 'onOff':
+                valid = true;
+                break;
+            case 'theme':
+                valid = !!this._lightBundle.theme;
+                break;
+            case 'hs':
+                attribute = this._lightBundle.state.attributes['hs_color'];
+                valid = !(attribute === undefined);
+                break;
+            case 'ct':
+                attribute = this._lightBundle.state.attributes['color_temp_kelvin'];
+                valid = !(attribute === undefined);
+                break;
+            default:
+                attribute = this._lightBundle.state.attributes[type];
+                valid = !(attribute === undefined);
         }
         return valid;
     }
-    lightIcon() {
-        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-        <div class="onoff icon outlined" @click=${()=>this.handleLightService('toggle', null, null)}>
-            <light-icon ._lightBundle = ${this._lightBundle}></light-icon>
-        </div>
-        `;
+    getStyles(type) {
+        let styles = {};
+        switch(type){
+            case 'brightness':
+                styles['background'] = (0, $d66841a16b153167$export$4e46ac54fc82cf3b)((0, $d66841a16b153167$export$a004fc522c1a4845), .2);
+                break;
+            case 'ct':
+                styles['background'] = this.getTempGradient();
+                break;
+            case 'hs':
+                styles['background'] = (0, $d66841a16b153167$export$475133aea461e763)(10);
+                break;
+            case 'theme':
+                styles['background'] = (0, $d66841a16b153167$export$4e46ac54fc82cf3b)((0, $d66841a16b153167$export$a004fc522c1a4845), .2);
+                break;
+        }
+        if (this.isSelected(type) && type != 'onOff') {
+            styles['outline'] = 'solid ' + (0, $d66841a16b153167$export$4e46ac54fc82cf3b)((0, $d66841a16b153167$export$a004fc522c1a4845), 1);
+            styles['outline-offset'] = '-2px';
+        }
+        return styles;
     }
-    brightnessIcon() {
+    iconContent(type) {
+        let content = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)``;
+        switch(type){
+            case 'onOff':
+                content = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<light-icon ._lightBundle = ${this._lightBundle}></light-icon>`;
+                break;
+            case 'brightness':
+                content = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<ha-svg-icon .path=${0, $04557c061247a0a6$export$6ace9c955f434b80}></ha-svg-icon>`;
+                break;
+            case 'theme':
+                content = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<ha-svg-icon .path=${0, $04557c061247a0a6$export$8b91c405b1f98ab9}></ha-svg-icon>`;
+                break;
+        }
+        return content;
+    }
+    icon(type) {
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
                 <div
-                    class="brightness icon ${this.isSelected("brightness")} outlined"
-                    @click=${()=>this.onSelect("brightness")}
+                    class="icon outlined"
+                    style=${(0, $19f464fcda7d2482$export$1e5b4ce2fa884e6a)(this.getStyles(type))}
+                    @click=${()=>this.onSelect(type)}
                 >
-                    <ha-svg-icon .path=${0, $04557c061247a0a6$export$6ace9c955f434b80}></ha-svg-icon>
+                    ${this.iconContent(type)}
                 </div>
-            `;
-    }
-    ctIcon() {
-        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<div
-            class="ct icon ${this.isSelected("ct")} outlined"
-            style="--grad: ${this.getTempGradient()};"
-            @click=${()=>this.onSelect("ct")}
-        ></div>`;
-    }
-    hsIcon() {
-        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<div
-            class="hs icon ${this.isSelected("hs")} outlined"
-            style="--grad: ${(0, $d66841a16b153167$export$475133aea461e763)(10)};"
-            @click=${()=>this.onSelect("hs")}
-        ></div>`;
-    }
-    selectIcon() {
-        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<div
-                class="select icon ${this.isSelected("select")} outlined"
-                @click=${()=>this.onSelect("select")}
-            >
-                <ha-svg-icon .path=${0, $04557c061247a0a6$export$8b91c405b1f98ab9}></ha-svg-icon>
-            </div>
         `;
     }
-    onSelect(result) {
-        this._control = result;
+    onSelect(type) {
+        if (type === 'onOff') this.handleLightService('toggle', null, null);
+        this._control = type;
     }
-    isSelected(string) {
-        return this._control === string;
+    isSelected(type) {
+        return this._control === type;
     }
     handleLightService(service, key, value) {
         const entityId = this._lightBundle.state.entity_id;
@@ -9194,7 +9136,7 @@ class $f76fa2dde9e8d076$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$ex
         if (key) data[key] = value;
         this.callService('light', service, data);
     }
-    handleSelect(event) {
+    handleTheme(event) {
         const entityId = this._lightBundle.theme.entity_id;
         const data = {
             entity_id: entityId,
@@ -9203,65 +9145,84 @@ class $f76fa2dde9e8d076$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$ex
         this.callService('select', 'select_option', data);
     }
     brightnessBar() {
-        if (this.isSelected('brightness')) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<slider-bar
-                class="outlined"
-                ._light=${this._lightBundle.state}
-                @change=${(e)=>this.handleLightService('turn_on', 'brightness', e.detail)}
-                ._max=${100}
-                ._min=${0}
-                ._startValue=${this._lightBundle.state.attributes.brightness * 100 / 255}
-                ._type=${'brightness'}
-            ></slider-bar>`;
+        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<slider-bar
+            class="outlined"
+            ._light=${this._lightBundle.state}
+            @change=${(e)=>this.handleLightService('turn_on', 'brightness', e.detail)}
+            ._max=${100}
+            ._min=${0}
+            ._startValue=${this._lightBundle.state.attributes.brightness * 100 / 255}
+            ._type=${'brightness'}
+        ></slider-bar>`;
     }
     ctBar() {
-        if (this.isSelected('ct')) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<slider-bar
-                class="outlined"
-                ._light=${this._lightBundle.state}
-                @change=${(e)=>this.handleLightService('turn_on', 'color_temp_kelvin', e.detail)}
-                ._max=${this._lightBundle.state.attributes.max_color_temp_kelvin}
-                ._min=${this._lightBundle.state.attributes.min_color_temp_kelvin}
-                ._startValue=${this._lightBundle.state.attributes.color_temp_kelvin}
-                ._type=${'ct'}
-            ></slider-bar>`;
+        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<slider-bar
+            class="outlined"
+            ._light=${this._lightBundle.state}
+            @change=${(e)=>this.handleLightService('turn_on', 'color_temp_kelvin', e.detail)}
+            ._max=${this._lightBundle.state.attributes.max_color_temp_kelvin}
+            ._min=${this._lightBundle.state.attributes.min_color_temp_kelvin}
+            ._startValue=${this._lightBundle.state.attributes.color_temp_kelvin}
+            ._type=${'ct'}
+        ></slider-bar>`;
     }
     colorWheel() {
-        if (this.isSelected('hs')) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<color-wheel
-                class="outlined"
-                ._light = ${this._lightBundle.state}
-                @change = ${(e)=>this.handleLightService('turn_on', 'hs_color', e.detail)}
-            ></color-wheel>`;
+        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<color-wheel
+            class="outlined"
+            ._light = ${this._lightBundle.state}
+            @change = ${(e)=>this.handleLightService('turn_on', 'hs_color', e.detail)}
+        ></color-wheel>`;
     }
     themeSelect() {
-        if (this.isSelected('select')) {
-            if (this._lightBundle.theme) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<theme-select
-                    class="outlined"
-                    ._theme = ${this._lightBundle.theme}
-                    @change = ${this.handleSelect}
-                ></theme-select>
-                `;
-        }
+        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<theme-select
+            class="outlined"
+            ._theme = ${this._lightBundle.theme}
+            @change = ${this.handleTheme}
+        ></theme-select>
+        `;
     }
     static styles = [
         (0, $65e9333b9a0c9dfd$export$2e2bcd8739ae039),
         (0, $201c56a28a72cc27$export$2e2bcd8739ae039)
     ];
+    controls() {
+        let panel;
+        switch(this._control){
+            case 'brightness':
+                panel = this.brightnessBar();
+                break;
+            case 'ct':
+                panel = this.ctBar();
+                break;
+            case 'hs':
+                panel = this.colorWheel();
+                break;
+            case 'theme':
+                panel = this.themeSelect();
+                break;
+            default:
+                panel = '';
+        }
+        return panel;
+    }
+    icons() {
+        let icons = [];
+        this._TYPES.forEach((type)=>{
+            if (this.isOption(type)) icons.push(this.icon(type));
+        });
+        return icons;
+    }
     render() {
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
             <div class="control-column outlined">
-                ${this.lightIcon()}
-                ${this.isOption('brightness') ? this.brightnessIcon() : ``}
-                ${this.isOption('color_temp_kelvin') ? this.ctIcon() : ``}
-                ${this.isOption('hs_color') ? this.hsIcon() : ``}
-                ${this.isOption('theme') ? this.selectIcon() : ``}
+                ${this.icons()}
             </div>
-            ${this.brightnessBar()}
-            ${this.ctBar()}
-            ${this.colorWheel()}
-            ${this.themeSelect()}
+            ${this.controls()}
         `;
     }
 }
 customElements.define("light-control", $f76fa2dde9e8d076$export$5ebffa7af4af21de);
+
 
 
 class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
@@ -9286,17 +9247,36 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
         (0, $65e9333b9a0c9dfd$export$2e2bcd8739ae039),
         (0, $84adf0e0aa3f1db7$export$2e2bcd8739ae039)
     ];
+    getStyles(lightBundle) {
+        let styles = {};
+        if (this.isSelected(lightBundle)) {
+            styles['outline'] = 'solid ' + (0, $d66841a16b153167$export$4e46ac54fc82cf3b)((0, $d66841a16b153167$export$b65e08a6803cf040), 1);
+            styles['outline-offset'] = '-4px';
+        }
+        return styles;
+    }
+    header(isMember) {
+        let result;
+        !isMember && (result = 'small-heading');
+        return result;
+    }
     innerLight(lightBundle, isMember) {
-        if (lightBundle) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-                <light-inner
-                    class="outlined"
+        if (lightBundle) {
+            const name = lightBundle.state.attributes.friendly_name;
+            return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+                <div
+                    class="light-inner outlined ${this.header(isMember)}"
+                    style=${(0, $19f464fcda7d2482$export$1e5b4ce2fa884e6a)(this.getStyles(lightBundle))}
                     id=${lightBundle.state.entity_id}
-                    ._lightBundle=${lightBundle}
-                    ._isSelected=${this.isSelected(lightBundle)}
-                    ._isMember=${isMember}
-                    @select=${()=>this.select(lightBundle)}
-                ></light-inner>
+                    @click=${()=>this.select(lightBundle)}
+                >
+                    <div class="icons">
+                        <light-icon ._lightBundle=${lightBundle} ></light-icon>
+                    </div>
+                    ${name}
+                </div>
             `;
+        }
     }
     lights() {
         const lightBundles = this._lightBundle.members;
@@ -9382,6 +9362,29 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
 }
 customElements.define("popout-window", $4b68482a6361126c$export$506b69e3dcbd131b);
 
+
+
+var $7c12e71e3f07e693$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
+
+    popout-window {
+    }
+
+    .light-element {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-flow: row nowrap;
+    }
+
+    .icons {
+        margin-right: 10px;
+        margin-left: 0px;
+        display: flex;
+        flex-flow: row nowrap;
+    }
+
+
+`;
 
 
 

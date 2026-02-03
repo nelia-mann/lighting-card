@@ -1,5 +1,6 @@
 import { html, LitElement } from 'lit';
-import { tempGradient, hsGradient } from './color-util.js';
+import { styleMap } from 'lit/directives/style-map.js';
+import { tempGradient, hsGradient, rgba, ONLIGHT } from './color-util.js';
 import { mdiBrightness6, mdiCreationOutline } from '@mdi/js';
 import styles from './light-control.styles.js';
 import sharedStyles from './shared-styles.js';
@@ -10,6 +11,8 @@ import './theme-select.js';
 
 
 export class LightControl extends LitElement {
+
+    _TYPES = ['onOff', 'brightness', 'ct', 'hs', 'theme'];
 
     static get properties() {
         return {
@@ -29,69 +32,91 @@ export class LightControl extends LitElement {
         return tempGradient(minTemp, maxTemp, steps);
     }
 
-    isOption(property) {
+    isOption(type) {
         let valid;
-        if (property === "theme") {
-            let theme = this._lightBundle.theme;
-            valid = !!theme;
-        } else {
-            let attribute = this._lightBundle.state.attributes[property];
-            valid = !(attribute === undefined);
+        let attribute;
+        switch (type) {
+            case 'onOff':
+                valid = true;
+                break;
+            case 'theme':
+                valid = !!(this._lightBundle.theme);
+                break;
+            case 'hs':
+                attribute = this._lightBundle.state.attributes['hs_color'];
+                valid = !(attribute === undefined);
+                break;
+            case 'ct':
+                attribute = this._lightBundle.state.attributes['color_temp_kelvin'];
+                valid = !(attribute === undefined);
+                break;
+            default:
+                attribute = this._lightBundle.state.attributes[type];
+                valid = !(attribute === undefined);
         }
         return valid;
     }
 
-    lightIcon() {
-        return html`
-        <div class="onoff icon outlined" @click=${() => this.handleLightService('toggle', null, null)}>
-            <light-icon ._lightBundle = ${this._lightBundle}></light-icon>
-        </div>
-        `
+    getStyles(type) {
+        let styles = {};
+        switch (type) {
+            case 'brightness':
+                styles['background'] = rgba(ONLIGHT, .2);
+                break;
+            case 'ct':
+                styles['background'] = this.getTempGradient();
+                break;
+            case 'hs':
+                styles['background'] = hsGradient(10);
+                break;
+            case 'theme':
+                styles['background'] = rgba(ONLIGHT, .2);
+                break;
+        }
+        if (this.isSelected(type) && (type != 'onOff')) {
+            styles['outline'] = 'solid ' + rgba(ONLIGHT, 1);
+            styles['outline-offset'] = '-2px';
+        }
+        return styles;
     }
 
-    brightnessIcon() {
+    iconContent(type) {
+        let content = html``;
+        switch (type) {
+            case 'onOff':
+                content = html`<light-icon ._lightBundle = ${this._lightBundle}></light-icon>`;
+                break;
+            case 'brightness':
+                content = html`<ha-svg-icon .path=${mdiBrightness6}></ha-svg-icon>`;
+                break;
+            case 'theme':
+                content = html`<ha-svg-icon .path=${mdiCreationOutline}></ha-svg-icon>`;
+                break;
+        }
+        return content;
+    }
+
+    icon(type) {
         return html`
                 <div
-                    class="brightness icon ${this.isSelected("brightness")} outlined"
-                    @click=${() => this.onSelect("brightness")}
+                    class="icon outlined"
+                    style=${styleMap(this.getStyles(type))}
+                    @click=${() => this.onSelect(type)}
                 >
-                    <ha-svg-icon .path=${mdiBrightness6}></ha-svg-icon>
+                    ${this.iconContent(type)}
                 </div>
-            `
-    }
-
-    ctIcon() {
-        return html`<div
-            class="ct icon ${this.isSelected("ct")} outlined"
-            style="--grad: ${this.getTempGradient()};"
-            @click=${() => this.onSelect("ct")}
-        ></div>`
-    }
-
-    hsIcon() {
-        return html`<div
-            class="hs icon ${this.isSelected("hs")} outlined"
-            style="--grad: ${hsGradient(10)};"
-            @click=${() => this.onSelect("hs")}
-        ></div>`
-    }
-
-    selectIcon() {
-        return html`<div
-                class="select icon ${this.isSelected("select")} outlined"
-                @click=${() => this.onSelect("select")}
-            >
-                <ha-svg-icon .path=${mdiCreationOutline}></ha-svg-icon>
-            </div>
         `
     }
 
-    onSelect(result) {
-        this._control = result;
+    onSelect(type) {
+        if (type === 'onOff') {
+            this.handleLightService('toggle', null, null);
+        }
+        this._control = type;
     }
 
-    isSelected(string) {
-        return (this._control === string);
+    isSelected(type) {
+        return (this._control === type);
     }
 
     handleLightService(service, key, value) {
@@ -103,7 +128,7 @@ export class LightControl extends LitElement {
         this.callService('light', service, data)
     }
 
-    handleSelect(event) {
+    handleTheme(event) {
         const entityId = this._lightBundle.theme.entity_id;
         const data = {
             entity_id: entityId,
@@ -113,71 +138,85 @@ export class LightControl extends LitElement {
     }
 
     brightnessBar() {
-        if (this.isSelected('brightness')) {
-            return html`<slider-bar
-                class="outlined"
-                ._light=${this._lightBundle.state}
-                @change=${(e) => this.handleLightService('turn_on', 'brightness', e.detail)}
-                ._max=${100}
-                ._min=${0}
-                ._startValue=${this._lightBundle.state.attributes.brightness * 100 / 255}
-                ._type=${'brightness'}
-            ></slider-bar>`
-        }
+        return html`<slider-bar
+            class="outlined"
+            ._light=${this._lightBundle.state}
+            @change=${(e) => this.handleLightService('turn_on', 'brightness', e.detail)}
+            ._max=${100}
+            ._min=${0}
+            ._startValue=${this._lightBundle.state.attributes.brightness * 100 / 255}
+            ._type=${'brightness'}
+        ></slider-bar>`
     }
 
     ctBar() {
-        if (this.isSelected('ct')) {
-            return html`<slider-bar
-                class="outlined"
-                ._light=${this._lightBundle.state}
-                @change=${(e) => this.handleLightService('turn_on', 'color_temp_kelvin', e.detail)}
-                ._max=${this._lightBundle.state.attributes.max_color_temp_kelvin}
-                ._min=${this._lightBundle.state.attributes.min_color_temp_kelvin}
-                ._startValue=${this._lightBundle.state.attributes.color_temp_kelvin}
-                ._type=${'ct'}
-            ></slider-bar>`
-        }
+        return html`<slider-bar
+            class="outlined"
+            ._light=${this._lightBundle.state}
+            @change=${(e) => this.handleLightService('turn_on', 'color_temp_kelvin', e.detail)}
+            ._max=${this._lightBundle.state.attributes.max_color_temp_kelvin}
+            ._min=${this._lightBundle.state.attributes.min_color_temp_kelvin}
+            ._startValue=${this._lightBundle.state.attributes.color_temp_kelvin}
+            ._type=${'ct'}
+        ></slider-bar>`
     }
 
     colorWheel() {
-        if (this.isSelected('hs')) {
-            return html`<color-wheel
-                class="outlined"
-                ._light = ${this._lightBundle.state}
-                @change = ${(e) => this.handleLightService('turn_on', 'hs_color', e.detail)}
-            ></color-wheel>`
-        }
+        return html`<color-wheel
+            class="outlined"
+            ._light = ${this._lightBundle.state}
+            @change = ${(e) => this.handleLightService('turn_on', 'hs_color', e.detail)}
+        ></color-wheel>`
     }
 
     themeSelect() {
-        if (this.isSelected('select')) {
-            if (this._lightBundle.theme) {
-                return html`<theme-select
-                    class="outlined"
-                    ._theme = ${this._lightBundle.theme}
-                    @change = ${this.handleSelect}
-                ></theme-select>
-                `
-            }
-        }
+        return html`<theme-select
+            class="outlined"
+            ._theme = ${this._lightBundle.theme}
+            @change = ${this.handleTheme}
+        ></theme-select>
+        `
     }
 
     static styles = [sharedStyles, styles];
 
+    controls() {
+        let panel;
+        switch (this._control) {
+            case 'brightness':
+                panel = this.brightnessBar();
+                break;
+            case 'ct':
+                panel = this.ctBar();
+                break;
+            case 'hs':
+                panel = this.colorWheel();
+                break;
+            case 'theme':
+                panel = this.themeSelect();
+                break;
+            default:
+                panel = '';
+        }
+        return panel;
+    }
+
+    icons() {
+        let icons = [];
+        this._TYPES.forEach((type) => {
+            if (this.isOption(type)) {
+                icons.push(this.icon(type));
+            }
+        })
+        return icons;
+    }
+
     render() {
         return html`
             <div class="control-column outlined">
-                ${this.lightIcon()}
-                ${(this.isOption('brightness')) ? (this.brightnessIcon()) : ``}
-                ${(this.isOption('color_temp_kelvin')) ? (this.ctIcon()) : ``}
-                ${(this.isOption('hs_color')) ? (this.hsIcon()) : ``}
-                ${(this.isOption('theme')) ? (this.selectIcon()) : ``}
+                ${this.icons()}
             </div>
-            ${this.brightnessBar()}
-            ${this.ctBar()}
-            ${this.colorWheel()}
-            ${this.themeSelect()}
+            ${this.controls()}
         `
     }
 

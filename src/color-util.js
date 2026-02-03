@@ -65,7 +65,8 @@ function tempGradient(minTemp, maxTemp, steps) {
 }
 
 function hsGradient(steps) {
-    let output = `conic-gradient( from 0deg`
+    let output = 'radial-gradient(circle at center, white 0%, transparent 100%), '
+    output = output + 'conic-gradient( from 0deg'
     for (let step = 0; step <= steps; step++) {
         const angle = Math.round(step * 360 / steps);
         output = output + `, hsl(${angle}, 100%, 50%)`

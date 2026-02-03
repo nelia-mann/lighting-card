@@ -53,14 +53,7 @@ export default css`
         justify-content: center;
     }
 
-    light-control {
-        display: flex;
-        flex-flow: row nowrap;
-        justify-content: space-around;
-        align-items: center;
-    }
-
-    light-inner {
+    .light-inner {
         width: 205px;
         height: 25px;
         padding: 10px;
@@ -70,6 +63,20 @@ export default css`
         touch-action: none;
         display: flex;
         flex-flow: row nowrap;
+    }
+
+    .icons {
+        margin-right: 10px;
+        margin-left: 0px;
+        display: flex;
+        flex-flow: row nowrap;
+    }
+
+    light-control {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-around;
+        align-items: center;
     }
 
 `;

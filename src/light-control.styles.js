@@ -20,31 +20,6 @@ export default css`
         margin: 10px;
     }
 
-    .icon.onoff {
-    }
-
-    .icon.brightness {
-        background: rgba(255, 193, 7, .2);
-    }
-
-    .icon.true {
-        outline: solid rgb(255, 193, 7);
-        outline-offset: -1px;
-    }
-
-    .icon.ct {
-        background: var(--grad);
-    }
-
-    .icon.hs {
-        background-image: radial-gradient(circle at center, white 0%, transparent 100%), var(--grad);
-    }
-
-    .icon.select {
-        background: rgba(255, 193, 7, .2);
-    }
-
-
     slider-bar {
         margin-left: 20px;
         margin-right: 10px;
@@ -78,6 +53,14 @@ export default css`
         width: 450px;
         height: 360px;
         padding: 15px;
+    }
+
+    ha-svg-icon {
+        padding: 0%;
+        margin: 0%;
+        --mdc-icon-size: 20px;
+        height: 20px;
+        width: 20px;
     }
 
 `;

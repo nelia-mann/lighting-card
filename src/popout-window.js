@@ -1,9 +1,10 @@
 import { html, LitElement } from 'lit';
+import { styleMap } from 'lit/directives/style-map.js';
 import { mdiCloseCircleOutline } from '@mdi/js';
 import styles from './popout.styles.js';
 import sharedStyles from './shared-styles.js';
-import './light-inner.js';
 import './light-control.js';
+import { SELECTEDLIGHT, rgba } from './color-util.js';
 
 export class PopoutWindow extends LitElement {
 
@@ -18,17 +19,36 @@ export class PopoutWindow extends LitElement {
 
     static styles = [sharedStyles, styles];
 
+    getStyles(lightBundle) {
+        let styles = {};
+        if (this.isSelected(lightBundle)) {
+            styles['outline'] = 'solid ' + rgba(SELECTEDLIGHT, 1);
+            styles['outline-offset'] = '-4px'
+        }
+        return styles;
+    }
+
+    header(isMember) {
+        let result;
+        (!isMember) && (result = 'small-heading');
+        return result;
+    }
+
     innerLight(lightBundle, isMember) {
         if (lightBundle) {
+            const name = lightBundle.state.attributes.friendly_name;
             return html`
-                <light-inner
-                    class="outlined"
+                <div
+                    class="light-inner outlined ${this.header(isMember)}"
+                    style=${styleMap(this.getStyles(lightBundle))}
                     id=${lightBundle.state.entity_id}
-                    ._lightBundle=${lightBundle}
-                    ._isSelected=${this.isSelected(lightBundle)}
-                    ._isMember=${isMember}
-                    @select=${() => this.select(lightBundle)}
-                ></light-inner>
+                    @click=${() => this.select(lightBundle)}
+                >
+                    <div class="icons">
+                        <light-icon ._lightBundle=${lightBundle} ></light-icon>
+                    </div>
+                    ${name}
+                </div>
             `
         }
     }
