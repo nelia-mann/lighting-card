@@ -1,4 +1,5 @@
 import { html, LitElement } from 'lit';
+import { styleMap } from 'lit/directives/style-map.js';
 import styles from './wheel.styles.js';
 import sharedStyles from './shared-styles';
 import { hsGradient } from './color-util.js';
@@ -7,7 +8,6 @@ import { hsGradient } from './color-util.js';
 
 export class ColorWheel extends LitElement {
 
-    _SCALE = 150;
     _box;
 
     static get properties() {
@@ -56,22 +56,32 @@ export class ColorWheel extends LitElement {
         return `hsl(${this._hue}, ${this._saturation}%, ${100 - this._saturation / 2}%)`
     }
 
+    getBGStyle() {
+        let styles = {};
+        styles['background'] = hsGradient(20);
+        return styles;
+    }
+
+    getDotStyle() {
+        let styles = {};
+        const XY = this.getXY();
+        styles['top'] = `${XY[1]}%`;
+        styles['left'] = `${XY[0]}%`;
+        styles['background'] = this.getColor();
+        return styles;
+    }
+
     render() {
         const XY = this.getXY();
         return html`
             <div class="wheel">
                 <div class="wheel-background outlined"
-                    style="
-                        --grad: ${hsGradient(20)};
-                        --top: ${XY[1]}%;
-                        --left: ${XY[0]}%;
-                        --color: ${this.getColor()};
-                        --scale: ${this._SCALE}px;"
+                    style="${styleMap(this.getBGStyle())}"
                     @pointerdown=${this.down}
                     @pointerup=${this.up}
                     @pointermove=${this.move}
                 >
-                    <div class="dot outlined"></div>
+                    <div class="dot outlined" style="${styleMap(this.getDotStyle())}"></div>
                 </div>
             </div>
         `
@@ -91,8 +101,9 @@ export class ColorWheel extends LitElement {
     move(e) {
         if (this._isDown) {
             const rect = this._box.getBoundingClientRect();
-            let x = (100 * (e.clientX - rect.left) / this._SCALE) - 50;
-            let y = 50 - (100 * (e.clientY - rect.top) / this._SCALE);
+            const scale = rect.width;
+            let x = (100 * (e.clientX - rect.left) / scale) - 50;
+            let y = 50 - (100 * (e.clientY - rect.top) / scale);
             let saturation = 2 * Math.sqrt(x ** 2 + y ** 2)
             let hue = 360 * Math.atan2(x, y) / (2 * Math.PI);
             (hue < 0) && (hue = 360 + hue);

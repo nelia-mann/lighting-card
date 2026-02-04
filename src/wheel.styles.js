@@ -15,19 +15,15 @@ export default css`
         width: 100%;
         height: 100%;
         border-radius: 50%;
-        background-image: radial-gradient(circle at center, white 0%, transparent 100%), var(--grad);
     }
 
     .dot {
         position: absolute;
-        top: var(--top);
-        left: var(--left);
         width: 20px;
         height: 20px;
         margin-left: -10px;
         margin-top: -10px;
         border-radius: 50%;
-        background: var(--color);
     }
 
 `;

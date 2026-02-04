@@ -8781,6 +8781,7 @@ customElements.define("slider-bar", $6520265339ffabe1$export$5ff34efdd1b9ed54);
 
 
 
+
 var $9da7823e99ded1f7$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
 
     .wheel {
@@ -8796,19 +8797,15 @@ var $9da7823e99ded1f7$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         width: 100%;
         height: 100%;
         border-radius: 50%;
-        background-image: radial-gradient(circle at center, white 0%, transparent 100%), var(--grad);
     }
 
     .dot {
         position: absolute;
-        top: var(--top);
-        left: var(--left);
         width: 20px;
         height: 20px;
         margin-left: -10px;
         margin-top: -10px;
         border-radius: 50%;
-        background: var(--color);
     }
 
 `;
@@ -8817,7 +8814,6 @@ var $9da7823e99ded1f7$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 
 
 class $39525fd96e3f385d$export$f80663f808113381 extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
-    _SCALE = 150;
     _box;
     static get properties() {
         return {
@@ -8871,22 +8867,30 @@ class $39525fd96e3f385d$export$f80663f808113381 extends (0, $ab210b2da7b39b9d$ex
     getColor() {
         return `hsl(${this._hue}, ${this._saturation}%, ${100 - this._saturation / 2}%)`;
     }
+    getBGStyle() {
+        let styles = {};
+        styles['background'] = (0, $d66841a16b153167$export$475133aea461e763)(20);
+        return styles;
+    }
+    getDotStyle() {
+        let styles = {};
+        const XY = this.getXY();
+        styles['top'] = `${XY[1]}%`;
+        styles['left'] = `${XY[0]}%`;
+        styles['background'] = this.getColor();
+        return styles;
+    }
     render() {
         const XY = this.getXY();
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
             <div class="wheel">
                 <div class="wheel-background outlined"
-                    style="
-                        --grad: ${(0, $d66841a16b153167$export$475133aea461e763)(20)};
-                        --top: ${XY[1]}%;
-                        --left: ${XY[0]}%;
-                        --color: ${this.getColor()};
-                        --scale: ${this._SCALE}px;"
+                    style="${(0, $19f464fcda7d2482$export$1e5b4ce2fa884e6a)(this.getBGStyle())}"
                     @pointerdown=${this.down}
                     @pointerup=${this.up}
                     @pointermove=${this.move}
                 >
-                    <div class="dot outlined"></div>
+                    <div class="dot outlined" style="${(0, $19f464fcda7d2482$export$1e5b4ce2fa884e6a)(this.getDotStyle())}"></div>
                 </div>
             </div>
         `;
@@ -8908,8 +8912,9 @@ class $39525fd96e3f385d$export$f80663f808113381 extends (0, $ab210b2da7b39b9d$ex
     move(e) {
         if (this._isDown) {
             const rect = this._box.getBoundingClientRect();
-            let x = 100 * (e.clientX - rect.left) / this._SCALE - 50;
-            let y = 50 - 100 * (e.clientY - rect.top) / this._SCALE;
+            const scale = rect.width;
+            let x = 100 * (e.clientX - rect.left) / scale - 50;
+            let y = 50 - 100 * (e.clientY - rect.top) / scale;
             let saturation = 2 * Math.sqrt(x ** 2 + y ** 2);
             let hue = 360 * Math.atan2(x, y) / (2 * Math.PI);
             hue < 0 && (hue = 360 + hue);
