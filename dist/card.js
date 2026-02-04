@@ -8640,7 +8640,6 @@ var $57a27094fb213e22$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 
     .shown-level {
         position: absolute;
-        bottom: var(--height);
         left: -10%;
         width: 120%;
         height: 2%;
@@ -8661,7 +8660,6 @@ var $57a27094fb213e22$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 
     .current-value {
         position: absolute;
-        bottom: var(--height);
         left: 5px;
     }
 
@@ -8737,7 +8735,6 @@ class $6520265339ffabe1$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$ex
             let pale = (0, $d66841a16b153167$export$4e46ac54fc82cf3b)((0, $d66841a16b153167$export$a004fc522c1a4845), 0.1);
             let stem = 'linear-gradient(to top, ';
             stem = stem + dark + height + ', ' + pale + height + ')';
-            console.log(stem);
             styles['background'] = stem;
         } else if (this._type === 'ct') styles['background'] = this.getTempGradient();
         return styles;

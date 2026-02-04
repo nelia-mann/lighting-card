@@ -53,7 +53,6 @@ export default css`
 
     .shown-level {
         position: absolute;
-        bottom: var(--height);
         left: -10%;
         width: 120%;
         height: 2%;
@@ -74,7 +73,6 @@ export default css`
 
     .current-value {
         position: absolute;
-        bottom: var(--height);
         left: 5px;
     }
 

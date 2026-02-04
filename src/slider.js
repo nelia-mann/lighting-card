@@ -81,7 +81,6 @@ export class SliderBar extends LitElement {
             let pale = rgba(ONLIGHT, 0.1);
             let stem = 'linear-gradient(to top, ';
             stem = stem + dark + height + ', ' + pale + height + ')';
-            console.log(stem);
             styles['background'] = stem;
         }
         else if (this._type === 'ct') {
