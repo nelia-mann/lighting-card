@@ -1,27 +1,32 @@
 import { css } from 'lit';
 
+const _TOPMARGIN = 10;
+const _BOTTOMMARGIN = 0;
+
 export default css`
 
     .values {
-        position: relative;
         height: 100%;
-        display: flex;
-        flex-flow: column nowrap;
-        align-items: flex-end;
-        justify-content: space-between;
         width: 35px;
+        padding-top: ${_TOPMARGIN + 25}%;
+    }
+
+    .inner-values {
+        position: relative;
+        height: ${100 - _TOPMARGIN - _BOTTOMMARGIN}%;
+        width: 100%;
     }
 
     .slider {
         height: 100%;
-        margin: 5px;
         width: 30px;
-        padding-top: 6%;
+        margin-left: 5px;
+        padding-top: ${_TOPMARGIN}%;
     }
 
     .inner-slider {
         position: relative;
-        height: 89%;
+        height: ${100 - _TOPMARGIN - _BOTTOMMARGIN}%;
         width: 100%;
         border-top: solid 2px rgba(0, 0, 0, .2);
         border-bottom: solid 2px rgba(0, 0, 0, .2);
@@ -61,36 +66,24 @@ export default css`
         width: 120%;
         height: 2%;
         background: rgba(0, 0, 0, 1);
-    }
-
-
-
-    .bottom-box {
-        position: absolute;
-        bottom: 5%;
-    }
+}
 
     .bottom-value {
-        margin-bottom: -10px;
-    }
-
-    .top-box {
         position: absolute;
-        bottom: 94%;
+        bottom: 0%;
+        right: 0px;
     }
 
     .top-value {
-        margin-bottom: -10px;
-    }
-
-    .current-box {
         position: absolute;
-        bottom: var(--height);
-        left: 0px;
+        bottom: 100%;
+        right: 0px;
     }
 
     .current-value {
-        margin-bottom: -10px;
+        position: absolute;
+        bottom: var(--height);
+        left: 5px;
     }
 
 `;

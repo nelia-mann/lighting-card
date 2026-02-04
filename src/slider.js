@@ -71,10 +71,8 @@ export class SliderBar extends LitElement {
     render() {
         return html`
             <div class="values">
-                <div class="top-box">
+                <div class="inner-values">
                     <div class="top-value"> ${this.addUnits(this._max)} </div>
-                </div>
-                <div class="bottom-box">
                     <div class="bottom-value"> ${this.addUnits(this._min)} </div>
                 </div>
             </div>
@@ -99,9 +97,10 @@ export class SliderBar extends LitElement {
                 </div>
             </div>
             <div class="values">
-                <div class="current-box"
-                    style="--height: ${this.getHeight()}%;">
-                    <div class="current-value"> ${this.addUnits(this.getValue())} </div>
+                <div class="inner-values">
+                    <div class="current-value" style="--height: ${this.getHeight()}%">
+                        ${this.addUnits(this.getValue())}
+                    </div>
                 </div>
             </div>
         `

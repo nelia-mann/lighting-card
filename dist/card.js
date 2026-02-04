@@ -8587,28 +8587,32 @@ var $201c56a28a72cc27$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 
 
 
+const $57a27094fb213e22$var$_TOPMARGIN = 10;
+const $57a27094fb213e22$var$_BOTTOMMARGIN = 0;
 var $57a27094fb213e22$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
 
     .values {
-        position: relative;
         height: 100%;
-        display: flex;
-        flex-flow: column nowrap;
-        align-items: flex-end;
-        justify-content: space-between;
         width: 35px;
+        padding-top: ${$57a27094fb213e22$var$_TOPMARGIN + 25}%;
+    }
+
+    .inner-values {
+        position: relative;
+        height: ${100 - $57a27094fb213e22$var$_TOPMARGIN - $57a27094fb213e22$var$_BOTTOMMARGIN}%;
+        width: 100%;
     }
 
     .slider {
         height: 100%;
-        margin: 5px;
         width: 30px;
-        padding-top: 6%;
+        margin-left: 5px;
+        padding-top: ${$57a27094fb213e22$var$_TOPMARGIN}%;
     }
 
     .inner-slider {
         position: relative;
-        height: 89%;
+        height: ${100 - $57a27094fb213e22$var$_TOPMARGIN - $57a27094fb213e22$var$_BOTTOMMARGIN}%;
         width: 100%;
         border-top: solid 2px rgba(0, 0, 0, .2);
         border-bottom: solid 2px rgba(0, 0, 0, .2);
@@ -8648,36 +8652,24 @@ var $57a27094fb213e22$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         width: 120%;
         height: 2%;
         background: rgba(0, 0, 0, 1);
-    }
-
-
-
-    .bottom-box {
-        position: absolute;
-        bottom: 5%;
-    }
+}
 
     .bottom-value {
-        margin-bottom: -10px;
-    }
-
-    .top-box {
         position: absolute;
-        bottom: 94%;
+        bottom: 0%;
+        right: 0px;
     }
 
     .top-value {
-        margin-bottom: -10px;
-    }
-
-    .current-box {
         position: absolute;
-        bottom: var(--height);
-        left: 0px;
+        bottom: 100%;
+        right: 0px;
     }
 
     .current-value {
-        margin-bottom: -10px;
+        position: absolute;
+        bottom: var(--height);
+        left: 5px;
     }
 
 `;
@@ -8744,10 +8736,8 @@ class $6520265339ffabe1$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$ex
     render() {
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
             <div class="values">
-                <div class="top-box">
+                <div class="inner-values">
                     <div class="top-value"> ${this.addUnits(this._max)} </div>
-                </div>
-                <div class="bottom-box">
                     <div class="bottom-value"> ${this.addUnits(this._min)} </div>
                 </div>
             </div>
@@ -8772,9 +8762,10 @@ class $6520265339ffabe1$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$ex
                 </div>
             </div>
             <div class="values">
-                <div class="current-box"
-                    style="--height: ${this.getHeight()}%;">
-                    <div class="current-value"> ${this.addUnits(this.getValue())} </div>
+                <div class="inner-values">
+                    <div class="current-value" style="--height: ${this.getHeight()}%">
+                        ${this.addUnits(this.getValue())}
+                    </div>
                 </div>
             </div>
         `;
