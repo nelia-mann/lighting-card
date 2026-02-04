@@ -8587,6 +8587,7 @@ var $201c56a28a72cc27$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 
 
 
+
 const $57a27094fb213e22$var$_TOPMARGIN = 10;
 const $57a27094fb213e22$var$_BOTTOMMARGIN = 0;
 var $57a27094fb213e22$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
@@ -8637,14 +8638,6 @@ var $57a27094fb213e22$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         height: 100%;
     }
 
-    .shown-slider.brightness {
-        background: linear-gradient(to top, rgb(255, 193, 7) var(--height), rgba(255, 193, 7, .1) var(--height));
-    }
-
-    .shown-slider.ct {
-        background: var(--grad);
-    }
-
     .shown-level {
         position: absolute;
         bottom: var(--height);
@@ -8682,8 +8675,6 @@ class $6520265339ffabe1$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$ex
     _min;
     _startValue;
     _type;
-    _MB = 5;
-    _MT = 6;
     static get properties() {
         return {
             _light: {
@@ -8733,6 +8724,24 @@ class $6520265339ffabe1$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$ex
         const steps = 10;
         return (0, $d66841a16b153167$export$5b5356aa7e20fd72)(minTemp, maxTemp, steps);
     }
+    getStyleLevel() {
+        let styles = {};
+        styles['bottom'] = `${this.getHeight()}%`;
+        return styles;
+    }
+    getStyleBG() {
+        let styles = {};
+        if (this._type === 'brightness') {
+            let height = ` ${Math.round(this.getHeight())}%`;
+            let dark = (0, $d66841a16b153167$export$4e46ac54fc82cf3b)((0, $d66841a16b153167$export$a004fc522c1a4845), 1);
+            let pale = (0, $d66841a16b153167$export$4e46ac54fc82cf3b)((0, $d66841a16b153167$export$a004fc522c1a4845), 0.1);
+            let stem = 'linear-gradient(to top, ';
+            stem = stem + dark + height + ', ' + pale + height + ')';
+            console.log(stem);
+            styles['background'] = stem;
+        } else if (this._type === 'ct') styles['background'] = this.getTempGradient();
+        return styles;
+    }
     render() {
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
             <div class="values">
@@ -8745,10 +8754,9 @@ class $6520265339ffabe1$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$ex
                 <div class="inner-slider">
                     <div
                         class="shown-slider ${this._type}"
-                        style="--height: ${this.getHeight()}%;
-                            --grad: ${this.getTempGradient()};"
+                        style="${(0, $19f464fcda7d2482$export$1e5b4ce2fa884e6a)(this.getStyleBG())}"
                     >
-                        <div class="shown-level" style="--height: ${this.getHeight()}%"></div>
+                        <div class="shown-level" style="${(0, $19f464fcda7d2482$export$1e5b4ce2fa884e6a)(this.getStyleLevel())}"></div>
                     </div>
                     <input
                         class="actual-slider"
@@ -8763,7 +8771,7 @@ class $6520265339ffabe1$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$ex
             </div>
             <div class="values">
                 <div class="inner-values">
-                    <div class="current-value" style="--height: ${this.getHeight()}%">
+                    <div class="current-value" style="${(0, $19f464fcda7d2482$export$1e5b4ce2fa884e6a)(this.getStyleLevel())}">
                         ${this.addUnits(this.getValue())}
                     </div>
                 </div>

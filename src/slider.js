@@ -1,7 +1,8 @@
 import { html, LitElement } from 'lit';
+import { styleMap } from 'lit/directives/style-map.js';
 import styles from './slider.styles.js';
 import sharedStyles from './shared-styles.js';
-import { tempGradient } from './color-util.js';
+import { tempGradient, ONLIGHT, rgba } from './color-util.js';
 
 export class SliderBar extends LitElement {
 
@@ -9,8 +10,6 @@ export class SliderBar extends LitElement {
     _min;
     _startValue;
     _type;
-    _MB = 5;
-    _MT = 6;
 
     static get properties() {
         return {
@@ -68,6 +67,29 @@ export class SliderBar extends LitElement {
         return tempGradient(minTemp, maxTemp, steps);
     }
 
+    getStyleLevel() {
+        let styles = {};
+        styles['bottom'] = `${this.getHeight()}%`;
+        return styles;
+    }
+
+    getStyleBG() {
+        let styles = {};
+        if (this._type === 'brightness') {
+            let height = ` ${Math.round(this.getHeight())}%`;
+            let dark = rgba(ONLIGHT, 1);
+            let pale = rgba(ONLIGHT, 0.1);
+            let stem = 'linear-gradient(to top, ';
+            stem = stem + dark + height + ', ' + pale + height + ')';
+            console.log(stem);
+            styles['background'] = stem;
+        }
+        else if (this._type === 'ct') {
+            styles['background'] = this.getTempGradient();
+        }
+        return styles;
+    }
+
     render() {
         return html`
             <div class="values">
@@ -80,10 +102,9 @@ export class SliderBar extends LitElement {
                 <div class="inner-slider">
                     <div
                         class="shown-slider ${this._type}"
-                        style="--height: ${this.getHeight()}%;
-                            --grad: ${this.getTempGradient()};"
+                        style="${styleMap(this.getStyleBG())}"
                     >
-                        <div class="shown-level" style="--height: ${this.getHeight()}%"></div>
+                        <div class="shown-level" style="${styleMap(this.getStyleLevel())}"></div>
                     </div>
                     <input
                         class="actual-slider"
@@ -98,7 +119,7 @@ export class SliderBar extends LitElement {
             </div>
             <div class="values">
                 <div class="inner-values">
-                    <div class="current-value" style="--height: ${this.getHeight()}%">
+                    <div class="current-value" style="${styleMap(this.getStyleLevel())}">
                         ${this.addUnits(this.getValue())}
                     </div>
                 </div>

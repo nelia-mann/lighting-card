@@ -51,14 +51,6 @@ export default css`
         height: 100%;
     }
 
-    .shown-slider.brightness {
-        background: linear-gradient(to top, rgb(255, 193, 7) var(--height), rgba(255, 193, 7, .1) var(--height));
-    }
-
-    .shown-slider.ct {
-        background: var(--grad);
-    }
-
     .shown-level {
         position: absolute;
         bottom: var(--height);
