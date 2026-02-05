@@ -69,6 +69,14 @@ export default css`
         .shown-level {
             background: rgba(255, 255, 255, 1);
         }
+
+        dialog {
+            background: #2c2c2c;
+        }
+
+        .slider {
+            background: #2c2c2c;
+        }
     }
 
 `

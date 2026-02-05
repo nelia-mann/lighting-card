@@ -798,6 +798,14 @@ var $65e9333b9a0c9dfd$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         .shown-level {
             background: rgba(255, 255, 255, 1);
         }
+
+        dialog {
+            background: #2c2c2c;
+        }
+
+        .slider {
+            background: #2c2c2c;
+        }
     }
 
 `;
