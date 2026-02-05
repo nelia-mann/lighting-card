@@ -52,9 +52,14 @@ export class MainCard extends LitElement {
         return this._hass.areas;
     }
 
-    // returns true if the entity_id corresponds to a light object
+    // returns true if the entity_id corresponds to a light object and no label conradicts this.
     isLight(entity_id) {
-        return (entity_id.substring(0, 6) === "light.");
+        const entity = this._hass.entities[entity_id];
+        let notLight = false;
+        if (entity) {
+            notLight = entity.labels.includes('not_light');
+        }
+        return (entity_id.substring(0, 6) === "light.") && (!notLight);
     }
 
     // returns true if the entity_id corresponds to a theme select object

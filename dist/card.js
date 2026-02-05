@@ -8274,6 +8274,11 @@ const $d66841a16b153167$export$a004fc522c1a4845 = [
     193,
     7
 ]; // color in rgb (yellow)
+const $d66841a16b153167$export$e59310e5bf013385 = [
+    127,
+    97,
+    3
+]; // should be black-ish yellow
 const $d66841a16b153167$export$173de64b5ad0d5b4 = [
     158,
     158,
@@ -8376,6 +8381,27 @@ function $d66841a16b153167$export$dd0fba3206c57e56(rgbA, rgbB, t) {
 }
 
 
+function $f61590692659393c$export$1a2d97de39ecbb75(lightBundle) {
+    return lightBundle.state.state === "on";
+}
+function $f61590692659393c$var$getRGB(lightBundle) {
+    return lightBundle.state.attributes.rgb_color;
+}
+function $f61590692659393c$var$getBrightness(lightBundle) {
+    let brightness = 1;
+    if (lightBundle.state.attributes.brightness) brightness = lightBundle.state.attributes.brightness / 255;
+    return brightness;
+}
+function $f61590692659393c$export$5551a2d24ff40153(lightBundle) {
+    let rgb = (0, $d66841a16b153167$export$f353bac13bc8bab2);
+    if ($f61590692659393c$export$1a2d97de39ecbb75(lightBundle)) {
+        if ($f61590692659393c$var$getRGB(lightBundle)) rgb = (0, $d66841a16b153167$export$dd0fba3206c57e56)((0, $d66841a16b153167$export$f353bac13bc8bab2), $f61590692659393c$var$getRGB(lightBundle), $f61590692659393c$var$getBrightness(lightBundle));
+        else rgb = (0, $d66841a16b153167$export$dd0fba3206c57e56)((0, $d66841a16b153167$export$e59310e5bf013385), (0, $d66841a16b153167$export$a004fc522c1a4845), $f61590692659393c$var$getBrightness(lightBundle));
+    }
+    return (0, $d66841a16b153167$export$4e46ac54fc82cf3b)(rgb, 1);
+}
+
+
 class $4356f78c5c3f665b$export$82acdd66a4e4bf90 extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
     static get properties() {
         return {
@@ -8384,30 +8410,14 @@ class $4356f78c5c3f665b$export$82acdd66a4e4bf90 extends (0, $ab210b2da7b39b9d$ex
             }
         };
     }
-    isOn() {
-        return this._lightBundle.state.state === "on";
-    }
     lightbulb() {
         let lightbulb;
-        if (this._lightBundle.members) this.isOn() ? lightbulb = (0, $04557c061247a0a6$export$2e6be2b8a537add2) : lightbulb = (0, $04557c061247a0a6$export$da8ede764477ab6a);
-        else this.isOn() ? lightbulb = (0, $04557c061247a0a6$export$dea852a9f40b969) : lightbulb = (0, $04557c061247a0a6$export$aad4bcd9f6406e73);
+        if (this._lightBundle.members) (0, $f61590692659393c$export$1a2d97de39ecbb75)(this._lightBundle) ? lightbulb = (0, $04557c061247a0a6$export$2e6be2b8a537add2) : lightbulb = (0, $04557c061247a0a6$export$da8ede764477ab6a);
+        else (0, $f61590692659393c$export$1a2d97de39ecbb75)(this._lightBundle) ? lightbulb = (0, $04557c061247a0a6$export$dea852a9f40b969) : lightbulb = (0, $04557c061247a0a6$export$aad4bcd9f6406e73);
         return lightbulb;
     }
-    getBrightness() {
-        let brightness = 1;
-        if (this._lightBundle.state.attributes.brightness) brightness = this._lightBundle.state.attributes.brightness / 255;
-        return brightness;
-    }
-    getRGB() {
-        return this._lightBundle.state.attributes.rgb_color;
-    }
     getColor() {
-        let rgb = (0, $d66841a16b153167$export$f353bac13bc8bab2);
-        if (this.isOn()) {
-            if (this.getRGB()) rgb = (0, $d66841a16b153167$export$dd0fba3206c57e56)((0, $d66841a16b153167$export$f353bac13bc8bab2), this.getRGB(), this.getBrightness());
-            else rgb = (0, $d66841a16b153167$export$dd0fba3206c57e56)((0, $d66841a16b153167$export$f353bac13bc8bab2), (0, $d66841a16b153167$export$a004fc522c1a4845), this.getBrightness());
-        }
-        return (0, $d66841a16b153167$export$4e46ac54fc82cf3b)(rgb, 1);
+        return (0, $f61590692659393c$export$5551a2d24ff40153)(this._lightBundle);
     }
     getStyles() {
         let styles = {
@@ -9244,7 +9254,7 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
     getStyles(lightBundle) {
         let styles = {};
         if (this.isSelected(lightBundle)) {
-            styles['outline'] = 'solid ' + (0, $d66841a16b153167$export$4e46ac54fc82cf3b)((0, $d66841a16b153167$export$b65e08a6803cf040), 1);
+            styles['outline'] = 'solid ' + (0, $f61590692659393c$export$5551a2d24ff40153)(lightBundle);
             styles['outline-offset'] = '-4px';
         }
         return styles;
@@ -9551,9 +9561,12 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
     getAreas() {
         return this._hass.areas;
     }
-    // returns true if the entity_id corresponds to a light object
+    // returns true if the entity_id corresponds to a light object and no label conradicts this.
     isLight(entity_id) {
-        return entity_id.substring(0, 6) === "light.";
+        const entity = this._hass.entities[entity_id];
+        let notLight = false;
+        if (entity) notLight = entity.labels.includes('not_light');
+        return entity_id.substring(0, 6) === "light." && !notLight;
     }
     // returns true if the entity_id corresponds to a theme select object
     isTheme(entity_id) {

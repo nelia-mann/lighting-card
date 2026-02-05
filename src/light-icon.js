@@ -2,7 +2,7 @@ import { html, LitElement } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
 import { mdiLightbulb, mdiLightbulbOff, mdiLightbulbGroup, mdiLightbulbGroupOff } from '@mdi/js';
 import styles from './icon.styles.js';
-import { interpolateRGB, rgba, OFFLIGHT, ONLIGHT }  from './color-util.js';
+import { getColor, isOn }  from './light-util.js';
 
 export class LightIcon extends LitElement {
 
@@ -12,42 +12,18 @@ export class LightIcon extends LitElement {
         }
     }
 
-    isOn() {
-        return (this._lightBundle.state.state === "on");
-    }
-
     lightbulb() {
         let lightbulb;
         if (this._lightBundle.members) {
-            (this.isOn()) ? (lightbulb = mdiLightbulbGroup) : (lightbulb = mdiLightbulbGroupOff);
+            (isOn(this._lightBundle)) ? (lightbulb = mdiLightbulbGroup) : (lightbulb = mdiLightbulbGroupOff);
         } else {
-            (this.isOn()) ? (lightbulb = mdiLightbulb) : (lightbulb = mdiLightbulbOff);
+            (isOn(this._lightBundle)) ? (lightbulb = mdiLightbulb) : (lightbulb = mdiLightbulbOff);
         }
         return lightbulb;
     }
 
-    getBrightness() {
-        let brightness = 1;
-        if (this._lightBundle.state.attributes.brightness) {
-            brightness = this._lightBundle.state.attributes.brightness / 255;
-        }
-        return brightness;
-    }
-
-    getRGB() {
-        return (this._lightBundle.state.attributes.rgb_color);
-    }
-
     getColor() {
-        let rgb = OFFLIGHT;
-        if (this.isOn()) {
-            if (this.getRGB()) {
-                rgb = interpolateRGB(OFFLIGHT, this.getRGB(), this.getBrightness());
-            } else {
-                rgb = interpolateRGB(OFFLIGHT, ONLIGHT, this.getBrightness());
-            }
-        }
-        return rgba(rgb, 1)
+        return getColor(this._lightBundle)
     }
 
     getStyles() {

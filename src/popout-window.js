@@ -4,7 +4,7 @@ import { mdiCloseCircleOutline } from '@mdi/js';
 import styles from './popout.styles.js';
 import sharedStyles from './shared-styles.js';
 import './light-control.js';
-import { SELECTEDLIGHT, rgba } from './color-util.js';
+import { getColor } from './light-util.js';
 
 export class PopoutWindow extends LitElement {
 
@@ -22,7 +22,7 @@ export class PopoutWindow extends LitElement {
     getStyles(lightBundle) {
         let styles = {};
         if (this.isSelected(lightBundle)) {
-            styles['outline'] = 'solid ' + rgba(SELECTEDLIGHT, 1);
+            styles['outline'] = 'solid ' + getColor(lightBundle);
             styles['outline-offset'] = '-4px'
         }
         return styles;
