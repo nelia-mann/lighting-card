@@ -10341,6 +10341,12 @@ class $a6f01a0d74278018$export$1b9e02e625a724dc extends (0, $ab210b2da7b39b9d$ex
         (0, $65e9333b9a0c9dfd$export$2e2bcd8739ae039),
         (0, $fc4a6c4e4b89c4fa$export$2e2bcd8739ae039)
     ];
+    firstUpdated() {
+        this.setValue();
+    }
+    updated(changedProperties) {
+        if (changedProperties.has('_theme')) this.setValue();
+    }
     onClick(e) {
         const newOption = e.target.id;
         this._option = newOption;
@@ -10381,7 +10387,6 @@ class $a6f01a0d74278018$export$1b9e02e625a724dc extends (0, $ab210b2da7b39b9d$ex
         });
     }
     render() {
-        this.setValue();
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
             ${this.listOptions()}
         `;

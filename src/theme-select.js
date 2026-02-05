@@ -20,6 +20,16 @@ export class ThemeSelect extends LitElement {
 
     static styles = [sharedStyles, styles];
 
+    firstUpdated() {
+        this.setValue();
+    }
+
+    updated(changedProperties) {
+        if (changedProperties.has('_theme')) {
+            this.setValue();
+        }
+    }
+
     onClick(e) {
         const newOption = e.target.id;
         this._option = newOption;
@@ -64,7 +74,6 @@ export class ThemeSelect extends LitElement {
     }
 
     render() {
-        this.setValue();
         return html`
             ${this.listOptions()}
         `
