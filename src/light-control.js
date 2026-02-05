@@ -1,6 +1,6 @@
 import { html, LitElement } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
-import { tempGradient, hsGradient, rgba, ONLIGHT } from './color-util.js';
+import { tempGradient, getTempColor, hsGradient, rgba, ONLIGHT, INDIGO } from './color-util.js';
 import { mdiBrightness6, mdiCreationOutline } from '@mdi/js';
 import styles from './light-control.styles.js';
 import sharedStyles from './shared-styles.js';
@@ -9,10 +9,11 @@ import './slider.js';
 import './color-wheel.js';
 import './theme-select.js';
 
-
 export class LightControl extends LitElement {
 
     _TYPES = ['onOff', 'brightness', 'ct', 'hs', 'theme'];
+    _MINTEMP = 1500;
+    _MAXTEMP = 9000;
 
     static get properties() {
         return {
@@ -25,11 +26,15 @@ export class LightControl extends LitElement {
         super();
     }
 
+    static styles = [sharedStyles, styles];
+
     getTempGradient() {
-        const minTemp = 1500;
-        const maxTemp = 9000;
         const steps = 10;
-        return tempGradient(minTemp, maxTemp, steps);
+        return tempGradient(this._MINTEMP, this._MAXTEMP, steps);
+    }
+
+    getTempBorder() {
+        return rgba(getTempColor(this._MINTEMP), 1)
     }
 
     isOption(type) {
@@ -62,19 +67,22 @@ export class LightControl extends LitElement {
         switch (type) {
             case 'brightness':
                 styles['background'] = rgba(ONLIGHT, .2);
+                (this.isSelected(type)) && (styles['outline'] = 'solid ' + rgba(ONLIGHT, 1));
                 break;
             case 'ct':
                 styles['background'] = this.getTempGradient();
+                (this.isSelected(type)) && (styles['outline'] = 'solid ' + this.getTempBorder());
                 break;
             case 'hs':
                 styles['background'] = hsGradient(10);
+                (this.isSelected(type)) && (styles['outline'] = 'solid ' + rgba(INDIGO, 1));
                 break;
             case 'theme':
                 styles['background'] = rgba(ONLIGHT, .2);
+                (this.isSelected(type)) && (styles['outline'] = 'solid ' + rgba(ONLIGHT, 1));
                 break;
         }
         if (this.isSelected(type) && (type != 'onOff')) {
-            styles['outline'] = 'solid ' + rgba(ONLIGHT, 1);
             styles['outline-offset'] = '-2px';
         }
         return styles;
@@ -177,8 +185,6 @@ export class LightControl extends LitElement {
         ></theme-select>
         `
     }
-
-    static styles = [sharedStyles, styles];
 
     controls() {
         let panel;

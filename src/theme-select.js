@@ -2,8 +2,8 @@ import { html, LitElement } from 'lit';
 import styles from './theme.styles.js';
 import sharedStyles from './shared-styles.js';
 import { ONLIGHT, rgba } from './color-util.js';
-import { styleMap } from  'lit/directives/style-map.js';
-
+import { styleMap } from 'lit/directives/style-map.js';
+import { getThemeGradient, getThemeOutline } from './theme-util.js';
 
 
 export class ThemeSelect extends LitElement {
@@ -47,9 +47,10 @@ export class ThemeSelect extends LitElement {
     getStyles(option) {
         let styles = {};
         if (this.isSelected(option)) {
-            styles['outline'] = `solid ${rgba(ONLIGHT, 1)}`;
+            styles['outline'] = `solid ${getThemeOutline(option)}`;
             styles['outline-offset'] = '-3px;'
         }
+        styles['background'] = getThemeGradient(option)
         return styles;
     }
 

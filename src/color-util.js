@@ -2,7 +2,7 @@ const ONLIGHT = [255, 193, 7]; // color in rgb (yellow)
 const HALFLIGHT = [127, 97, 3]; // should be black-ish yellow
 const OFF = [158, 158, 158]; // color in rgb (gray)
 const OFFLIGHT = [68, 115, 158]; // color in rgb (steel blue)
-const SELECTEDLIGHT = [255, 193, 7]; // (yellow)
+const INDIGO = [41, 0, 255]; // blue color
 
 function getTempRed(temp) {
     let red;
@@ -104,9 +104,10 @@ export {
     hsGradient,
     interpolateRGB,
     rgba,
+    getTempColor,
     OFFLIGHT,
     ONLIGHT,
     OFF,
-    SELECTEDLIGHT,
     HALFLIGHT,
+    INDIGO
 }
