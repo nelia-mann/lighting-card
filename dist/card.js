@@ -8395,7 +8395,7 @@ function $f61590692659393c$var$getBrightness(lightBundle) {
 function $f61590692659393c$export$5551a2d24ff40153(lightBundle) {
     let rgb = (0, $d66841a16b153167$export$f353bac13bc8bab2);
     if ($f61590692659393c$export$1a2d97de39ecbb75(lightBundle)) {
-        if ($f61590692659393c$var$getRGB(lightBundle)) rgb = (0, $d66841a16b153167$export$dd0fba3206c57e56)((0, $d66841a16b153167$export$f353bac13bc8bab2), $f61590692659393c$var$getRGB(lightBundle), $f61590692659393c$var$getBrightness(lightBundle));
+        if ($f61590692659393c$var$getRGB(lightBundle)) rgb = (0, $d66841a16b153167$export$dd0fba3206c57e56)((0, $d66841a16b153167$export$e59310e5bf013385), $f61590692659393c$var$getRGB(lightBundle), $f61590692659393c$var$getBrightness(lightBundle));
         else rgb = (0, $d66841a16b153167$export$dd0fba3206c57e56)((0, $d66841a16b153167$export$e59310e5bf013385), (0, $d66841a16b153167$export$a004fc522c1a4845), $f61590692659393c$var$getBrightness(lightBundle));
     }
     return (0, $d66841a16b153167$export$4e46ac54fc82cf3b)(rgb, 1);

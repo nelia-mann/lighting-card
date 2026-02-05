@@ -20,7 +20,7 @@ function getColor(lightBundle) {
     let rgb = OFFLIGHT;
     if (isOn(lightBundle)) {
         if (getRGB(lightBundle)) {
-            rgb = interpolateRGB(OFFLIGHT, getRGB(lightBundle), getBrightness(lightBundle));
+            rgb = interpolateRGB(HALFLIGHT, getRGB(lightBundle), getBrightness(lightBundle));
         } else {
             rgb = interpolateRGB(HALFLIGHT, ONLIGHT, getBrightness(lightBundle));
         }
