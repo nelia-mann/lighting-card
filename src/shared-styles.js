@@ -8,7 +8,7 @@ export default css`
 
     .outlined {
         outline: .5px solid rgba(0, 0, 0, .1);
-        outline-offset: .1px;
+        outline-offset: 0px;
         border-radius: 10px;
         box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
     }

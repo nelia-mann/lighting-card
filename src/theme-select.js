@@ -1,7 +1,6 @@
 import { html, LitElement } from 'lit';
 import styles from './theme.styles.js';
 import sharedStyles from './shared-styles.js';
-import { ONLIGHT, rgba } from './color-util.js';
 import { styleMap } from 'lit/directives/style-map.js';
 import { getThemeGradient, getThemeOutline } from './theme-util.js';
 
@@ -21,18 +20,14 @@ export class ThemeSelect extends LitElement {
 
     static styles = [sharedStyles, styles];
 
-    firstUpdated() {
-        this._option = this.getValue();
-    }
-
     onClick(e) {
         const newOption = e.target.id;
         this._option = newOption;
         this.dispatchEvent(new CustomEvent('change', { detail: newOption }))
     }
 
-    getValue() {
-        return this._theme.state;
+    setValue() {
+        this._option = this._theme.state;
     }
 
     getOptions() {
@@ -69,6 +64,7 @@ export class ThemeSelect extends LitElement {
     }
 
     render() {
+        this.setValue();
         return html`
             ${this.listOptions()}
         `

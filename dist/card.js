@@ -737,7 +737,7 @@ var $65e9333b9a0c9dfd$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 
     .outlined {
         outline: .5px solid rgba(0, 0, 0, .1);
-        outline-offset: .1px;
+        outline-offset: 0px;
         border-radius: 10px;
         box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
     }
@@ -8957,7 +8957,6 @@ var $fc4a6c4e4b89c4fa$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 
 
 
-
 const $c1e171af2fc86367$export$d9300e0cf063e5de = {
     'autumn': [
         [
@@ -10319,9 +10318,6 @@ class $a6f01a0d74278018$export$1b9e02e625a724dc extends (0, $ab210b2da7b39b9d$ex
         (0, $65e9333b9a0c9dfd$export$2e2bcd8739ae039),
         (0, $fc4a6c4e4b89c4fa$export$2e2bcd8739ae039)
     ];
-    firstUpdated() {
-        this._option = this.getValue();
-    }
     onClick(e) {
         const newOption = e.target.id;
         this._option = newOption;
@@ -10329,8 +10325,8 @@ class $a6f01a0d74278018$export$1b9e02e625a724dc extends (0, $ab210b2da7b39b9d$ex
             detail: newOption
         }));
     }
-    getValue() {
-        return this._theme.state;
+    setValue() {
+        this._option = this._theme.state;
     }
     getOptions() {
         const optionList = this._theme.attributes.options;
@@ -10362,6 +10358,7 @@ class $a6f01a0d74278018$export$1b9e02e625a724dc extends (0, $ab210b2da7b39b9d$ex
         });
     }
     render() {
+        this.setValue();
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
             ${this.listOptions()}
         `;
@@ -10550,7 +10547,7 @@ class $f76fa2dde9e8d076$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$ex
                 panel = this.colorWheel();
                 break;
             case 'theme':
-                panel = this.themeSelect();
+                this._lightBundle.theme && (panel = this.themeSelect());
                 break;
             default:
                 panel = '';

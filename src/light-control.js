@@ -199,7 +199,7 @@ export class LightControl extends LitElement {
                 panel = this.colorWheel();
                 break;
             case 'theme':
-                panel = this.themeSelect();
+                (this._lightBundle.theme) && (panel = this.themeSelect());
                 break;
             default:
                 panel = '';
