@@ -78,7 +78,7 @@ export class SliderBar extends LitElement {
         if (this._type === 'brightness') {
             let height = ` ${Math.round(this.getHeight())}%`;
             let dark = rgba(ONLIGHT, 1);
-            let pale = rgba(ONLIGHT, 0.1);
+            let pale = rgba(ONLIGHT, 0.2);
             let stem = 'linear-gradient(to top, ';
             stem = stem + dark + height + ', ' + pale + height + ')';
             styles['background'] = stem;

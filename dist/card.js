@@ -8772,7 +8772,7 @@ class $6520265339ffabe1$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$ex
         if (this._type === 'brightness') {
             let height = ` ${Math.round(this.getHeight())}%`;
             let dark = (0, $d66841a16b153167$export$4e46ac54fc82cf3b)((0, $d66841a16b153167$export$a004fc522c1a4845), 1);
-            let pale = (0, $d66841a16b153167$export$4e46ac54fc82cf3b)((0, $d66841a16b153167$export$a004fc522c1a4845), 0.1);
+            let pale = (0, $d66841a16b153167$export$4e46ac54fc82cf3b)((0, $d66841a16b153167$export$a004fc522c1a4845), 0.2);
             let stem = 'linear-gradient(to top, ';
             stem = stem + dark + height + ', ' + pale + height + ')';
             styles['background'] = stem;
