@@ -10326,7 +10326,7 @@ class $a6f01a0d74278018$export$1b9e02e625a724dc extends (0, $ab210b2da7b39b9d$ex
         }));
     }
     setValue() {
-        this._option = this._theme.state;
+        if (!this._option) this._option = this._theme.state;
     }
     getOptions() {
         const optionList = this._theme.attributes.options;

@@ -27,7 +27,9 @@ export class ThemeSelect extends LitElement {
     }
 
     setValue() {
-        this._option = this._theme.state;
+        if (!(this._option)) {
+            this._option = this._theme.state;
+        }
     }
 
     getOptions() {
