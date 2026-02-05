@@ -787,7 +787,7 @@ var $65e9333b9a0c9dfd$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 
         .outlined {
             outline: .5px solid rgba(255, 255, 255, .1);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(255, 255, 255, 0.1) inset;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3), 0 .5px 2px rgba(255, 255, 255, 0.1) inset;
         }
 
         .inner-slider {
@@ -800,11 +800,11 @@ var $65e9333b9a0c9dfd$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         }
 
         dialog {
-            background: #2c2c2c;
+            background: #191919;
         }
 
         .slider {
-            background: #2c2c2c;
+            background: #191919;
         }
     }
 
