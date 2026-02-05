@@ -52,7 +52,9 @@ export default css`
         margin-left: 15px;
         width: 450px;
         height: 360px;
-        padding: 15px;
+        padding: 10px;
+        padding-left: 5px;
+        padding-right: 5px;
     }
 
     ha-svg-icon {

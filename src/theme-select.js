@@ -10,7 +10,7 @@ export class ThemeSelect extends LitElement {
     static get properties() {
         return {
             _theme: { state: true },
-            _option: { state: true}
+            _option: { state: true }
         }
     }
 
@@ -27,9 +27,7 @@ export class ThemeSelect extends LitElement {
     }
 
     setValue() {
-        if (!(this._option)) {
-            this._option = this._theme.state;
-        }
+        this._option = this._theme.state;
     }
 
     getOptions() {
@@ -55,7 +53,7 @@ export class ThemeSelect extends LitElement {
         const optionList = this.getOptions();
         return optionList.map((option) => {
             return html`<div
-                class="option outlined"
+                class="option outlined sub-info"
                 style="${styleMap(this.getStyles(option))}"
                 id="${option}"
                 @click=${this.onClick}

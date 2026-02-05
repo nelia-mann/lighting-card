@@ -28,8 +28,6 @@ export default css`
         position: relative;
         height: ${100 - _TOPMARGIN - _BOTTOMMARGIN}%;
         width: 100%;
-        border-top: solid 2px rgba(0, 0, 0, .2);
-        border-bottom: solid 2px rgba(0, 0, 0, .2);
     }
 
     .actual-slider {
@@ -56,7 +54,6 @@ export default css`
         left: -10%;
         width: 120%;
         height: 2%;
-        background: rgba(0, 0, 0, 1);
 }
 
     .bottom-value {

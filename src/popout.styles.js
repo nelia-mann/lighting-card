@@ -14,10 +14,6 @@ export default css`
         overflow: hidden;
     }
 
-    dialog::backdrop {
-        background-color: rgba(0, 0, 0, 0.5);
-    }
-
     .modal-header {
         display: flex;
         flex-flow: row nowrap;
@@ -54,7 +50,7 @@ export default css`
     }
 
     .light-inner {
-        width: 205px;
+        width: 180px;
         height: 25px;
         padding: 10px;
         padding-top: 8px;

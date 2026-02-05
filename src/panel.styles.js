@@ -3,7 +3,7 @@ import { css } from 'lit';
 export default css`
 
     light-component {
-        width: 205px;
+        width: 180px;
         height: 25px;
         padding: 10px;
         padding-top: 8px;

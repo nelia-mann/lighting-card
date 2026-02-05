@@ -25,13 +25,13 @@ function getThemeGradient(theme) {
         if (number > 1) {
             string = 'linear-gradient(to left';
             colors.forEach((color, index) => {
-                let hsl = hsv_to_hsl(color, .5);
+                let hsl = hsv_to_hsl(color, .4);
                 let percent = ` ${Math.round(100 * index / (number - 1))}%`
                 string = string + ', ' + hsl + percent
             })
             string = string + ')'
         } else if (number === 1) {
-            string = hsv_to_hsl(colors[0], .5)
+            string = hsv_to_hsl(colors[0], .4)
         }
     }
     return string;

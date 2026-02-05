@@ -685,14 +685,14 @@ class $107bb7d062dde330$export$befdefbdce210f91 {
 var $24833e213e3419f0$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
     ha-card {
         padding: 25px;
-        padding-top: 15px;
+        padding-top: 5px;
         margin: 0px;
         display: flex;
         flex-flow: column nowrap;
         justify-content: space-between;
         align-items: center;
         height: 500px;
-        width: 900px;
+        width: 800px;
     }
 
     panel-component {
@@ -719,7 +719,7 @@ var $24833e213e3419f0$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 
     .button {
         height: 100%;
-        width: 200px;
+        width: 160px;
         padding: 0px;
         border: none;
     }
@@ -733,18 +733,12 @@ var $65e9333b9a0c9dfd$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 
     * {
         font-family: "Roboto", "Noto", sans-serif;
-    }
-
-    .outlined {
-        outline: .5px solid rgba(0, 0, 0, .1);
-        outline-offset: 0px;
-        border-radius: 10px;
-        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+        ---mdc-icon-size: 20px;
     }
 
     .small-heading {
         font-weight: 700;
-        font-size: 100%;
+        font-size: 105%;
         margin: 0px;
         padding: 0px;
     }
@@ -760,16 +754,49 @@ var $65e9333b9a0c9dfd$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         padding: 0px;
         margin: 0px;
         font-weight: 400;
-        font-size: 80%;
+        font-size: 85%;
+    }
+
+    .outlined {
+        outline-offset: 0px;
+        border-radius: 8px;
+    }
+
+    dialog::backdrop {
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .outlined {
+        outline: .5px solid rgba(0, 0, 0, .1);
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .inner-slider {
+        border-top: solid 2px rgba(0, 0, 0, .1);
+        border-bottom: solid 2px rgba(0, 0, 0, .1);
+    }
+
+    .shown-level {
+        background: rgba(0, 0, 0, 1);
     }
 
     @media (prefers-color-scheme: dark) {
-        ha-card {
+        * {
             color: #ffffff;
         }
 
-        .button {
-            color: #ffffff;
+        .outlined {
+            outline: .5px solid rgba(255, 255, 255, .1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(255, 255, 255, 0.1) inset;
+        }
+
+        .inner-slider {
+            border-top: solid 2px rgba(255, 255, 255, .1);
+            border-bottom: solid 2px rgba(255, 255, 255, .1);
+        }
+
+        .shown-level {
+            background: rgba(255, 255, 255, 1);
         }
     }
 
@@ -781,7 +808,7 @@ var $65e9333b9a0c9dfd$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 var $fd69d66a3348dfcc$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
 
     light-component {
-        width: 205px;
+        width: 180px;
         height: 25px;
         padding: 10px;
         padding-top: 8px;
@@ -8453,10 +8480,6 @@ var $84adf0e0aa3f1db7$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         overflow: hidden;
     }
 
-    dialog::backdrop {
-        background-color: rgba(0, 0, 0, 0.5);
-    }
-
     .modal-header {
         display: flex;
         flex-flow: row nowrap;
@@ -8493,7 +8516,7 @@ var $84adf0e0aa3f1db7$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
     }
 
     .light-inner {
-        width: 205px;
+        width: 180px;
         height: 25px;
         padding: 10px;
         padding-top: 8px;
@@ -8579,7 +8602,9 @@ var $201c56a28a72cc27$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         margin-left: 15px;
         width: 450px;
         height: 360px;
-        padding: 15px;
+        padding: 10px;
+        padding-left: 5px;
+        padding-right: 5px;
     }
 
     ha-svg-icon {
@@ -8625,8 +8650,6 @@ var $57a27094fb213e22$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         position: relative;
         height: ${100 - $57a27094fb213e22$var$_TOPMARGIN - $57a27094fb213e22$var$_BOTTOMMARGIN}%;
         width: 100%;
-        border-top: solid 2px rgba(0, 0, 0, .2);
-        border-bottom: solid 2px rgba(0, 0, 0, .2);
     }
 
     .actual-slider {
@@ -8653,7 +8676,6 @@ var $57a27094fb213e22$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         left: -10%;
         width: 120%;
         height: 2%;
-        background: rgba(0, 0, 0, 1);
 }
 
     .bottom-value {
@@ -8943,9 +8965,10 @@ customElements.define("color-wheel", $39525fd96e3f385d$export$f80663f808113381);
 var $fc4a6c4e4b89c4fa$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
 
     .option {
-        padding: 0px;
-        margin: 4px;
-        width: 100px;
+        padding-top: 1px;
+        padding-bottom: 1px;
+        margin: 5px;
+        width: 90px;
         display: flex;
         flex-flow: row nowrap;
         justify-content: center;
@@ -10283,12 +10306,12 @@ function $250cd39cb2d393e2$export$aa352c5cf20281b9(theme) {
         if (number > 1) {
             string = 'linear-gradient(to left';
             colors.forEach((color, index)=>{
-                let hsl = $250cd39cb2d393e2$var$hsv_to_hsl(color, .5);
+                let hsl = $250cd39cb2d393e2$var$hsv_to_hsl(color, .4);
                 let percent = ` ${Math.round(100 * index / (number - 1))}%`;
                 string = string + ', ' + hsl + percent;
             });
             string = string + ')';
-        } else if (number === 1) string = $250cd39cb2d393e2$var$hsv_to_hsl(colors[0], .5);
+        } else if (number === 1) string = $250cd39cb2d393e2$var$hsv_to_hsl(colors[0], .4);
     }
     return string;
 }
@@ -10326,7 +10349,7 @@ class $a6f01a0d74278018$export$1b9e02e625a724dc extends (0, $ab210b2da7b39b9d$ex
         }));
     }
     setValue() {
-        if (!this._option) this._option = this._theme.state;
+        this._option = this._theme.state;
     }
     getOptions() {
         const optionList = this._theme.attributes.options;
@@ -10348,7 +10371,7 @@ class $a6f01a0d74278018$export$1b9e02e625a724dc extends (0, $ab210b2da7b39b9d$ex
         const optionList = this.getOptions();
         return optionList.map((option)=>{
             return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<div
-                class="option outlined"
+                class="option outlined sub-info"
                 style="${(0, $19f464fcda7d2482$export$1e5b4ce2fa884e6a)(this.getStyles(option))}"
                 id="${option}"
                 @click=${this.onClick}
@@ -10606,7 +10629,8 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
     }
     header(isMember) {
         let result;
-        !isMember && (result = 'small-heading');
+        if (isMember) result = 'sub-info';
+        else result = 'small-heading';
         return result;
     }
     innerLight(lightBundle, isMember) {
@@ -10771,22 +10795,39 @@ class $046ae152b1d9e254$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
             `;
         return result;
     }
+    hasOptions() {
+        let valid = false;
+        !!this._lightBundle.theme && (valid = true);
+        !(this._lightBundle.state.attributes['hs_color'] === undefined) && (valid = true);
+        !(this._lightBundle.state.attributes['color_temp_kelvin'] === undefined) && (valid = true);
+        !(this._lightBundle.state.attributes['brightness'] === undefined) && (valid = true);
+        !!this._lightBundle.members && (valid = true);
+        return valid;
+    }
+    popoutWindow() {
+        if (this.hasOptions()) {
+            const name = this._lightBundle.state.attributes.friendly_name;
+            return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+                <popout-window
+                    title="${name}"
+                    ?opened="${this.isModalOpen}"
+                    @modal-closed="${this.handleModalClosed}"
+                    ._lightBundle=${this._lightBundle}
+                    .callService="${this.callService}"
+                ></popout-window>
+            `;
+        }
+    }
     render() {
         const name = this._lightBundle.state.attributes.friendly_name;
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-            <div class="light-element" @pointerup=${this.onUp} @pointerdown=${this.onDown}>
+            <div class="light-element sub-info" @pointerup=${this.onUp} @pointerdown=${this.onDown}>
                 <div class="icons">
                     ${this.icons()}
                 </div>
                 ${name}
             </div>
-            <popout-window
-                title="${name}"
-                ?opened="${this.isModalOpen}"
-                @modal-closed="${this.handleModalClosed}"
-                ._lightBundle=${this._lightBundle}
-                .callService="${this.callService}"
-            ></popout-window>
+            ${this.popoutWindow()}
         `;
     }
     onDown() {

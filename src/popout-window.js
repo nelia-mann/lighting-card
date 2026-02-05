@@ -30,7 +30,11 @@ export class PopoutWindow extends LitElement {
 
     header(isMember) {
         let result;
-        (!isMember) && (result = 'small-heading');
+        if (isMember) {
+            result = 'sub-info';
+        } else {
+            result = 'small-heading';
+        }
         return result;
     }
 

@@ -41,22 +41,41 @@ export class LightComponent extends LitElement {
         return result;
     }
 
+    hasOptions() {
+        let valid = false;
+        !!(this._lightBundle.theme) && (valid = true);
+        !(this._lightBundle.state.attributes['hs_color'] === undefined) && (valid = true);
+        !(this._lightBundle.state.attributes['color_temp_kelvin'] === undefined) && (valid = true);
+        !(this._lightBundle.state.attributes['brightness'] === undefined) && (valid = true);
+        !!(this._lightBundle.members) && (valid = true);
+        return valid;
+    }
+
+    popoutWindow() {
+        if (this.hasOptions()) {
+            const name = this._lightBundle.state.attributes.friendly_name;
+            return html`
+                <popout-window
+                    title="${name}"
+                    ?opened="${this.isModalOpen}"
+                    @modal-closed="${this.handleModalClosed}"
+                    ._lightBundle=${this._lightBundle}
+                    .callService="${this.callService}"
+                ></popout-window>
+            `
+        }
+    }
+
     render() {
         const name = this._lightBundle.state.attributes.friendly_name;
         return html`
-            <div class="light-element" @pointerup=${this.onUp} @pointerdown=${this.onDown}>
+            <div class="light-element sub-info" @pointerup=${this.onUp} @pointerdown=${this.onDown}>
                 <div class="icons">
                     ${this.icons()}
                 </div>
                 ${name}
             </div>
-            <popout-window
-                title="${name}"
-                ?opened="${this.isModalOpen}"
-                @modal-closed="${this.handleModalClosed}"
-                ._lightBundle=${this._lightBundle}
-                .callService="${this.callService}"
-            ></popout-window>
+            ${this.popoutWindow()}
         `
     }
 
