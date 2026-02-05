@@ -12,13 +12,4 @@ export default css`
         align-items: center;
     }
 
-    .option.true {
-        outline: solid rgb(255, 193, 7);
-        outline-offset: -3px;
-    }
-
-    .option:hover {
-        background: rgba(255, 193, 7, .1);
-    }
-
 `;

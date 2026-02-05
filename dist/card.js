@@ -8942,16 +8942,9 @@ var $fc4a6c4e4b89c4fa$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         align-items: center;
     }
 
-    .option.true {
-        outline: solid rgb(255, 193, 7);
-        outline-offset: -3px;
-    }
-
-    .option:hover {
-        background: rgba(255, 193, 7, .1);
-    }
-
 `;
+
+
 
 
 
@@ -8993,11 +8986,20 @@ class $a6f01a0d74278018$export$1b9e02e625a724dc extends (0, $ab210b2da7b39b9d$ex
     isSelected(option) {
         return option === this._option;
     }
+    getStyles(option) {
+        let styles = {};
+        if (this.isSelected(option)) {
+            styles['outline'] = `solid ${(0, $d66841a16b153167$export$4e46ac54fc82cf3b)((0, $d66841a16b153167$export$a004fc522c1a4845), 1)}`;
+            styles['outline-offset'] = '-3px;';
+        }
+        return styles;
+    }
     listOptions() {
         const optionList = this.getOptions();
         return optionList.map((option)=>{
             return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<div
-                class="option ${this.isSelected(option)} outlined"
+                class="option outlined"
+                style="${(0, $19f464fcda7d2482$export$1e5b4ce2fa884e6a)(this.getStyles(option))}"
                 id="${option}"
                 @click=${this.onClick}
              >

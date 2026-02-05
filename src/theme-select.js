@@ -1,6 +1,8 @@
 import { html, LitElement } from 'lit';
 import styles from './theme.styles.js';
 import sharedStyles from './shared-styles.js';
+import { ONLIGHT, rgba } from './color-util.js';
+import { styleMap } from  'lit/directives/style-map.js';
 
 
 
@@ -42,11 +44,21 @@ export class ThemeSelect extends LitElement {
         return (option === this._option);
     }
 
+    getStyles(option) {
+        let styles = {};
+        if (this.isSelected(option)) {
+            styles['outline'] = `solid ${rgba(ONLIGHT, 1)}`;
+            styles['outline-offset'] = '-3px;'
+        }
+        return styles;
+    }
+
     listOptions() {
         const optionList = this.getOptions();
         return optionList.map((option) => {
             return html`<div
-                class="option ${this.isSelected(option)} outlined"
+                class="option outlined"
+                style="${styleMap(this.getStyles(option))}"
                 id="${option}"
                 @click=${this.onClick}
              >
