@@ -9,12 +9,15 @@ export class MainCard extends LitElement {
 
     // private properties
     _hass;
+    _entities;
 
     // internal reactive states
     static get properties() {
         return {
             _floorId: { state: true },
-            _lightBundles: { state: true }
+            _lightBundles: { state: true },
+            _structure: { state: true },
+            _states: { state: true }
         };
     }
 
@@ -26,6 +29,8 @@ export class MainCard extends LitElement {
     set hass(hass) {
         this._hass = hass;
         this.setLightBundles();
+        this.setStructure();
+        console.log(this._structure);
     }
 
     // upon first render, initializes the selected floor.
@@ -67,6 +72,79 @@ export class MainCard extends LitElement {
         return ((entity_id.substring(0, 7) === "select.") && (entity_id.includes("theme")))
     }
 
+    getLightIds() {
+        const entities = this._hass.entities;
+        let lightIds = [];
+        Object.keys(entities).forEach((entity_id) => {
+            (this.isLight(entity_id)) && (lightIds.push(entity_id));
+        })
+        return lightIds;
+    }
+
+    getThemeIds() {
+        const entities = this._hass.entities;
+        let themeIds = [];
+        Object.keys(entities).forEach((entity_id) => {
+            (this.isTheme(entity_id)) && (themeIds = entity_id);
+        })
+        return themeIds;
+    }
+
+    // adds the outer dictionary structure (with floor_ids as keys) to this._lightBundles
+    setFloorStructure() {
+        this._structure = {};
+        const floors = this.getFloors();
+        Object.keys(floors).forEach((floor_id) => {
+            this._structure[floor_id] = {};
+        })
+    }
+
+    // determines whether a given area_id corresponds to an area on a floor with a given floor id.
+    isOnFloor(floor_id, area_id) {
+        const areas = this.getAreas();
+        const area = areas[area_id];
+        return (area.floor_id === floor_id);
+    }
+
+    // adds the second dictionary structure (with area_ids as keys) to this._lightBundles
+    setAreaStructure() {
+        const areas = this.getAreas();
+        Object.entries(this._structure).forEach(([floor_id, floorDictionary]) => {
+            Object.keys(areas).forEach((area_id) => {
+                (this.isOnFloor(floor_id, area_id)) && (floorDictionary[area_id] = {});
+            })
+        })
+    }
+
+    getEntityArea(entity_id) {
+        return this._hass.entities[entity_id].area_id;
+    }
+
+    // returns true if the provided entity_id has the given area_id, false otherwise.
+    isInArea(entity_id, area_id) {
+        return (this.getEntityaArea(entity_id) === area_id);
+    }
+
+    setLightIdStructure() {
+        const lightIds = this.getLightIds();
+        Object.values(this._structure).forEach((floorDict) => {
+            Object.entries(floorDict).forEach(([areaId, areaDict]) => {
+                lightIds.forEach((lightId) => {
+                    if (this.isInArea(lightId, areaId)) {
+                        areaDict[lightId] = {};
+                    }
+                })
+            })
+        })
+
+    }
+
+    setStructure() {
+        this.setFloorStructure();
+        this.setAreaStructure();
+        this.setLightIdStructure();
+    }
+
     // returns a dictionary of dictionaries.  The outer dictionary's keys are entity_ids that
     // start with "light."  The inner dictionary has keys that include entity_id, area_id,
     // platform (wich might be "group"), and name
@@ -106,11 +184,13 @@ export class MainCard extends LitElement {
     }
 
     // adds the outer dictionary structure (with floor_ids as keys) to this._lightBundles
-    setFloorStructure() {
+    setFloorStructure2() {
         this._lightBundles = {};
+        this._structure = {};
         const floors = this.getFloors();
         Object.keys(floors).forEach((floor_id) => {
             this._lightBundles[floor_id] = {};
+            this._structure[floor_id] = {};
         })
     }
 
@@ -122,9 +202,14 @@ export class MainCard extends LitElement {
     }
 
     // adds the second dictionary structure (with area_ids as keys) to this._lightBundles
-    setAreaStructure() {
+    setAreaStructure2() {
         const areas = this.getAreas();
         Object.entries(this._lightBundles).forEach(([floor_id, floorDictionary]) => {
+            Object.keys(areas).forEach((area_id) => {
+                (this.isOnFloor(floor_id, area_id)) && (floorDictionary[area_id] = {});
+            })
+        })
+        Object.entries(this._structure).forEach(([floor_id, floorDictionary]) => {
             Object.keys(areas).forEach((area_id) => {
                 (this.isOnFloor(floor_id, area_id)) && (floorDictionary[area_id] = {});
             })
@@ -185,6 +270,11 @@ export class MainCard extends LitElement {
         lightDictionary.theme = themeStates[themeId];
     }
 
+    addThemeId(lightId, lightDictionary) {
+        const themeId = this.getThemeId(lightId);
+        lightDictionary.theme = themeId;
+    }
+
     // finds the group member states associated with a particular light group, and adds them to the
     // light dictionary.
     addMembers(lightDictionary) {
@@ -234,8 +324,8 @@ export class MainCard extends LitElement {
 
     // fully creates the this._lightBundles object.
     setLightBundles() {
-        this.setFloorStructure();
-        this.setAreaStructure();
+        this.setFloorStructure2();
+        this.setAreaStructure2();
         this.bundleLights();
         this.cleanStructure();
     }
