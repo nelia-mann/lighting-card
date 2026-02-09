@@ -10922,7 +10922,7 @@ customElements.define("panel-component", $fdede02cbd34666f$export$40073d408f029a
 class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
     // private properties
     _hass;
-    _entities;
+    _entityIds;
     // internal reactive states
     static get properties() {
         return {
@@ -10947,7 +10947,8 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
         this._hass = hass;
         this.setLightBundles();
         this.setStructure();
-        console.log(this._structure);
+        this.setEntityIds();
+        this.setStates();
     }
     // upon first render, initializes the selected floor.
     firstUpdated() {
@@ -10992,7 +10993,7 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
         const entities = this._hass.entities;
         let themeIds = [];
         Object.keys(entities).forEach((entity_id)=>{
-            this.isTheme(entity_id) && (themeIds = entity_id);
+            this.isTheme(entity_id) && themeIds.push(entity_id);
         });
         return themeIds;
     }
@@ -11026,20 +11027,110 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
     isInArea(entity_id, area_id) {
         return this.getEntityaArea(entity_id) === area_id;
     }
+    // if the provided light entity_id corresponds to valid theme entity_id, returns the theme id.  Otherwise,
+    // returns null,
+    getThemeId(lightId) {
+        const lightIdStub = lightId.substring(6);
+        const themeIds = this.getThemeIds();
+        let foundId = null;
+        themeIds.forEach((themeId)=>{
+            themeId.includes(lightIdStub) && (foundId = themeId);
+        });
+        return foundId;
+    }
+    hasTheme(lightId) {
+        return this.getThemeId(lightId) != null;
+    }
+    setThemeStructure(lightId, lightDictionary) {
+        const themeId = this.getThemeId(lightId);
+        lightDictionary.theme = themeId;
+    }
+    getGroupIds() {
+        const lightIds = this.getLightIds();
+        const groupIds = lightIds.filter((lightId)=>{
+            const entity = this._hass.entities[lightId];
+            return entity.platform === "group";
+        });
+        return groupIds;
+    }
+    getMemberIds(groupId) {
+        const state = this._hass.states[groupId];
+        return state.attributes.entity_id;
+    }
+    getAllMemberIds() {
+        let memberIds = [];
+        const groupIds = this.getGroupIds();
+        groupIds.forEach((groupId)=>{
+            memberIds = [
+                ...memberIds,
+                ...this.getMemberIds(groupId)
+            ];
+        });
+        return memberIds;
+    }
+    isInAGroup(lightId) {
+        const memberIds = this.getAllMemberIds();
+        return memberIds.includes(lightId);
+    }
+    isAGroup(lightId) {
+        const groupIds = this.getGroupIds();
+        return groupIds.includes(lightId);
+    }
+    setGroupStructure(lightId, lightDictionary) {
+        const memberIds = this.getMemberIds(lightId);
+        let members = {};
+        memberIds.forEach((memberId)=>{
+            let memberDictionary = {};
+            this.hasTheme(memberId) && this.setThemeStructure(memberId, memberDictionary);
+            members[memberId] = memberDictionary;
+        });
+        lightDictionary.members = members;
+    }
     setLightIdStructure() {
         const lightIds = this.getLightIds();
         Object.values(this._structure).forEach((floorDict)=>{
             Object.entries(floorDict).forEach(([areaId, areaDict])=>{
                 lightIds.forEach((lightId)=>{
-                    if (this.isInArea(lightId, areaId)) areaDict[lightId] = {};
+                    if (this.isInArea(lightId, areaId) && !this.isInAGroup(lightId)) {
+                        let lightDictionary = {};
+                        this.hasTheme(lightId) && this.setThemeStructure(lightId, lightDictionary);
+                        this.isAGroup(lightId) && this.setGroupStructure(lightId, lightDictionary);
+                        areaDict[lightId] = lightDictionary;
+                    }
                 });
             });
+        });
+    }
+    cleanStructure() {
+        Object.entries(this._structure).forEach(([floor_id, floorDictionary])=>{
+            Object.entries(floorDictionary).forEach(([area_id, areaDictionary])=>{
+                const areaKeys = Object.keys(areaDictionary);
+                if (areaKeys.length === 0) delete floorDictionary[area_id];
+            });
+            const floorKeys = Object.keys(floorDictionary);
+            if (floorKeys.length === 0) delete this._structure[floor_id];
         });
     }
     setStructure() {
         this.setFloorStructure();
         this.setAreaStructure();
         this.setLightIdStructure();
+        this.cleanStructure();
+    }
+    setEntityIds() {
+        const lightIds = this.getLightIds();
+        const themeIds = this.getThemeIds();
+        this._entityIds = [
+            ...lightIds,
+            ...themeIds
+        ];
+    }
+    setStates() {
+        let states = {};
+        this._entityIds.forEach((entityId)=>{
+            states[entityId] = this._hass.states[entityId];
+        });
+        this._states = states;
     }
     // returns a dictionary of dictionaries.  The outer dictionary's keys are entity_ids that
     // start with "light."  The inner dictionary has keys that include entity_id, area_id,
@@ -11195,7 +11286,7 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
         });
     }
     // trawls through the this._lightBundles object and removes any areas or floors that don't have any actual lights.
-    cleanStructure() {
+    cleanStructure2() {
         Object.entries(this._lightBundles).forEach(([floor_id, floorDictionary])=>{
             Object.entries(floorDictionary).forEach(([area_id, areaDictionary])=>{
                 const areaKeys = Object.keys(areaDictionary);
@@ -11210,7 +11301,7 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
         this.setFloorStructure2();
         this.setAreaStructure2();
         this.bundleLights();
-        this.cleanStructure();
+        this.cleanStructure2();
     }
     // returns the bundles associated with the currently selected floor.
     getFloorBundles() {
