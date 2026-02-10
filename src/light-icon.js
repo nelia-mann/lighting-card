@@ -39,6 +39,7 @@ export class LightIcon extends LitElement {
     static styles = styles;
 
     render() {
+        console.log(this._isGroup)
         if (this._lightBundle) {
             return html`
                 <ha-svg-icon .path=${this.lightbulb()} style="${styleMap(this.getStyles())}"></ha-svg-icon>

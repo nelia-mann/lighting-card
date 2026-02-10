@@ -8466,6 +8466,7 @@ class $4356f78c5c3f665b$export$82acdd66a4e4bf90 extends (0, $ab210b2da7b39b9d$ex
     }
     static styles = (0, $c87b1b47755af4d8$export$2e2bcd8739ae039);
     render() {
+        console.log(this._isGroup);
         if (this._lightBundle) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
                 <ha-svg-icon .path=${this.lightbulb()} style="${(0, $19f464fcda7d2482$export$1e5b4ce2fa884e6a)(this.getStyles())}"></ha-svg-icon>
             `;
@@ -10494,11 +10495,14 @@ class $f76fa2dde9e8d076$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$ex
         if (this.isSelected(type) && type != 'onOff') styles['outline-offset'] = '-2px';
         return styles;
     }
+    isGroup() {
+        return !!this._lightState.attributes.entity_id;
+    }
     iconContent(type) {
         let content = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)``;
         switch(type){
             case 'onOff':
-                content = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<light-icon ._lightBundle = ${this._lightBundle}></light-icon>`;
+                content = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<light-icon ._lightBundle = ${this._lightBundle} ._state=${this._lightState} ._isGroup=${this.isGroup()}></light-icon>`;
                 break;
             case 'brightness':
                 content = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<ha-svg-icon .path=${0, $04557c061247a0a6$export$6ace9c955f434b80}></ha-svg-icon>`;
@@ -10528,7 +10532,7 @@ class $f76fa2dde9e8d076$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$ex
         return this._control === type;
     }
     handleLightService(service, key, value) {
-        const entityId = this._lightBundle.state.entity_id;
+        const entityId = this._lightState.entity_id;
         let data = {
             entity_id: entityId
         };
@@ -10546,36 +10550,36 @@ class $f76fa2dde9e8d076$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$ex
     brightnessBar() {
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<slider-bar
             class="outlined"
-            ._light=${this._lightBundle.state}
+            ._light=${this._lightState}
             @change=${(e)=>this.handleLightService('turn_on', 'brightness', e.detail)}
             ._max=${100}
             ._min=${0}
-            ._startValue=${this._lightBundle.state.attributes.brightness * 100 / 255}
+            ._startValue=${this._lightState.attributes.brightness * 100 / 255}
             ._type=${'brightness'}
         ></slider-bar>`;
     }
     ctBar() {
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<slider-bar
             class="outlined"
-            ._light=${this._lightBundle.state}
+            ._light=${this._lightState}
             @change=${(e)=>this.handleLightService('turn_on', 'color_temp_kelvin', e.detail)}
-            ._max=${this._lightBundle.state.attributes.max_color_temp_kelvin}
-            ._min=${this._lightBundle.state.attributes.min_color_temp_kelvin}
-            ._startValue=${this._lightBundle.state.attributes.color_temp_kelvin}
+            ._max=${this._lightState.attributes.max_color_temp_kelvin}
+            ._min=${this._lightState.attributes.min_color_temp_kelvin}
+            ._startValue=${this._lightState.attributes.color_temp_kelvin}
             ._type=${'ct'}
         ></slider-bar>`;
     }
     colorWheel() {
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<color-wheel
             class="outlined"
-            ._light = ${this._lightBundle.state}
+            ._light = ${this._lightState}
             @change = ${(e)=>this.handleLightService('turn_on', 'hs_color', e.detail)}
         ></color-wheel>`;
     }
     themeSelect() {
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<theme-select
             class="outlined"
-            ._theme = ${this._lightBundle.theme}
+            ._theme = ${this._themeState}
             @change = ${this.handleTheme}
         ></theme-select>
         `;
@@ -10608,8 +10612,6 @@ class $f76fa2dde9e8d076$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$ex
         return icons;
     }
     render() {
-        console.log(this._lightState);
-        console.log(this._themeState);
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
             <div class="control-column outlined">
                 ${this.icons()}

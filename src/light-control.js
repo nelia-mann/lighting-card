@@ -90,11 +90,15 @@ export class LightControl extends LitElement {
         return styles;
     }
 
+    isGroup() {
+        return !!(this._lightState.attributes.entity_id)
+    }
+
     iconContent(type) {
         let content = html``;
         switch (type) {
             case 'onOff':
-                content = html`<light-icon ._lightBundle = ${this._lightBundle}></light-icon>`;
+                content = html`<light-icon ._lightBundle = ${this._lightBundle} ._state=${this._lightState} ._isGroup=${this.isGroup()}></light-icon>`;
                 break;
             case 'brightness':
                 content = html`<ha-svg-icon .path=${mdiBrightness6}></ha-svg-icon>`;
@@ -130,7 +134,7 @@ export class LightControl extends LitElement {
     }
 
     handleLightService(service, key, value) {
-        const entityId = this._lightBundle.state.entity_id;
+        const entityId = this._lightState.entity_id;
         let data = { entity_id: entityId }
         if (key) {
             data[key] = value;
@@ -150,11 +154,11 @@ export class LightControl extends LitElement {
     brightnessBar() {
         return html`<slider-bar
             class="outlined"
-            ._light=${this._lightBundle.state}
+            ._light=${this._lightState}
             @change=${(e) => this.handleLightService('turn_on', 'brightness', e.detail)}
             ._max=${100}
             ._min=${0}
-            ._startValue=${this._lightBundle.state.attributes.brightness * 100 / 255}
+            ._startValue=${this._lightState.attributes.brightness * 100 / 255}
             ._type=${'brightness'}
         ></slider-bar>`
     }
@@ -162,11 +166,11 @@ export class LightControl extends LitElement {
     ctBar() {
         return html`<slider-bar
             class="outlined"
-            ._light=${this._lightBundle.state}
+            ._light=${this._lightState}
             @change=${(e) => this.handleLightService('turn_on', 'color_temp_kelvin', e.detail)}
-            ._max=${this._lightBundle.state.attributes.max_color_temp_kelvin}
-            ._min=${this._lightBundle.state.attributes.min_color_temp_kelvin}
-            ._startValue=${this._lightBundle.state.attributes.color_temp_kelvin}
+            ._max=${this._lightState.attributes.max_color_temp_kelvin}
+            ._min=${this._lightState.attributes.min_color_temp_kelvin}
+            ._startValue=${this._lightState.attributes.color_temp_kelvin}
             ._type=${'ct'}
         ></slider-bar>`
     }
@@ -174,7 +178,7 @@ export class LightControl extends LitElement {
     colorWheel() {
         return html`<color-wheel
             class="outlined"
-            ._light = ${this._lightBundle.state}
+            ._light = ${this._lightState}
             @change = ${(e) => this.handleLightService('turn_on', 'hs_color', e.detail)}
         ></color-wheel>`
     }
@@ -182,7 +186,7 @@ export class LightControl extends LitElement {
     themeSelect() {
         return html`<theme-select
             class="outlined"
-            ._theme = ${this._lightBundle.theme}
+            ._theme = ${this._themeState}
             @change = ${this.handleTheme}
         ></theme-select>
         `
@@ -220,8 +224,6 @@ export class LightControl extends LitElement {
     }
 
     render() {
-        console.log(this._lightState);
-        console.log(this._themeState);
         return html`
             <div class="control-column outlined">
                 ${this.icons()}
