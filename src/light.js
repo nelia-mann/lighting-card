@@ -68,7 +68,6 @@ export class LightComponent extends LitElement {
                     title="${name}"
                     ?opened="${this.isModalOpen}"
                     @modal-closed="${this.handleModalClosed}"
-                    ._lightBundle=${this._lightBundle}
                     ._states = ${this._states}
                     ._lightId = ${this._lightId}
                     ._structure = ${this._structure}

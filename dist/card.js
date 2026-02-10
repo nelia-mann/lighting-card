@@ -10629,9 +10629,6 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
             title: {
                 type: String
             },
-            _lightBundle: {
-                state: true
-            },
             _selectedId: {
                 state: true
             },
@@ -10644,10 +10641,10 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
         (0, $65e9333b9a0c9dfd$export$2e2bcd8739ae039),
         (0, $84adf0e0aa3f1db7$export$2e2bcd8739ae039)
     ];
-    getStyles(lightBundle) {
+    getStyles(lightState) {
         let styles = {};
-        if (this.isSelected(lightBundle)) {
-            styles['outline'] = 'solid ' + (0, $f61590692659393c$export$5551a2d24ff40153)(lightBundle.state);
+        if (this.isSelected(lightState)) {
+            styles['outline'] = 'solid ' + (0, $f61590692659393c$export$5551a2d24ff40153)(lightState);
             styles['outline-offset'] = '-4px';
         }
         return styles;
@@ -10658,17 +10655,17 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
         else result = 'small-heading';
         return result;
     }
-    innerLight(lightBundle, lightId, isMember) {
-        if (lightBundle) {
-            const lightState = this._states[lightId];
+    innerLight(lightId, isMember) {
+        const lightState = this._states[lightId];
+        if (lightState) {
             const name = lightState.attributes.friendly_name;
             const isGroup = this.isGroup(lightId);
             return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
                 <div
                     class="light-inner outlined ${this.header(isMember)}"
-                    style=${(0, $19f464fcda7d2482$export$1e5b4ce2fa884e6a)(this.getStyles(lightBundle))}
+                    style=${(0, $19f464fcda7d2482$export$1e5b4ce2fa884e6a)(this.getStyles(lightState))}
                     id=${lightState.entity_id}
-                    @click=${()=>this.select(lightBundle)}
+                    @click=${()=>this.select(lightState)}
                 >
                     <div class="icons">
                         <light-icon ._state=${lightState} ._isGroup=${isGroup}></light-icon>
@@ -10684,14 +10681,12 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
     }
     lights() {
         const memberIds = this._structure.members;
-        const lightBundles = this._lightBundle.members;
         if (memberIds) return Object.keys(memberIds).map((memberId)=>{
-            const lightBundle = lightBundles[memberId];
-            return this.innerLight(lightBundle, memberId, true);
+            return this.innerLight(memberId, true);
         });
     }
     lightControl() {
-        if (this.selectedLight()) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+        if (this.selectedLightState() && this.selectedThemeState()) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
                 <light-control
                     ._lightState = ${this.selectedLightState()}
                     ._themeState = ${this.selectedThemeState()}
@@ -10712,7 +10707,7 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
             </div>
             <div class="content-row">
                 <div class="select-lights">
-                    ${this.innerLight(this._lightBundle, this._lightId, false)}
+                    ${this.innerLight(this._lightId, false)}
                     ${this.lights()}
                 </div>
                 ${this.lightControl()}
@@ -10722,21 +10717,21 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
     }
     possibleIds() {
         let ids = [
-            this._lightBundle.state.entity_id
+            this._lightId
         ];
-        if (this._lightBundle.members) Object.values(this._lightBundle.members).forEach((memberBundle)=>{
-            ids.push(memberBundle.state.entity_id);
+        if (this._structure.members) Object.keys(this._structure.members).forEach((memberId)=>{
+            ids.push(memberId);
         });
         return ids;
     }
     defaultSelect() {
-        if (!this.possibleIds().includes(this._selectedId)) this._selectedId = this._lightBundle.state.entity_id;
+        if (!this.possibleIds().includes(this._selectedId)) this._selectedId = this._lightId;
     }
-    select(lightBundle) {
-        this._selectedId = lightBundle.state.entity_id;
+    select(lightState) {
+        this._selectedId = lightState.entity_id;
     }
-    isSelected(lightBundle) {
-        return this._selectedId === lightBundle.state.entity_id;
+    isSelected(lightState) {
+        return this._selectedId === lightState.entity_id;
     }
     selectedLightState() {
         return this._states[this._selectedId];
@@ -10746,16 +10741,6 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
         if (this._selectedId === this._lightId) themeId = this._structure.theme;
         else themeId = this._structure.members[this._selectedId].theme;
         if (themeId) return this._states[themeId];
-    }
-    selectedLight() {
-        if (this._selectedId === this._lightBundle.state.entity_id) return this._lightBundle;
-        else if (this._lightBundle.members) {
-            let result;
-            Object.values(this._lightBundle.members).forEach((lightBundle)=>{
-                if (this._selectedId === lightBundle.state.entity_id) result = lightBundle;
-            });
-            return result;
-        }
     }
     // Lifecycle method to open/close the native dialog
     updated(changedProperties) {
@@ -10867,7 +10852,6 @@ class $046ae152b1d9e254$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
                     title="${name}"
                     ?opened="${this.isModalOpen}"
                     @modal-closed="${this.handleModalClosed}"
-                    ._lightBundle=${this._lightBundle}
                     ._states = ${this._states}
                     ._lightId = ${this._lightId}
                     ._structure = ${this._structure}
@@ -11020,13 +11004,21 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
     set hass(hass) {
         this._hass = hass;
         this.setLightBundles();
+        if (!this._initialized) {
+            this.setAreas();
+            this.setStructure();
+            this.initializeFloor();
+            this.setEntityIds();
+            this._initialized = true;
+        }
+        this.setAreas();
         this.setStructure();
         this.setEntityIds();
         this.setStates();
     }
     // upon first render, initializes the selected floor.
     firstUpdated() {
-        this.initializeFloor();
+    // this.initializeFloor();
     }
     // returns a dictionary of dictionaries.  The outer dictionary's keys are the floor_ids.
     // the inner dictionary has floor_id and name keys.
@@ -11039,10 +11031,15 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
         const floorIds = Object.keys(floors);
         this._floorId = floorIds[0];
     }
+    setAreas() {
+        this._areas = this._hass.areas;
+    }
     // returns a dictionary of dictionaries.  The outer dictionary's keys are the area_ids.
     // the inner dictionary has area_id, name, and floor_id keys.
     getAreas() {
-        return this._hass.areas;
+        let areas;
+        this._areas ? areas = this._areas : areas = this._hass.areas;
+        return areas;
     }
     // returns true if the entity_id corresponds to a light object and no label conradicts this.
     isLight(entity_id) {
@@ -11094,12 +11091,71 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
             });
         });
     }
-    getEntityArea(entity_id) {
-        return this._hass.entities[entity_id].area_id;
+    getEntityArea(entityId) {
+        return this._hass.entities[entityId].area_id;
     }
     // returns true if the provided entity_id has the given area_id, false otherwise.
-    isInArea(entity_id, area_id) {
-        return this.getEntityaArea(entity_id) === area_id;
+    isInArea(entityId, areaId) {
+        return this.getEntityaArea(entityId) === areaId;
+    }
+    // if the provided light entity_id corresponds to valid theme entity_id, returns the theme id.  Otherwise,
+    // returns null,
+    getThemeId(lightId) {
+        const lightIdStub = lightId.substring(6);
+        const themeIds = this.getThemeIds();
+        let foundId = null;
+        themeIds.forEach((themeId)=>{
+            themeId.includes(lightIdStub) && (foundId = themeId);
+        });
+        return foundId;
+    }
+    hasTheme(lightId) {
+        return this.getThemeId(lightId) != null;
+    }
+    setThemeStructure(lightId, lightDictionary) {
+        const themeId = this.getThemeId(lightId);
+        lightDictionary.theme = themeId;
+    }
+    getGroupIds() {
+        const lightIds = this.getLightIds();
+        const groupIds = lightIds.filter((lightId)=>{
+            const entity = this._hass.entities[lightId];
+            return entity.platform === "group";
+        });
+        return groupIds;
+    }
+    getMemberIds(groupId) {
+        const state = this._hass.states[groupId];
+        return state.attributes.entity_id;
+    }
+    getAllMemberIds() {
+        let memberIds = [];
+        const groupIds = this.getGroupIds();
+        groupIds.forEach((groupId)=>{
+            memberIds = [
+                ...memberIds,
+                ...this.getMemberIds(groupId)
+            ];
+        });
+        return memberIds;
+    }
+    isInAGroup(lightId) {
+        const memberIds = this.getAllMemberIds();
+        return memberIds.includes(lightId);
+    }
+    isAGroup(lightId) {
+        const groupIds = this.getGroupIds();
+        return groupIds.includes(lightId);
+    }
+    setGroupStructure(lightId, lightDictionary) {
+        const memberIds = this.getMemberIds(lightId);
+        let members = {};
+        memberIds.forEach((memberId)=>{
+            let memberDictionary = {};
+            this.hasTheme(memberId) && this.setThemeStructure(memberId, memberDictionary);
+            members[memberId] = memberDictionary;
+        });
+        lightDictionary.members = members;
     }
     // if the provided light entity_id corresponds to valid theme entity_id, returns the theme id.  Otherwise,
     // returns null,
@@ -11229,6 +11285,20 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
         });
         return states;
     }
+    setEntityIds() {
+        const lightIds = this.getLightIds();
+        const themeIds = this.getThemeIds();
+        this._entityIds = [
+            ...lightIds,
+            ...themeIds
+        ];
+    }
+    setStates() {
+        this._states = {};
+        this._entityIds.forEach((entityId)=>{
+            this._states[entityId] = this._hass.states[entityId];
+        });
+    }
     // returns a dictionary of dictionaries.  The outer dictionary's keys are entity_ids that
     // start with "light."  The inner dictionary has keys that include entity_id, area_id,
     // platform (wich might be "group"), and name
@@ -11328,7 +11398,7 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
     }
     // if the provided light entity_id corresponds to valid theme entity_id, returns the theme id.  Otherwise,
     // returns null,
-    getThemeId(entity_id) {
+    getThemeId2(entity_id) {
         const themeStates = this.getThemeStates();
         const lightId = entity_id.substring(6);
         const themeIds = Object.keys(themeStates);
@@ -11342,11 +11412,11 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
     addTheme(lightDictionary) {
         const themeStates = this.getThemeStates();
         const lightId = lightDictionary.state.entity_id;
-        const themeId = this.getThemeId(lightId);
+        const themeId = this.getThemeId2(lightId);
         lightDictionary.theme = themeStates[themeId];
     }
     addThemeId(lightId, lightDictionary) {
-        const themeId = this.getThemeId(lightId);
+        const themeId = this.getThemeId2(lightId);
         lightDictionary.theme = themeId;
     }
     // finds the group member states associated with a particular light group, and adds them to the
@@ -11359,7 +11429,7 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
             const memberDictionary = {
                 state: lightStates[memberId]
             };
-            this.getThemeId(memberId) && this.addTheme(memberDictionary);
+            this.getThemeId2(memberId) && this.addTheme(memberDictionary);
             lightDictionary.members[memberId] = memberDictionary;
         });
     }

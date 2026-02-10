@@ -29,6 +29,14 @@ export class MainCard extends LitElement {
     set hass(hass) {
         this._hass = hass;
         this.setLightBundles();
+        if (!this._initialized) {
+            this.setAreas();
+            this.setStructure();
+            this.initializeFloor();
+            this.setEntityIds();
+            this._initialized = true;
+        }
+        this.setAreas();
         this.setStructure();
         this.setEntityIds();
         this.setStates();
@@ -36,7 +44,7 @@ export class MainCard extends LitElement {
 
     // upon first render, initializes the selected floor.
     firstUpdated() {
-        this.initializeFloor();
+        // this.initializeFloor();
     }
 
     // returns a dictionary of dictionaries.  The outer dictionary's keys are the floor_ids.
@@ -52,10 +60,16 @@ export class MainCard extends LitElement {
         this._floorId = floorIds[0];
     }
 
+    setAreas() {
+        this._areas = this._hass.areas;
+    }
+
     // returns a dictionary of dictionaries.  The outer dictionary's keys are the area_ids.
     // the inner dictionary has area_id, name, and floor_id keys.
     getAreas() {
-        return this._hass.areas;
+        let areas;
+        (this._areas) ? (areas = this._areas) : (areas = this._hass.areas);
+        return areas;
     }
 
     // returns true if the entity_id corresponds to a light object and no label conradicts this.
@@ -117,13 +131,78 @@ export class MainCard extends LitElement {
         })
     }
 
-    getEntityArea(entity_id) {
-        return this._hass.entities[entity_id].area_id;
+    getEntityArea(entityId) {
+        return this._hass.entities[entityId].area_id;
     }
 
     // returns true if the provided entity_id has the given area_id, false otherwise.
-    isInArea(entity_id, area_id) {
-        return (this.getEntityaArea(entity_id) === area_id);
+    isInArea(entityId, areaId) {
+        return (this.getEntityaArea(entityId) === areaId);
+    }
+
+    // if the provided light entity_id corresponds to valid theme entity_id, returns the theme id.  Otherwise,
+    // returns null,
+    getThemeId(lightId) {
+        const lightIdStub = lightId.substring(6);
+        const themeIds = this.getThemeIds();
+        let foundId = null;
+        themeIds.forEach((themeId) => {
+            (themeId.includes(lightIdStub)) && (foundId = themeId);
+        })
+        return foundId;
+    }
+
+    hasTheme(lightId) {
+        return (this.getThemeId(lightId) != null);
+    }
+
+    setThemeStructure(lightId, lightDictionary) {
+        const themeId = this.getThemeId(lightId);
+        lightDictionary.theme = themeId;
+    }
+
+    getGroupIds() {
+        const lightIds = this.getLightIds();
+        const groupIds = lightIds.filter((lightId) => {
+            const entity = this._hass.entities[lightId];
+            return (entity.platform === "group")
+        })
+        return groupIds
+    }
+
+    getMemberIds(groupId) {
+        const state = this._hass.states[groupId];
+        return state.attributes.entity_id;
+    }
+
+    getAllMemberIds() {
+        let memberIds = [];
+        const groupIds = this.getGroupIds();
+        groupIds.forEach((groupId) => {
+            memberIds = [...memberIds, ...this.getMemberIds(groupId)]
+        });
+        return memberIds;
+    }
+
+    isInAGroup(lightId) {
+        const memberIds = this.getAllMemberIds();
+        return memberIds.includes(lightId);
+    }
+
+    isAGroup(lightId) {
+        const groupIds = this.getGroupIds();
+        return groupIds.includes(lightId);
+    }
+
+    setGroupStructure(lightId, lightDictionary) {
+        const memberIds = this.getMemberIds(lightId);
+        let members = {};
+        memberIds.forEach((memberId) => {
+            let memberDictionary = {};
+            (this.hasTheme(memberId)) && (this.setThemeStructure(memberId, memberDictionary));
+            members[memberId] = memberDictionary;
+        })
+        lightDictionary.members = members;
     }
 
     // if the provided light entity_id corresponds to valid theme entity_id, returns the theme id.  Otherwise,
@@ -270,6 +349,19 @@ export class MainCard extends LitElement {
         return states;
     }
 
+    setEntityIds() {
+        const lightIds = this.getLightIds();
+        const themeIds = this.getThemeIds();
+        this._entityIds = [...lightIds, ...themeIds];
+    }
+
+    setStates() {
+        this._states = {};
+        this._entityIds.forEach((entityId) => {
+            this._states[entityId] = this._hass.states[entityId];
+        })
+    }
+
     // returns a dictionary of dictionaries.  The outer dictionary's keys are entity_ids that
     // start with "light."  The inner dictionary has keys that include entity_id, area_id,
     // platform (wich might be "group"), and name
@@ -376,7 +468,7 @@ export class MainCard extends LitElement {
 
     // if the provided light entity_id corresponds to valid theme entity_id, returns the theme id.  Otherwise,
     // returns null,
-    getThemeId(entity_id) {
+    getThemeId2(entity_id) {
         const themeStates = this.getThemeStates();
         const lightId = entity_id.substring(6);
         const themeIds = Object.keys(themeStates);
@@ -391,12 +483,12 @@ export class MainCard extends LitElement {
     addTheme(lightDictionary) {
         const themeStates = this.getThemeStates();
         const lightId = lightDictionary.state.entity_id;
-        const themeId = this.getThemeId(lightId);
+        const themeId = this.getThemeId2(lightId);
         lightDictionary.theme = themeStates[themeId];
     }
 
     addThemeId(lightId, lightDictionary) {
-        const themeId = this.getThemeId(lightId);
+        const themeId = this.getThemeId2(lightId);
         lightDictionary.theme = themeId;
     }
 
@@ -408,7 +500,7 @@ export class MainCard extends LitElement {
         lightDictionary.members = {};
         memberIds.forEach((memberId) => {
             const memberDictionary = { state: lightStates[memberId] };
-            (this.getThemeId(memberId)) && (this.addTheme(memberDictionary));
+            (this.getThemeId2(memberId)) && (this.addTheme(memberDictionary));
             lightDictionary.members[memberId] = memberDictionary;
         })
     }
