@@ -10416,9 +10416,6 @@ class $f76fa2dde9e8d076$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$ex
     _MAXTEMP = 9000;
     static get properties() {
         return {
-            _lightBundle: {
-                state: true
-            },
             _lightState: {
                 state: true
             },
@@ -10452,18 +10449,18 @@ class $f76fa2dde9e8d076$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$ex
                 valid = true;
                 break;
             case 'theme':
-                valid = !!this._lightBundle.theme;
+                valid = !!this._themeState;
                 break;
             case 'hs':
-                attribute = this._lightBundle.state.attributes['hs_color'];
+                attribute = this._lightState.attributes['hs_color'];
                 valid = !(attribute === undefined);
                 break;
             case 'ct':
-                attribute = this._lightBundle.state.attributes['color_temp_kelvin'];
+                attribute = this._lightState.attributes['color_temp_kelvin'];
                 valid = !(attribute === undefined);
                 break;
             default:
-                attribute = this._lightBundle.state.attributes[type];
+                attribute = this._lightState.attributes[type];
                 valid = !(attribute === undefined);
         }
         return valid;
@@ -10536,7 +10533,7 @@ class $f76fa2dde9e8d076$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$ex
         this.callService('light', service, data);
     }
     handleTheme(event) {
-        const entityId = this._lightBundle.theme.entity_id;
+        const entityId = this._themeState.entity_id;
         const data = {
             entity_id: entityId,
             option: event.detail
@@ -10593,7 +10590,7 @@ class $f76fa2dde9e8d076$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$ex
                 panel = this.colorWheel();
                 break;
             case 'theme':
-                this._lightBundle.theme && (panel = this.themeSelect());
+                this._themeState && (panel = this.themeSelect());
                 break;
             default:
                 panel = '';
@@ -10696,7 +10693,6 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
     lightControl() {
         if (this.selectedLight()) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
                 <light-control
-                    ._lightBundle = ${this.selectedLight()}
                     ._lightState = ${this.selectedLightState()}
                     ._themeState = ${this.selectedThemeState()}
                     .callService=${this.callService}

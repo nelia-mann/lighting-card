@@ -17,7 +17,6 @@ export class LightControl extends LitElement {
 
     static get properties() {
         return {
-            _lightBundle: { state: true },
             _lightState: { state: true },
             _themeState: { state: true },
             _control: { state: true }
@@ -47,18 +46,18 @@ export class LightControl extends LitElement {
                 valid = true;
                 break;
             case 'theme':
-                valid = !!(this._lightBundle.theme);
+                valid = !!(this._themeState);
                 break;
             case 'hs':
-                attribute = this._lightBundle.state.attributes['hs_color'];
+                attribute = this._lightState.attributes['hs_color'];
                 valid = !(attribute === undefined);
                 break;
             case 'ct':
-                attribute = this._lightBundle.state.attributes['color_temp_kelvin'];
+                attribute = this._lightState.attributes['color_temp_kelvin'];
                 valid = !(attribute === undefined);
                 break;
             default:
-                attribute = this._lightBundle.state.attributes[type];
+                attribute = this._lightState.attributes[type];
                 valid = !(attribute === undefined);
         }
         return valid;
@@ -143,7 +142,7 @@ export class LightControl extends LitElement {
     }
 
     handleTheme(event) {
-        const entityId = this._lightBundle.theme.entity_id;
+        const entityId = this._themeState.entity_id;
         const data = {
             entity_id: entityId,
             option: event.detail
@@ -205,7 +204,7 @@ export class LightControl extends LitElement {
                 panel = this.colorWheel();
                 break;
             case 'theme':
-                (this._lightBundle.theme) && (panel = this.themeSelect());
+                (this._themeState) && (panel = this.themeSelect());
                 break;
             default:
                 panel = '';
