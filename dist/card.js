@@ -10872,9 +10872,13 @@ customElements.define("light-component", $046ae152b1d9e254$export$5e33b198135dff
 
 class $fdede02cbd34666f$export$40073d408f029a0b extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
     _areas;
+    _structure;
     static get properties() {
         return {
             _lightBundles: {
+                state: true
+            },
+            _states: {
                 state: true
             }
         };
@@ -10923,6 +10927,7 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
     // private properties
     _hass;
     _entityIds;
+    _structure;
     // internal reactive states
     static get properties() {
         return {
@@ -10930,9 +10935,6 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
                 state: true
             },
             _lightBundles: {
-                state: true
-            },
-            _structure: {
                 state: true
             },
             _states: {
@@ -11131,6 +11133,29 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
             states[entityId] = this._hass.states[entityId];
         });
         this._states = states;
+    }
+    getFloorEntityIds() {
+        const floorStructure = this._structure[this._floorId];
+        let entityIds = [];
+        Object.values(floorStructure).forEach((areaStructure)=>{
+            Object.entries(areaStructure).forEach(([lightId, lightStructure])=>{
+                entityIds.push(lightId);
+                lightStructure.theme && entityIds.push(lightStructure.theme);
+                if (lightStructure.members) Object.entries(lightStructure.members).forEach(([memberId, memberStructure])=>{
+                    entityIds.push(memberId);
+                    memberStructure.theme && entityIds.push(memberStructure.theme);
+                });
+            });
+        });
+        return entityIds;
+    }
+    getFloorStates() {
+        const entityIds = this.getFloorEntityIds();
+        let states = {};
+        entityIds.forEach((entityId)=>{
+            states[entityId] = this._states[entityId];
+        });
+        return states;
     }
     // returns a dictionary of dictionaries.  The outer dictionary's keys are entity_ids that
     // start with "light."  The inner dictionary has keys that include entity_id, area_id,
@@ -11393,6 +11418,8 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
         if (this.getFloorBundles() && this.getAreas()) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
                 <panel-component
                     ._lightBundles = ${this.getFloorBundles()}
+                    ._structure = ${this._structure[this._floorId]}
+                    ._states = ${this.getFloorStates()}
                     ._areas = ${this.getAreas()}
                     .callService=${this._hass.callService}
                 ></panel-component>

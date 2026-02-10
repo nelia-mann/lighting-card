@@ -10,13 +10,13 @@ export class MainCard extends LitElement {
     // private properties
     _hass;
     _entityIds;
+    _structure;
 
     // internal reactive states
     static get properties() {
         return {
             _floorId: { state: true },
             _lightBundles: { state: true },
-            _structure: { state: true },
             _states: { state: true }
         };
     }
@@ -241,6 +241,33 @@ export class MainCard extends LitElement {
             states[entityId] = this._hass.states[entityId];
         })
         this._states = states;
+    }
+
+    getFloorEntityIds() {
+        const floorStructure = this._structure[this._floorId];
+        let entityIds = [];
+        Object.values(floorStructure).forEach((areaStructure) => {
+            Object.entries(areaStructure).forEach(([lightId, lightStructure]) => {
+                entityIds.push(lightId);
+                (lightStructure.theme) && (entityIds.push(lightStructure.theme))
+                if (lightStructure.members) {
+                    Object.entries(lightStructure.members).forEach(([memberId, memberStructure]) => {
+                        entityIds.push(memberId);
+                        (memberStructure.theme) && (entityIds.push(memberStructure.theme))
+                    })
+                }
+            })
+        })
+        return entityIds;
+    }
+
+    getFloorStates() {
+        const entityIds = this.getFloorEntityIds();
+        let states = {};
+        entityIds.forEach((entityId) => {
+            states[entityId] = this._states[entityId]
+        })
+        return states;
     }
 
     // returns a dictionary of dictionaries.  The outer dictionary's keys are entity_ids that
@@ -525,6 +552,8 @@ export class MainCard extends LitElement {
             return html`
                 <panel-component
                     ._lightBundles = ${this.getFloorBundles()}
+                    ._structure = ${this._structure[this._floorId]}
+                    ._states = ${this.getFloorStates()}
                     ._areas = ${this.getAreas()}
                     .callService=${this._hass.callService}
                 ></panel-component>

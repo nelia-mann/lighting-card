@@ -6,10 +6,12 @@ import './light.js';
 export class PanelComponent extends LitElement {
 
     _areas;
+    _structure;
 
     static get properties() {
         return {
-            _lightBundles: { state: true }
+            _lightBundles: { state: true },
+            _states: { state: true }
         }
     }
 
