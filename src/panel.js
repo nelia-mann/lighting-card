@@ -25,11 +25,12 @@ export class PanelComponent extends LitElement {
         return this._lightBundles[areaId];
     }
 
-    getLightDisplay(lightBundle, lightStructure, lightStates) {
+    getLightDisplay(lightBundle, lightId, lightStructure, lightStates) {
         return html`
             <light-component
                 class="outlined"
                 ._lightBundle = ${lightBundle}
+                ._lightId = ${lightId}
                 ._structure = ${lightStructure}
                 ._states = ${lightStates}
                 .callService=${this.callService}
@@ -65,7 +66,7 @@ export class PanelComponent extends LitElement {
         const areaComponents = Object.keys(areaStructure).map((lightId) => {
             const lightStructure = areaStructure[lightId];
             const lightStates = this.getStates(lightId, lightStructure)
-            return this.getLightDisplay(areaBundles[lightId], lightStructure, lightStates)
+            return this.getLightDisplay(areaBundles[lightId], lightId, lightStructure, lightStates)
         })
         return html`
             <div class="area">

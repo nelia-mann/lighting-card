@@ -9,6 +9,7 @@ export class LightComponent extends LitElement {
     _holding = false;
     _HOLD_DURATION = 500;
     _structure;
+    _lightId;
 
     static get properties() {
         return {
@@ -28,17 +29,23 @@ export class LightComponent extends LitElement {
     icons() {
         let result;
         const lightBundles = this._lightBundle.members;
-        if (lightBundles) {
-            result = Object.values(lightBundles).map((lightBundle) => {
+        const memberIds = this._structure.members;
+        let lightBundle;
+        let lightState;
+        if (memberIds) {
+            result = Object.keys(memberIds).map((memberId) => {
+                lightBundle = lightBundles[memberId];
+                lightState = this._states[memberId];
                 return html`
-                    <light-icon ._lightBundle=${lightBundle}></light-icon>
+                    <light-icon ._lightBundle=${lightBundle} ._lightState=${lightState} ._isGroup=${false}></light-icon>
                 `
             })
-        }
-        else {
+        } else {
+            lightBundle = this._lightBundle;
+            lightState = this._states[this._lightId];
             result = html`
-                <light-icon ._lightBundle=${this._lightBundle}></light-icon>
-            `
+                    <light-icon ._lightBundle=${lightBundle} ._lightState=${lightState} ._isGroup=${false}></light-icon>
+                `
         }
         return result;
     }
@@ -62,6 +69,8 @@ export class LightComponent extends LitElement {
                     ?opened="${this.isModalOpen}"
                     @modal-closed="${this.handleModalClosed}"
                     ._lightBundle=${this._lightBundle}
+                    ._states = ${this._states}
+                    ._structure = ${this._structure}
                     .callService="${this.callService}"
                 ></popout-window>
             `
@@ -69,8 +78,6 @@ export class LightComponent extends LitElement {
     }
 
     render() {
-        console.log(this._states);
-        console.log(this._structure);
         const name = this._lightBundle.state.attributes.friendly_name;
         return html`
             <div class="light-element sub-info" @pointerup=${this.onUp} @pointerdown=${this.onDown}>

@@ -6,9 +6,12 @@ import { getColor, isOn }  from './light-util.js';
 
 export class LightIcon extends LitElement {
 
+    _isGroup;
+
     static get properties() {
         return {
-            _lightBundle: { state: true }
+            _lightBundle: { state: true },
+            _lightState: { state: true }
         }
     }
 

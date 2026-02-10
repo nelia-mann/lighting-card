@@ -8438,9 +8438,13 @@ function $f61590692659393c$export$5551a2d24ff40153(lightBundle) {
 
 
 class $4356f78c5c3f665b$export$82acdd66a4e4bf90 extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
+    _isGroup;
     static get properties() {
         return {
             _lightBundle: {
+                state: true
+            },
+            _lightState: {
                 state: true
             }
         };
@@ -10778,6 +10782,7 @@ class $046ae152b1d9e254$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
     _holding = false;
     _HOLD_DURATION = 500;
     _structure;
+    _lightId;
     static get properties() {
         return {
             _lightBundle: {
@@ -10802,14 +10807,23 @@ class $046ae152b1d9e254$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
     icons() {
         let result;
         const lightBundles = this._lightBundle.members;
-        if (lightBundles) result = Object.values(lightBundles).map((lightBundle)=>{
+        const memberIds = this._structure.members;
+        let lightBundle;
+        let lightState;
+        if (memberIds) result = Object.keys(memberIds).map((memberId)=>{
+            lightBundle = lightBundles[memberId];
+            lightState = this._states[memberId];
             return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-                    <light-icon ._lightBundle=${lightBundle}></light-icon>
+                    <light-icon ._lightBundle=${lightBundle} ._lightState=${lightState} ._isGroup=${false}></light-icon>
                 `;
         });
-        else result = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-                <light-icon ._lightBundle=${this._lightBundle}></light-icon>
-            `;
+        else {
+            lightBundle = this._lightBundle;
+            lightState = this._states[this._lightId];
+            result = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+                    <light-icon ._lightBundle=${lightBundle} ._lightState=${lightState} ._isGroup=${false}></light-icon>
+                `;
+        }
         return result;
     }
     hasOptions() {
@@ -10830,14 +10844,14 @@ class $046ae152b1d9e254$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
                     ?opened="${this.isModalOpen}"
                     @modal-closed="${this.handleModalClosed}"
                     ._lightBundle=${this._lightBundle}
+                    ._states = ${this._states}
+                    ._structure = ${this._structure}
                     .callService="${this.callService}"
                 ></popout-window>
             `;
         }
     }
     render() {
-        console.log(this._states);
-        console.log(this._structure);
         const name = this._lightBundle.state.attributes.friendly_name;
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
             <div class="light-element sub-info" @pointerup=${this.onUp} @pointerdown=${this.onDown}>
@@ -10899,11 +10913,12 @@ class $fdede02cbd34666f$export$40073d408f029a0b extends (0, $ab210b2da7b39b9d$ex
     getAreaBundles(areaId) {
         return this._lightBundles[areaId];
     }
-    getLightDisplay(lightBundle, lightStructure, lightStates) {
+    getLightDisplay(lightBundle, lightId, lightStructure, lightStates) {
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
             <light-component
                 class="outlined"
                 ._lightBundle = ${lightBundle}
+                ._lightId = ${lightId}
                 ._structure = ${lightStructure}
                 ._states = ${lightStates}
                 .callService=${this.callService}
@@ -10936,7 +10951,7 @@ class $fdede02cbd34666f$export$40073d408f029a0b extends (0, $ab210b2da7b39b9d$ex
         const areaComponents = Object.keys(areaStructure).map((lightId)=>{
             const lightStructure = areaStructure[lightId];
             const lightStates = this.getStates(lightId, lightStructure);
-            return this.getLightDisplay(areaBundles[lightId], lightStructure, lightStates);
+            return this.getLightDisplay(areaBundles[lightId], lightId, lightStructure, lightStates);
         });
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
             <div class="area">
