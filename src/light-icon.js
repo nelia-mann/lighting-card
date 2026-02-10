@@ -10,23 +10,22 @@ export class LightIcon extends LitElement {
 
     static get properties() {
         return {
-            _lightBundle: { state: true },
             _state: { state: true }
         }
     }
 
     lightbulb() {
         let lightbulb;
-        if (this._lightBundle.members) {
-            (isOn(this._lightBundle)) ? (lightbulb = mdiLightbulbGroup) : (lightbulb = mdiLightbulbGroupOff);
+        if (this._isGroup) {
+            (isOn(this._state)) ? (lightbulb = mdiLightbulbGroup) : (lightbulb = mdiLightbulbGroupOff);
         } else {
-            (isOn(this._lightBundle)) ? (lightbulb = mdiLightbulb) : (lightbulb = mdiLightbulbOff);
+            (isOn(this._state)) ? (lightbulb = mdiLightbulb) : (lightbulb = mdiLightbulbOff);
         }
         return lightbulb;
     }
 
     getColor() {
-        return getColor(this._lightBundle)
+        return getColor(this._state)
     }
 
     getStyles() {
@@ -39,8 +38,7 @@ export class LightIcon extends LitElement {
     static styles = styles;
 
     render() {
-        console.log(this._isGroup)
-        if (this._lightBundle) {
+        if (this._state) {
             return html`
                 <ha-svg-icon .path=${this.lightbulb()} style="${styleMap(this.getStyles())}"></ha-svg-icon>
             `

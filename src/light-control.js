@@ -98,7 +98,7 @@ export class LightControl extends LitElement {
         let content = html``;
         switch (type) {
             case 'onOff':
-                content = html`<light-icon ._lightBundle = ${this._lightBundle} ._state=${this._lightState} ._isGroup=${this.isGroup()}></light-icon>`;
+                content = html`<light-icon ._state=${this._lightState} ._isGroup=${this.isGroup()}></light-icon>`;
                 break;
             case 'brightness':
                 content = html`<ha-svg-icon .path=${mdiBrightness6}></ha-svg-icon>`;

@@ -1,28 +1,28 @@
 import { interpolateRGB, rgba, OFFLIGHT, ONLIGHT, HALFLIGHT } from './color-util.js';
 
-function isOn(lightBundle) {
-    return (lightBundle.state.state === "on");
+function isOn(lightState) {
+    return (lightState.state === "on");
 }
 
-function getRGB(lightBundle) {
-    return (lightBundle.state.attributes.rgb_color);
+function getRGB(lightState) {
+    return (lightState.attributes.rgb_color);
 }
 
-function getBrightness(lightBundle) {
+function getBrightness(lightState) {
     let brightness = 1;
-    if (lightBundle.state.attributes.brightness) {
-        brightness = lightBundle.state.attributes.brightness / 255;
+    if (lightState.attributes.brightness) {
+        brightness = lightState.attributes.brightness / 255;
     }
     return brightness;
 }
 
-function getColor(lightBundle) {
+function getColor(lightState) {
     let rgb = OFFLIGHT;
-    if (isOn(lightBundle)) {
-        if (getRGB(lightBundle)) {
-            rgb = interpolateRGB(HALFLIGHT, getRGB(lightBundle), getBrightness(lightBundle));
+    if (isOn(lightState)) {
+        if (getRGB(lightState)) {
+            rgb = interpolateRGB(HALFLIGHT, getRGB(lightState), getBrightness(lightState));
         } else {
-            rgb = interpolateRGB(HALFLIGHT, ONLIGHT, getBrightness(lightBundle));
+            rgb = interpolateRGB(HALFLIGHT, ONLIGHT, getBrightness(lightState));
         }
     }
     return rgba(rgb, 1)

@@ -26,7 +26,7 @@ export class PopoutWindow extends LitElement {
     getStyles(lightBundle) {
         let styles = {};
         if (this.isSelected(lightBundle)) {
-            styles['outline'] = 'solid ' + getColor(lightBundle);
+            styles['outline'] = 'solid ' + getColor(lightBundle.state);
             styles['outline-offset'] = '-4px'
         }
         return styles;
@@ -55,7 +55,7 @@ export class PopoutWindow extends LitElement {
                     @click=${() => this.select(lightBundle)}
                 >
                     <div class="icons">
-                        <light-icon ._lightBundle=${lightBundle} ._lightState=${lightState} ._isGroup=${isGroup}></light-icon>
+                        <light-icon ._state=${lightState} ._isGroup=${isGroup}></light-icon>
                     </div>
                     ${name}
                 </div>

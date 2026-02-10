@@ -8416,22 +8416,22 @@ function $d66841a16b153167$export$dd0fba3206c57e56(rgbA, rgbB, t) {
 }
 
 
-function $f61590692659393c$export$1a2d97de39ecbb75(lightBundle) {
-    return lightBundle.state.state === "on";
+function $f61590692659393c$export$1a2d97de39ecbb75(lightState) {
+    return lightState.state === "on";
 }
-function $f61590692659393c$var$getRGB(lightBundle) {
-    return lightBundle.state.attributes.rgb_color;
+function $f61590692659393c$var$getRGB(lightState) {
+    return lightState.attributes.rgb_color;
 }
-function $f61590692659393c$var$getBrightness(lightBundle) {
+function $f61590692659393c$var$getBrightness(lightState) {
     let brightness = 1;
-    if (lightBundle.state.attributes.brightness) brightness = lightBundle.state.attributes.brightness / 255;
+    if (lightState.attributes.brightness) brightness = lightState.attributes.brightness / 255;
     return brightness;
 }
-function $f61590692659393c$export$5551a2d24ff40153(lightBundle) {
+function $f61590692659393c$export$5551a2d24ff40153(lightState) {
     let rgb = (0, $d66841a16b153167$export$f353bac13bc8bab2);
-    if ($f61590692659393c$export$1a2d97de39ecbb75(lightBundle)) {
-        if ($f61590692659393c$var$getRGB(lightBundle)) rgb = (0, $d66841a16b153167$export$dd0fba3206c57e56)((0, $d66841a16b153167$export$e59310e5bf013385), $f61590692659393c$var$getRGB(lightBundle), $f61590692659393c$var$getBrightness(lightBundle));
-        else rgb = (0, $d66841a16b153167$export$dd0fba3206c57e56)((0, $d66841a16b153167$export$e59310e5bf013385), (0, $d66841a16b153167$export$a004fc522c1a4845), $f61590692659393c$var$getBrightness(lightBundle));
+    if ($f61590692659393c$export$1a2d97de39ecbb75(lightState)) {
+        if ($f61590692659393c$var$getRGB(lightState)) rgb = (0, $d66841a16b153167$export$dd0fba3206c57e56)((0, $d66841a16b153167$export$e59310e5bf013385), $f61590692659393c$var$getRGB(lightState), $f61590692659393c$var$getBrightness(lightState));
+        else rgb = (0, $d66841a16b153167$export$dd0fba3206c57e56)((0, $d66841a16b153167$export$e59310e5bf013385), (0, $d66841a16b153167$export$a004fc522c1a4845), $f61590692659393c$var$getBrightness(lightState));
     }
     return (0, $d66841a16b153167$export$4e46ac54fc82cf3b)(rgb, 1);
 }
@@ -8441,9 +8441,6 @@ class $4356f78c5c3f665b$export$82acdd66a4e4bf90 extends (0, $ab210b2da7b39b9d$ex
     _isGroup;
     static get properties() {
         return {
-            _lightBundle: {
-                state: true
-            },
             _state: {
                 state: true
             }
@@ -8451,12 +8448,12 @@ class $4356f78c5c3f665b$export$82acdd66a4e4bf90 extends (0, $ab210b2da7b39b9d$ex
     }
     lightbulb() {
         let lightbulb;
-        if (this._lightBundle.members) (0, $f61590692659393c$export$1a2d97de39ecbb75)(this._lightBundle) ? lightbulb = (0, $04557c061247a0a6$export$2e6be2b8a537add2) : lightbulb = (0, $04557c061247a0a6$export$da8ede764477ab6a);
-        else (0, $f61590692659393c$export$1a2d97de39ecbb75)(this._lightBundle) ? lightbulb = (0, $04557c061247a0a6$export$dea852a9f40b969) : lightbulb = (0, $04557c061247a0a6$export$aad4bcd9f6406e73);
+        if (this._isGroup) (0, $f61590692659393c$export$1a2d97de39ecbb75)(this._state) ? lightbulb = (0, $04557c061247a0a6$export$2e6be2b8a537add2) : lightbulb = (0, $04557c061247a0a6$export$da8ede764477ab6a);
+        else (0, $f61590692659393c$export$1a2d97de39ecbb75)(this._state) ? lightbulb = (0, $04557c061247a0a6$export$dea852a9f40b969) : lightbulb = (0, $04557c061247a0a6$export$aad4bcd9f6406e73);
         return lightbulb;
     }
     getColor() {
-        return (0, $f61590692659393c$export$5551a2d24ff40153)(this._lightBundle);
+        return (0, $f61590692659393c$export$5551a2d24ff40153)(this._state);
     }
     getStyles() {
         let styles = {
@@ -8466,8 +8463,7 @@ class $4356f78c5c3f665b$export$82acdd66a4e4bf90 extends (0, $ab210b2da7b39b9d$ex
     }
     static styles = (0, $c87b1b47755af4d8$export$2e2bcd8739ae039);
     render() {
-        console.log(this._isGroup);
-        if (this._lightBundle) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+        if (this._state) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
                 <ha-svg-icon .path=${this.lightbulb()} style="${(0, $19f464fcda7d2482$export$1e5b4ce2fa884e6a)(this.getStyles())}"></ha-svg-icon>
             `;
     }
@@ -10502,7 +10498,7 @@ class $f76fa2dde9e8d076$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$ex
         let content = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)``;
         switch(type){
             case 'onOff':
-                content = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<light-icon ._lightBundle = ${this._lightBundle} ._state=${this._lightState} ._isGroup=${this.isGroup()}></light-icon>`;
+                content = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<light-icon ._state=${this._lightState} ._isGroup=${this.isGroup()}></light-icon>`;
                 break;
             case 'brightness':
                 content = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<ha-svg-icon .path=${0, $04557c061247a0a6$export$6ace9c955f434b80}></ha-svg-icon>`;
@@ -10654,7 +10650,7 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
     getStyles(lightBundle) {
         let styles = {};
         if (this.isSelected(lightBundle)) {
-            styles['outline'] = 'solid ' + (0, $f61590692659393c$export$5551a2d24ff40153)(lightBundle);
+            styles['outline'] = 'solid ' + (0, $f61590692659393c$export$5551a2d24ff40153)(lightBundle.state);
             styles['outline-offset'] = '-4px';
         }
         return styles;
@@ -10678,7 +10674,7 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
                     @click=${()=>this.select(lightBundle)}
                 >
                     <div class="icons">
-                        <light-icon ._lightBundle=${lightBundle} ._lightState=${lightState} ._isGroup=${isGroup}></light-icon>
+                        <light-icon ._state=${lightState} ._isGroup=${isGroup}></light-icon>
                     </div>
                     ${name}
                 </div>
@@ -10846,14 +10842,14 @@ class $046ae152b1d9e254$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
             lightBundle = lightBundles[memberId];
             lightState = this._states[memberId];
             return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-                    <light-icon ._lightBundle=${lightBundle} ._state=${lightState} ._isGroup=${false}></light-icon>
+                    <light-icon ._state=${lightState} ._isGroup=${false}></light-icon>
                 `;
         });
         else {
             lightBundle = this._lightBundle;
             lightState = this._states[this._lightId];
             result = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-                    <light-icon ._lightBundle=${lightBundle} ._state=${lightState} ._isGroup=${false}></light-icon>
+                    <light-icon ._state=${lightState} ._isGroup=${false}></light-icon>
                 `;
         }
         return result;
