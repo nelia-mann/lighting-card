@@ -10660,14 +10660,14 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
     }
     innerLight(lightBundle, lightId, isMember) {
         if (lightBundle) {
-            const name = lightBundle.state.attributes.friendly_name;
             const lightState = this._states[lightId];
+            const name = lightState.attributes.friendly_name;
             const isGroup = this.isGroup(lightId);
             return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
                 <div
                     class="light-inner outlined ${this.header(isMember)}"
                     style=${(0, $19f464fcda7d2482$export$1e5b4ce2fa884e6a)(this.getStyles(lightBundle))}
-                    id=${lightBundle.state.entity_id}
+                    id=${lightState.entity_id}
                     @click=${()=>this.select(lightBundle)}
                 >
                     <div class="icons">

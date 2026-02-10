@@ -44,14 +44,14 @@ export class PopoutWindow extends LitElement {
 
     innerLight(lightBundle, lightId, isMember) {
         if (lightBundle) {
-            const name = lightBundle.state.attributes.friendly_name;
             const lightState = this._states[lightId];
+            const name = lightState.attributes.friendly_name;
             const isGroup = this.isGroup(lightId);
             return html`
                 <div
                     class="light-inner outlined ${this.header(isMember)}"
                     style=${styleMap(this.getStyles(lightBundle))}
-                    id=${lightBundle.state.entity_id}
+                    id=${lightState.entity_id}
                     @click=${() => this.select(lightBundle)}
                 >
                     <div class="icons">
