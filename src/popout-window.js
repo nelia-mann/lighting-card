@@ -8,12 +8,16 @@ import { getColor } from './light-util.js';
 
 export class PopoutWindow extends LitElement {
 
+    _structure;
+    _lightId;
+
     static get properties() {
         return {
             opened: { type: Boolean, reflect: true },
             title: { type: String },
             _lightBundle: { state: true },
-            _lightId: { state: true },
+            _selectedId: { state: true },
+            _states: { state: true }
         }
     }
 
@@ -38,9 +42,11 @@ export class PopoutWindow extends LitElement {
         return result;
     }
 
-    innerLight(lightBundle, isMember) {
+    innerLight(lightBundle, lightId, isMember) {
         if (lightBundle) {
             const name = lightBundle.state.attributes.friendly_name;
+            const lightState = this._states[lightId];
+            const isGroup = this.isGroup(lightId);
             return html`
                 <div
                     class="light-inner outlined ${this.header(isMember)}"
@@ -49,7 +55,7 @@ export class PopoutWindow extends LitElement {
                     @click=${() => this.select(lightBundle)}
                 >
                     <div class="icons">
-                        <light-icon ._lightBundle=${lightBundle} ></light-icon>
+                        <light-icon ._lightBundle=${lightBundle} ._lightState=${lightState} ._isGroup=${isGroup}></light-icon>
                     </div>
                     ${name}
                 </div>
@@ -57,15 +63,23 @@ export class PopoutWindow extends LitElement {
         }
     }
 
-    lights() {
-        const lightBundles = this._lightBundle.members;
-        let result = html``;
-        if (lightBundles) {
-            result = Object.values(lightBundles).map((lightBundle) => {
-                return this.innerLight(lightBundle, true)
-                })
+    isGroup(entityId) {
+        if (this._lightId != entityId) {
+            return false;
+        } else {
+            return !!this._structure.members;
         }
-        return result;
+    }
+
+    lights() {
+        const memberIds = this._structure.members;
+        const lightBundles = this._lightBundle.members;
+        if (memberIds) {
+            return Object.keys(memberIds).map((memberId) => {
+                const lightBundle = lightBundles[memberId];
+                return this.innerLight(lightBundle, memberId, true)
+            })
+        }
     }
 
     lightControl() {
@@ -73,6 +87,8 @@ export class PopoutWindow extends LitElement {
             return html`
                 <light-control
                     ._lightBundle = ${this.selectedLight()}
+                    ._lightState = ${this.selectedLightState()}
+                    ._themeState = ${this.selectedThemeState()}
                     .callService=${this.callService}
                 ></light-control>
             `
@@ -92,7 +108,7 @@ export class PopoutWindow extends LitElement {
             </div>
             <div class="content-row">
                 <div class="select-lights">
-                    ${this.innerLight(this._lightBundle, false)}
+                    ${this.innerLight(this._lightBundle, this._lightId, false)}
                     ${this.lights()}
                 </div>
                 ${this.lightControl()}
@@ -112,26 +128,42 @@ export class PopoutWindow extends LitElement {
     }
 
     defaultSelect() {
-        if (!this.possibleIds().includes(this._lightId)) {
-            this._lightId = this._lightBundle.state.entity_id;
+        if (!this.possibleIds().includes(this._selectedId)) {
+            this._selectedId = this._lightBundle.state.entity_id;
         }
     }
 
     select(lightBundle) {
-        this._lightId = lightBundle.state.entity_id;
+        this._selectedId = lightBundle.state.entity_id;
     }
 
     isSelected(lightBundle) {
-        return (this._lightId === lightBundle.state.entity_id);
+        return (this._selectedId === lightBundle.state.entity_id);
+    }
+
+    selectedLightState() {
+        return this._states[this._selectedId];
+    }
+
+    selectedThemeState() {
+        let themeId;
+        if (this._selectedId === this._lightId) {
+            themeId = this._structure.theme;
+        } else {
+            themeId = this._structure.members[this._selectedId].theme;
+        }
+        if (themeId) {
+            return this._states[themeId];
+        }
     }
 
     selectedLight() {
-        if (this._lightId === this._lightBundle.state.entity_id) {
+        if (this._selectedId === this._lightBundle.state.entity_id) {
             return this._lightBundle;
         } else if (this._lightBundle.members) {
             let result;
             Object.values(this._lightBundle.members).forEach((lightBundle) => {
-                if (this._lightId === lightBundle.state.entity_id) {
+                if (this._selectedId === lightBundle.state.entity_id) {
                     result = lightBundle;
                 }
             })

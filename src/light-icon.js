@@ -11,7 +11,7 @@ export class LightIcon extends LitElement {
     static get properties() {
         return {
             _lightBundle: { state: true },
-            _lightState: { state: true }
+            _state: { state: true }
         }
     }
 

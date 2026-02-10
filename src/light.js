@@ -37,14 +37,14 @@ export class LightComponent extends LitElement {
                 lightBundle = lightBundles[memberId];
                 lightState = this._states[memberId];
                 return html`
-                    <light-icon ._lightBundle=${lightBundle} ._lightState=${lightState} ._isGroup=${false}></light-icon>
+                    <light-icon ._lightBundle=${lightBundle} ._state=${lightState} ._isGroup=${false}></light-icon>
                 `
             })
         } else {
             lightBundle = this._lightBundle;
             lightState = this._states[this._lightId];
             result = html`
-                    <light-icon ._lightBundle=${lightBundle} ._lightState=${lightState} ._isGroup=${false}></light-icon>
+                    <light-icon ._lightBundle=${lightBundle} ._state=${lightState} ._isGroup=${false}></light-icon>
                 `
         }
         return result;
@@ -70,6 +70,7 @@ export class LightComponent extends LitElement {
                     @modal-closed="${this.handleModalClosed}"
                     ._lightBundle=${this._lightBundle}
                     ._states = ${this._states}
+                    ._lightId = ${this._lightId}
                     ._structure = ${this._structure}
                     .callService="${this.callService}"
                 ></popout-window>

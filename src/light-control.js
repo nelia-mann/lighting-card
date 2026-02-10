@@ -18,6 +18,8 @@ export class LightControl extends LitElement {
     static get properties() {
         return {
             _lightBundle: { state: true },
+            _lightState: { state: true },
+            _themeState: { state: true },
             _control: { state: true }
         }
     }
@@ -218,6 +220,8 @@ export class LightControl extends LitElement {
     }
 
     render() {
+        console.log(this._lightState);
+        console.log(this._themeState);
         return html`
             <div class="control-column outlined">
                 ${this.icons()}

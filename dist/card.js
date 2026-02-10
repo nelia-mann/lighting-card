@@ -8444,7 +8444,7 @@ class $4356f78c5c3f665b$export$82acdd66a4e4bf90 extends (0, $ab210b2da7b39b9d$ex
             _lightBundle: {
                 state: true
             },
-            _lightState: {
+            _state: {
                 state: true
             }
         };
@@ -10422,6 +10422,12 @@ class $f76fa2dde9e8d076$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$ex
             _lightBundle: {
                 state: true
             },
+            _lightState: {
+                state: true
+            },
+            _themeState: {
+                state: true
+            },
             _control: {
                 state: true
             }
@@ -10602,6 +10608,8 @@ class $f76fa2dde9e8d076$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$ex
         return icons;
     }
     render() {
+        console.log(this._lightState);
+        console.log(this._themeState);
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
             <div class="control-column outlined">
                 ${this.icons()}
@@ -10615,6 +10623,8 @@ customElements.define("light-control", $f76fa2dde9e8d076$export$5ebffa7af4af21de
 
 
 class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
+    _structure;
+    _lightId;
     static get properties() {
         return {
             opened: {
@@ -10627,7 +10637,10 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
             _lightBundle: {
                 state: true
             },
-            _lightId: {
+            _selectedId: {
+                state: true
+            },
+            _states: {
                 state: true
             }
         };
@@ -10650,9 +10663,11 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
         else result = 'small-heading';
         return result;
     }
-    innerLight(lightBundle, isMember) {
+    innerLight(lightBundle, lightId, isMember) {
         if (lightBundle) {
             const name = lightBundle.state.attributes.friendly_name;
+            const lightState = this._states[lightId];
+            const isGroup = this.isGroup(lightId);
             return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
                 <div
                     class="light-inner outlined ${this.header(isMember)}"
@@ -10661,25 +10676,31 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
                     @click=${()=>this.select(lightBundle)}
                 >
                     <div class="icons">
-                        <light-icon ._lightBundle=${lightBundle} ></light-icon>
+                        <light-icon ._lightBundle=${lightBundle} ._lightState=${lightState} ._isGroup=${isGroup}></light-icon>
                     </div>
                     ${name}
                 </div>
             `;
         }
     }
+    isGroup(entityId) {
+        if (this._lightId != entityId) return false;
+        else return !!this._structure.members;
+    }
     lights() {
+        const memberIds = this._structure.members;
         const lightBundles = this._lightBundle.members;
-        let result = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)``;
-        if (lightBundles) result = Object.values(lightBundles).map((lightBundle)=>{
-            return this.innerLight(lightBundle, true);
+        if (memberIds) return Object.keys(memberIds).map((memberId)=>{
+            const lightBundle = lightBundles[memberId];
+            return this.innerLight(lightBundle, memberId, true);
         });
-        return result;
     }
     lightControl() {
         if (this.selectedLight()) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
                 <light-control
                     ._lightBundle = ${this.selectedLight()}
+                    ._lightState = ${this.selectedLightState()}
+                    ._themeState = ${this.selectedThemeState()}
                     .callService=${this.callService}
                 ></light-control>
             `;
@@ -10697,7 +10718,7 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
             </div>
             <div class="content-row">
                 <div class="select-lights">
-                    ${this.innerLight(this._lightBundle, false)}
+                    ${this.innerLight(this._lightBundle, this._lightId, false)}
                     ${this.lights()}
                 </div>
                 ${this.lightControl()}
@@ -10715,20 +10736,29 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
         return ids;
     }
     defaultSelect() {
-        if (!this.possibleIds().includes(this._lightId)) this._lightId = this._lightBundle.state.entity_id;
+        if (!this.possibleIds().includes(this._selectedId)) this._selectedId = this._lightBundle.state.entity_id;
     }
     select(lightBundle) {
-        this._lightId = lightBundle.state.entity_id;
+        this._selectedId = lightBundle.state.entity_id;
     }
     isSelected(lightBundle) {
-        return this._lightId === lightBundle.state.entity_id;
+        return this._selectedId === lightBundle.state.entity_id;
+    }
+    selectedLightState() {
+        return this._states[this._selectedId];
+    }
+    selectedThemeState() {
+        let themeId;
+        if (this._selectedId === this._lightId) themeId = this._structure.theme;
+        else themeId = this._structure.members[this._selectedId].theme;
+        if (themeId) return this._states[themeId];
     }
     selectedLight() {
-        if (this._lightId === this._lightBundle.state.entity_id) return this._lightBundle;
+        if (this._selectedId === this._lightBundle.state.entity_id) return this._lightBundle;
         else if (this._lightBundle.members) {
             let result;
             Object.values(this._lightBundle.members).forEach((lightBundle)=>{
-                if (this._lightId === lightBundle.state.entity_id) result = lightBundle;
+                if (this._selectedId === lightBundle.state.entity_id) result = lightBundle;
             });
             return result;
         }
@@ -10814,14 +10844,14 @@ class $046ae152b1d9e254$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
             lightBundle = lightBundles[memberId];
             lightState = this._states[memberId];
             return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-                    <light-icon ._lightBundle=${lightBundle} ._lightState=${lightState} ._isGroup=${false}></light-icon>
+                    <light-icon ._lightBundle=${lightBundle} ._state=${lightState} ._isGroup=${false}></light-icon>
                 `;
         });
         else {
             lightBundle = this._lightBundle;
             lightState = this._states[this._lightId];
             result = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-                    <light-icon ._lightBundle=${lightBundle} ._lightState=${lightState} ._isGroup=${false}></light-icon>
+                    <light-icon ._lightBundle=${lightBundle} ._state=${lightState} ._isGroup=${false}></light-icon>
                 `;
         }
         return result;
@@ -10845,6 +10875,7 @@ class $046ae152b1d9e254$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
                     @modal-closed="${this.handleModalClosed}"
                     ._lightBundle=${this._lightBundle}
                     ._states = ${this._states}
+                    ._lightId = ${this._lightId}
                     ._structure = ${this._structure}
                     .callService="${this.callService}"
                 ></popout-window>
