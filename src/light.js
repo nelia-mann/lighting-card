@@ -8,11 +8,13 @@ export class LightComponent extends LitElement {
 
     _holding = false;
     _HOLD_DURATION = 500;
+    _structure;
 
     static get properties() {
         return {
             _lightBundle: { state: true },
-            isModalOpen: { type: Boolean},
+            isModalOpen: { type: Boolean },
+            _states: { state: true }
         }
     }
 
@@ -67,6 +69,8 @@ export class LightComponent extends LitElement {
     }
 
     render() {
+        console.log(this._states);
+        console.log(this._structure);
         const name = this._lightBundle.state.attributes.friendly_name;
         return html`
             <div class="light-element sub-info" @pointerup=${this.onUp} @pointerdown=${this.onDown}>

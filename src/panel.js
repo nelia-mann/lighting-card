@@ -25,21 +25,48 @@ export class PanelComponent extends LitElement {
         return this._lightBundles[areaId];
     }
 
-    getLightDisplay(lightBundle) {
+    getLightDisplay(lightBundle, lightStructure, lightStates) {
         return html`
             <light-component
                 class="outlined"
                 ._lightBundle = ${lightBundle}
+                ._structure = ${lightStructure}
+                ._states = ${lightStates}
                 .callService=${this.callService}
             ></light-component>
         `
     }
 
+    getEntityIds(lightId, lightStructure) {
+        let entityIds = [lightId];
+        (lightStructure.theme) && (entityIds.push(lightStructure.theme));
+        if (lightStructure.members) {
+            Object.entries(lightStructure.members).forEach(([memberId, memberStructure]) => {
+                entityIds.push(memberId);
+                (memberStructure.theme) && (entityIds.push(memberStructure.theme));
+            })
+        }
+        return entityIds;
+    }
+
+    getStates(lightId, lightStructure) {
+        const entityIds = this.getEntityIds(lightId, lightStructure);
+        let states = {};
+        entityIds.forEach((entityId) => {
+            states[entityId] = this._states[entityId];
+        })
+        return states;
+    }
+
     getAreaDisplay(areaId) {
         const title = this.getAreaName(areaId);
+        const areaStructure = this._structure[areaId];
         const areaBundles = this.getAreaBundles(areaId);
-        const areaComponents = Object.values(areaBundles).map((lightBundle) =>
-            this.getLightDisplay(lightBundle))
+        const areaComponents = Object.keys(areaStructure).map((lightId) => {
+            const lightStructure = areaStructure[lightId];
+            const lightStates = this.getStates(lightId, lightStructure)
+            return this.getLightDisplay(areaBundles[lightId], lightStructure, lightStates)
+        })
         return html`
             <div class="area">
                 <div class="small-heading">${title}</div>

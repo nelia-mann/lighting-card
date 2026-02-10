@@ -10777,6 +10777,7 @@ var $7c12e71e3f07e693$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 class $046ae152b1d9e254$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
     _holding = false;
     _HOLD_DURATION = 500;
+    _structure;
     static get properties() {
         return {
             _lightBundle: {
@@ -10784,6 +10785,9 @@ class $046ae152b1d9e254$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
             },
             isModalOpen: {
                 type: Boolean
+            },
+            _states: {
+                state: true
             }
         };
     }
@@ -10832,6 +10836,8 @@ class $046ae152b1d9e254$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
         }
     }
     render() {
+        console.log(this._states);
+        console.log(this._structure);
         const name = this._lightBundle.state.attributes.friendly_name;
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
             <div class="light-element sub-info" @pointerup=${this.onUp} @pointerdown=${this.onDown}>
@@ -10893,19 +10899,45 @@ class $fdede02cbd34666f$export$40073d408f029a0b extends (0, $ab210b2da7b39b9d$ex
     getAreaBundles(areaId) {
         return this._lightBundles[areaId];
     }
-    getLightDisplay(lightBundle) {
+    getLightDisplay(lightBundle, lightStructure, lightStates) {
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
             <light-component
                 class="outlined"
                 ._lightBundle = ${lightBundle}
+                ._structure = ${lightStructure}
+                ._states = ${lightStates}
                 .callService=${this.callService}
             ></light-component>
         `;
     }
+    getEntityIds(lightId, lightStructure) {
+        let entityIds = [
+            lightId
+        ];
+        lightStructure.theme && entityIds.push(lightStructure.theme);
+        if (lightStructure.members) Object.entries(lightStructure.members).forEach(([memberId, memberStructure])=>{
+            entityIds.push(memberId);
+            memberStructure.theme && entityIds.push(memberStructure.theme);
+        });
+        return entityIds;
+    }
+    getStates(lightId, lightStructure) {
+        const entityIds = this.getEntityIds(lightId, lightStructure);
+        let states = {};
+        entityIds.forEach((entityId)=>{
+            states[entityId] = this._states[entityId];
+        });
+        return states;
+    }
     getAreaDisplay(areaId) {
         const title = this.getAreaName(areaId);
+        const areaStructure = this._structure[areaId];
         const areaBundles = this.getAreaBundles(areaId);
-        const areaComponents = Object.values(areaBundles).map((lightBundle)=>this.getLightDisplay(lightBundle));
+        const areaComponents = Object.keys(areaStructure).map((lightId)=>{
+            const lightStructure = areaStructure[lightId];
+            const lightStates = this.getStates(lightId, lightStructure);
+            return this.getLightDisplay(areaBundles[lightId], lightStructure, lightStates);
+        });
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
             <div class="area">
                 <div class="small-heading">${title}</div>
