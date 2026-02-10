@@ -10,7 +10,6 @@ export class PanelComponent extends LitElement {
 
     static get properties() {
         return {
-            _lightBundles: { state: true },
             _states: { state: true }
         }
     }
@@ -21,15 +20,10 @@ export class PanelComponent extends LitElement {
         return this._areas[areaId].name;
     }
 
-    getAreaBundles(areaId) {
-        return this._lightBundles[areaId];
-    }
-
-    getLightDisplay(lightBundle, lightId, lightStructure, lightStates) {
+    getLightDisplay(lightId, lightStructure, lightStates) {
         return html`
             <light-component
                 class="outlined"
-                ._lightBundle = ${lightBundle}
                 ._lightId = ${lightId}
                 ._structure = ${lightStructure}
                 ._states = ${lightStates}
@@ -62,11 +56,10 @@ export class PanelComponent extends LitElement {
     getAreaDisplay(areaId) {
         const title = this.getAreaName(areaId);
         const areaStructure = this._structure[areaId];
-        const areaBundles = this.getAreaBundles(areaId);
         const areaComponents = Object.keys(areaStructure).map((lightId) => {
             const lightStructure = areaStructure[lightId];
             const lightStates = this.getStates(lightId, lightStructure)
-            return this.getLightDisplay(areaBundles[lightId], lightId, lightStructure, lightStates)
+            return this.getLightDisplay(lightId, lightStructure, lightStates)
         })
         return html`
             <div class="area">
@@ -76,7 +69,7 @@ export class PanelComponent extends LitElement {
     }
 
     getAreaDisplays() {
-        return Object.keys(this._lightBundles).map((areaId) =>
+        return Object.keys(this._structure).map((areaId) =>
             (this.getAreaDisplay(areaId)))
     }
 

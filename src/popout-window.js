@@ -80,7 +80,7 @@ export class PopoutWindow extends LitElement {
     }
 
     lightControl() {
-        if (this.selectedLightState() && this.selectedThemeState()) {
+        if (this.selectedLightState()) {
             return html`
                 <light-control
                     ._lightState = ${this.selectedLightState()}

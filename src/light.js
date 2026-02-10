@@ -13,7 +13,6 @@ export class LightComponent extends LitElement {
 
     static get properties() {
         return {
-            _lightBundle: { state: true },
             isModalOpen: { type: Boolean },
             _states: { state: true }
         }
@@ -28,20 +27,16 @@ export class LightComponent extends LitElement {
 
     icons() {
         let result;
-        const lightBundles = this._lightBundle.members;
         const memberIds = this._structure.members;
-        let lightBundle;
         let lightState;
         if (memberIds) {
             result = Object.keys(memberIds).map((memberId) => {
-                lightBundle = lightBundles[memberId];
                 lightState = this._states[memberId];
                 return html`
                     <light-icon ._state=${lightState} ._isGroup=${false}></light-icon>
                 `
             })
         } else {
-            lightBundle = this._lightBundle;
             lightState = this._states[this._lightId];
             result = html`
                     <light-icon ._state=${lightState} ._isGroup=${false}></light-icon>
@@ -52,17 +47,18 @@ export class LightComponent extends LitElement {
 
     hasOptions() {
         let valid = false;
-        !!(this._lightBundle.theme) && (valid = true);
-        !(this._lightBundle.state.attributes['hs_color'] === undefined) && (valid = true);
-        !(this._lightBundle.state.attributes['color_temp_kelvin'] === undefined) && (valid = true);
-        !(this._lightBundle.state.attributes['brightness'] === undefined) && (valid = true);
-        !!(this._lightBundle.members) && (valid = true);
+        const state = this._states[this._lightId];
+        !!(this._structure.theme) && (valid = true);
+        !(state.attributes['hs_color'] === undefined) && (valid = true);
+        !(state.attributes['color_temp_kelvin'] === undefined) && (valid = true);
+        !(state.attributes['brightness'] === undefined) && (valid = true);
+        !!(this._structure.members) && (valid = true);
         return valid;
     }
 
     popoutWindow() {
         if (this.hasOptions()) {
-            const name = this._lightBundle.state.attributes.friendly_name;
+        const name = this._states[this._lightId].attributes.friendly_name;
             return html`
                 <popout-window
                     title="${name}"
@@ -78,7 +74,7 @@ export class LightComponent extends LitElement {
     }
 
     render() {
-        const name = this._lightBundle.state.attributes.friendly_name;
+        const name = this._states[this._lightId].attributes.friendly_name;
         return html`
             <div class="light-element sub-info" @pointerup=${this.onUp} @pointerdown=${this.onDown}>
                 <div class="icons">
@@ -113,7 +109,7 @@ export class LightComponent extends LitElement {
     }
 
     onClick() {
-        const entityId = this._lightBundle.state.entity_id;
+        const entityId = this._lightId;
         const data = {
             entity_id: entityId,
         }
