@@ -5,16 +5,14 @@ import './light.js';
 
 export class PanelComponent extends LitElement {
 
-    _areas;
-    _structure;
+    _areas = {};
+    _structure = {};
 
     static get properties() {
         return {
             _states: { state: true }
         }
     }
-
-    static styles = [sharedStyles, styles];
 
     getAreaName(areaId) {
         return this._areas[areaId].name;
@@ -72,6 +70,8 @@ export class PanelComponent extends LitElement {
         return Object.keys(this._structure).map((areaId) =>
             (this.getAreaDisplay(areaId)))
     }
+
+    static styles = [sharedStyles, styles];
 
     render() {
         return html`${this.getAreaDisplays()}`
