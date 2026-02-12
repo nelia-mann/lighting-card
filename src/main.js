@@ -480,18 +480,17 @@ export class MainCard extends LitElement {
 
     // generates panel content, based on currently selected floor.
     content() {
-        if (this.getFloorStates()) {
-            return html`
-                <panel-component
-                    ._structure = ${this.getFloorStructure()}
-                    ._states = ${this.getFloorStates()}
-                    ._areas = ${this.getAreas()}
-                    ._entityIds = ${this.getFloorEntityIds()}
-                    ._changedEntityIds = ${this.getFloorChangedEntityIds()}
-                    .callService=${this._hass.callService}
-                ></panel-component>
-            `;
-        }
+        return html`
+            <panel-component
+                ._structure = ${this.getFloorStructure()}
+                ._states = ${this.getFloorStates()}
+                ._areas = ${this.getAreas()}
+                ._floorId = ${this._floorId}
+                ._entityIds = ${this.getFloorEntityIds()}
+                ._changedEntityIds = ${this.getFloorChangedEntityIds()}
+                .callService=${this._hass.callService}
+            ></panel-component>
+        `;
     }
 
     // pull styles
@@ -513,15 +512,15 @@ export class MainCard extends LitElement {
 
     // set card size parameters for ha
     getCardSize() {
-        return 7;
+        return 8;
     }
 
     getGridOptions() {
         return {
-            rows: 7,
+            rows: 8,
             columns: 24,
-            min_rows: 7,
-            max_rows: 7
+            min_rows: 8,
+            max_rows: 8
         }
     }
 

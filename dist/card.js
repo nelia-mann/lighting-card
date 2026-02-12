@@ -10855,6 +10855,7 @@ class $046ae152b1d9e254$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
         }
     }
     render() {
+        console.log("re-rendering");
         const name = this._states[this._lightId].attributes.friendly_name;
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
             <div class="light-element sub-info" @pointerup=${this.onUp} @pointerdown=${this.onDown}>
@@ -10897,13 +10898,24 @@ class $fdede02cbd34666f$export$40073d408f029a0b extends (0, $ab210b2da7b39b9d$ex
     _areas = {};
     _structure = {};
     _entityIds = [];
+    _intiialized = false;
     _changedEntityIds = new Set();
     static get properties() {
         return {
+            _floorId: {
+                state: true
+            },
             _states: {
                 state: true
             }
         };
+    }
+    update(changedProps) {
+        super.update(changedProps);
+        this._initialized = true;
+    }
+    shouldUpdate(changedProps) {
+        return !this._initialized || this._changedEntityIds.size > 0 || changedProps.has("_floorId") > 0;
     }
     getAreaName(areaId) {
         return this._areas[areaId].name;
@@ -10960,8 +10972,6 @@ class $fdede02cbd34666f$export$40073d408f029a0b extends (0, $ab210b2da7b39b9d$ex
         (0, $fd69d66a3348dfcc$export$2e2bcd8739ae039)
     ];
     render() {
-        console.log(this._entityIds);
-        console.log(this._changedEntityIds);
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`${this.getAreaDisplays()}`;
     }
 }
@@ -11372,16 +11382,17 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
     }
     // generates panel content, based on currently selected floor.
     content() {
-        if (this.getFloorStates()) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-                <panel-component
-                    ._structure = ${this.getFloorStructure()}
-                    ._states = ${this.getFloorStates()}
-                    ._areas = ${this.getAreas()}
-                    ._entityIds = ${this.getFloorEntityIds()}
-                    ._changedEntityIds = ${this.getFloorChangedEntityIds()}
-                    .callService=${this._hass.callService}
-                ></panel-component>
-            `;
+        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+            <panel-component
+                ._structure = ${this.getFloorStructure()}
+                ._states = ${this.getFloorStates()}
+                ._areas = ${this.getAreas()}
+                ._floorId = ${this._floorId}
+                ._entityIds = ${this.getFloorEntityIds()}
+                ._changedEntityIds = ${this.getFloorChangedEntityIds()}
+                .callService=${this._hass.callService}
+            ></panel-component>
+        `;
     }
     // pull styles
     static styles = [
@@ -11401,14 +11412,14 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
     }
     // set card size parameters for ha
     getCardSize() {
-        return 7;
+        return 8;
     }
     getGridOptions() {
         return {
-            rows: 7,
+            rows: 8,
             columns: 24,
-            min_rows: 7,
-            max_rows: 7
+            min_rows: 8,
+            max_rows: 8
         };
     }
 }

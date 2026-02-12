@@ -8,12 +8,23 @@ export class PanelComponent extends LitElement {
     _areas = {};
     _structure = {};
     _entityIds = [];
+    _intiialized = false;
     _changedEntityIds = new Set();
 
     static get properties() {
         return {
+            _floorId: { state: true },
             _states: { state: true }
         }
+    }
+
+    update(changedProps) {
+        super.update(changedProps);
+        this._initialized = true;
+    }
+
+    shouldUpdate(changedProps) {
+        return (!this._initialized || this._changedEntityIds.size > 0 || changedProps.has("_floorId") > 0)
     }
 
     getAreaName(areaId) {
@@ -76,8 +87,6 @@ export class PanelComponent extends LitElement {
     static styles = [sharedStyles, styles];
 
     render() {
-        console.log(this._entityIds);
-        console.log(this._changedEntityIds);
         return html`${this.getAreaDisplays()}`
     }
 
