@@ -7,6 +7,8 @@ export class PanelComponent extends LitElement {
 
     _areas = {};
     _structure = {};
+    _entityIds = [];
+    _changedEntityIds = new Set();
 
     static get properties() {
         return {
@@ -74,6 +76,8 @@ export class PanelComponent extends LitElement {
     static styles = [sharedStyles, styles];
 
     render() {
+        console.log(this._entityIds);
+        console.log(this._changedEntityIds);
         return html`${this.getAreaDisplays()}`
     }
 

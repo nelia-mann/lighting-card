@@ -10896,6 +10896,8 @@ customElements.define("light-component", $046ae152b1d9e254$export$5e33b198135dff
 class $fdede02cbd34666f$export$40073d408f029a0b extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
     _areas = {};
     _structure = {};
+    _entityIds = [];
+    _changedEntityIds = new Set();
     static get properties() {
         return {
             _states: {
@@ -10958,6 +10960,8 @@ class $fdede02cbd34666f$export$40073d408f029a0b extends (0, $ab210b2da7b39b9d$ex
         (0, $fd69d66a3348dfcc$export$2e2bcd8739ae039)
     ];
     render() {
+        console.log(this._entityIds);
+        console.log(this._changedEntityIds);
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`${this.getAreaDisplays()}`;
     }
 }
@@ -11097,35 +11101,43 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
             });
         });
     }
-    /***************************************************************************************/ // returns true if the entity_id corresponds to a light object and no label conradicts this.
+    /***************************************************************************************/ getHassEntities() {
+        return this._hass.entities;
+    }
+    getHassStates() {
+        return this._hass.states;
+    }
+    getEntity(entityId) {
+        const entities = this.getHassEntities();
+        return entities[entityId];
+    }
+    getState(entityId) {
+        const states = this.getHassStates();
+        return states[entityId];
+    }
+    // returns true if the entity_id corresponds to a light object and no label conradicts this.
     isLight(entityId) {
-        const entity = this._hass.entities[entityId];
-        let notLight = false;
-        if (entity) notLight = entity.labels.includes('not_light');
+        const entity = this.getEntity(entityId);
+        const notLight = entity.labels.includes('not_light');
         return entityId.substring(0, 6) === "light." && !notLight;
+    }
+    getLightIds() {
+        const entities = this.getHassEntities();
+        const lightIds = Object.keys(entities).filter((entityId)=>this.isLight(entityId));
+        return lightIds;
     }
     // returns true if the entity_id corresponds to a theme select object
     isTheme(entityId) {
         return entityId.substring(0, 7) === "select." && entityId.includes("theme");
     }
-    getLightIds() {
-        const entities = this._hass.entities;
-        let lightIds = [];
-        Object.keys(entities).forEach((entityId)=>{
-            this.isLight(entityId) && lightIds.push(entityId);
-        });
-        return lightIds;
-    }
     getThemeIds() {
-        const entities = this._hass.entities;
-        let themeIds = [];
-        Object.keys(entities).forEach((entityId)=>{
-            this.isTheme(entityId) && themeIds.push(entityId);
-        });
+        const entities = this.getHassEntities();
+        const themeIds = Object.keys(entities).filter((entityId)=>this.isTheme(entityId));
         return themeIds;
     }
     getEntityArea(entityId) {
-        return this._hass.entities[entityId].area_id;
+        const entity = this.getEntity(entityId);
+        return entity.area_id;
     }
     // returns true if the provided entity_id has the given area_id, false otherwise.
     isInArea(entityId, areaId) {
@@ -11152,13 +11164,13 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
     getGroupIds() {
         const lightIds = this.getLightIds();
         const groupIds = lightIds.filter((lightId)=>{
-            const entity = this._hass.entities[lightId];
+            const entity = this.getEntity(lightId);
             return entity.platform === "group";
         });
         return groupIds;
     }
     getMemberIds(groupId) {
-        const state = this._hass.states[groupId];
+        const state = this.getState(groupId);
         return state.attributes.entity_id;
     }
     getAllMemberIds() {
@@ -11179,32 +11191,6 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
     isAGroup(lightId) {
         const groupIds = this.getGroupIds();
         return groupIds.includes(lightId);
-    }
-    setGroupStructure(lightId, lightDictionary) {
-        const memberIds = this.getMemberIds(lightId);
-        let members = {};
-        memberIds.forEach((memberId)=>{
-            let memberDictionary = {};
-            this.hasTheme(memberId) && this.setThemeStructure(memberId, memberDictionary);
-            members[memberId] = memberDictionary;
-        });
-        lightDictionary.members = members;
-    }
-    getThemeId(lightId) {
-        const lightIdStub = lightId.substring(6);
-        const themeIds = this.getThemeIds();
-        let foundId = null;
-        themeIds.forEach((themeId)=>{
-            themeId.includes(lightIdStub) && (foundId = themeId);
-        });
-        return foundId;
-    }
-    hasTheme(lightId) {
-        return this.getThemeId(lightId) != null;
-    }
-    setThemeStructure(lightId, lightDictionary) {
-        const themeId = this.getThemeId(lightId);
-        lightDictionary.theme = themeId;
     }
     setGroupStructure(lightId, lightDictionary) {
         const memberIds = this.getMemberIds(lightId);
@@ -11262,7 +11248,7 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
     setStates() {
         let states = {};
         this._entityIds.forEach((entityId)=>{
-            states[entityId] = this._hass.states[entityId];
+            states[entityId] = this.getState(entityId);
         });
         this._states = states;
     }
@@ -11391,6 +11377,8 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
                     ._structure = ${this.getFloorStructure()}
                     ._states = ${this.getFloorStates()}
                     ._areas = ${this.getAreas()}
+                    ._entityIds = ${this.getFloorEntityIds()}
+                    ._changedEntityIds = ${this.getFloorChangedEntityIds()}
                     .callService=${this._hass.callService}
                 ></panel-component>
             `;
