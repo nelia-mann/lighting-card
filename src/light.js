@@ -74,7 +74,6 @@ export class LightComponent extends LitElement {
     }
 
     render() {
-        console.log("re-rendering");
         const name = this._states[this._lightId].attributes.friendly_name;
         return html`
             <div class="light-element sub-info" @pointerup=${this.onUp} @pointerdown=${this.onDown}>

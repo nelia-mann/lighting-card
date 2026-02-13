@@ -19,6 +19,7 @@ export class MainCard extends LitElement {
     _changedEntities = false;
     _needsRender = false;
     _changedEntityIds = new Set();
+    _floorCEIs = new Set();
 
     // internal reactive states
     static get properties() {
@@ -71,7 +72,7 @@ export class MainCard extends LitElement {
     }
 
     detectStateChanges(oldHass, newHass) {
-        this._changedEntityIds.clear();
+        this._changedEntityIds = new Set();
 
         for (const id of this._entityIds ?? []) {
             const oldState = oldHass.states[id];
@@ -400,18 +401,6 @@ export class MainCard extends LitElement {
         return states;
     }
 
-    getFloorChangedEntityIds() {
-        const changedEntityIds = this._changedEntityIds;
-        const floorEntityIds = this.getFloorEntityIds();
-        let floorCEI = new Set();
-        floorEntityIds.forEach((entityId) => {
-            if (changedEntityIds.has(entityId)) {
-                floorCEI.add(entityId)
-            }
-        })
-        return floorCEI;
-    }
-
     // deals with click to select floor.
     onClick(e) {
         this.setFloorId(e.currentTarget.id);
@@ -485,9 +474,6 @@ export class MainCard extends LitElement {
                 ._structure = ${this.getFloorStructure()}
                 ._states = ${this.getFloorStates()}
                 ._areas = ${this.getAreas()}
-                ._floorId = ${this._floorId}
-                ._entityIds = ${this.getFloorEntityIds()}
-                ._changedEntityIds = ${this.getFloorChangedEntityIds()}
                 .callService=${this._hass.callService}
             ></panel-component>
         `;

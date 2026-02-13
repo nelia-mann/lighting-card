@@ -10855,7 +10855,6 @@ class $046ae152b1d9e254$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
         }
     }
     render() {
-        console.log("re-rendering");
         const name = this._states[this._lightId].attributes.friendly_name;
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
             <div class="light-element sub-info" @pointerup=${this.onUp} @pointerdown=${this.onDown}>
@@ -10897,27 +10896,21 @@ customElements.define("light-component", $046ae152b1d9e254$export$5e33b198135dff
 class $fdede02cbd34666f$export$40073d408f029a0b extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
     _areas = {};
     _structure = {};
-    _entityIds = [];
-    _intiialized = false;
-    _changedEntityIds = new Set();
     static get properties() {
         return {
-            _floorId: {
-                state: true
-            },
             _states: {
                 state: true
             }
         };
     }
-    update(changedProps) {
+    /*     update(changedProps) {
         super.update(changedProps);
         this._initialized = true;
     }
+
     shouldUpdate(changedProps) {
-        return !this._initialized || this._changedEntityIds.size > 0 || changedProps.has("_floorId") > 0;
-    }
-    getAreaName(areaId) {
+        return (!this._initialized || this._changedEntityIds.size > 0 || changedProps.has("_floorId") > 0)
+    } */ getAreaName(areaId) {
         return this._areas[areaId].name;
     }
     getLightDisplay(lightId, lightStructure, lightStates) {
@@ -10992,6 +10985,7 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
     _changedEntities = false;
     _needsRender = false;
     _changedEntityIds = new Set();
+    _floorCEIs = new Set();
     // internal reactive states
     static get properties() {
         return {
@@ -11037,7 +11031,7 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
         return this._needsRender || !this._structuresBuilt || changedProps.has("_floorId") > 0;
     }
     detectStateChanges(oldHass, newHass) {
-        this._changedEntityIds.clear();
+        this._changedEntityIds = new Set();
         for (const id of this._entityIds ?? []){
             const oldState = oldHass.states[id];
             const newState = newHass.states[id];
@@ -11310,15 +11304,6 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
         });
         return states;
     }
-    getFloorChangedEntityIds() {
-        const changedEntityIds = this._changedEntityIds;
-        const floorEntityIds = this.getFloorEntityIds();
-        let floorCEI = new Set();
-        floorEntityIds.forEach((entityId)=>{
-            if (changedEntityIds.has(entityId)) floorCEI.add(entityId);
-        });
-        return floorCEI;
-    }
     // deals with click to select floor.
     onClick(e) {
         this.setFloorId(e.currentTarget.id);
@@ -11387,9 +11372,6 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
                 ._structure = ${this.getFloorStructure()}
                 ._states = ${this.getFloorStates()}
                 ._areas = ${this.getAreas()}
-                ._floorId = ${this._floorId}
-                ._entityIds = ${this.getFloorEntityIds()}
-                ._changedEntityIds = ${this.getFloorChangedEntityIds()}
                 .callService=${this._hass.callService}
             ></panel-component>
         `;
