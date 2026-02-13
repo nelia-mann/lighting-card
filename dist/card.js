@@ -10790,8 +10790,11 @@ var $7c12e71e3f07e693$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 class $046ae152b1d9e254$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
     _holding = false;
     _HOLD_DURATION = 500;
-    _structure;
+    _structure = {};
     _lightId;
+    _entityIds = [];
+    _changedEntityIds = new Set();
+    _initialized = false;
     static get properties() {
         return {
             isModalOpen: {
@@ -10805,6 +10808,16 @@ class $046ae152b1d9e254$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
     constructor(){
         super();
         this.isModalOpen = false;
+    }
+    update(changedProps) {
+        super.update(changedProps);
+        this._initialized = true;
+    }
+    hasRelevantChanges() {
+        return this._entityIds.some((entityId)=>this._changedEntityIds.has(entityId));
+    }
+    shouldUpdate(changedProps) {
+        return !this._initialized || this.hasRelevantChanges() || changedProps.has("isModalOpen") > 0;
     }
     static styles = [
         (0, $65e9333b9a0c9dfd$export$2e2bcd8739ae039),
@@ -10913,18 +10926,25 @@ class $fdede02cbd34666f$export$40073d408f029a0b extends (0, $ab210b2da7b39b9d$ex
         super.update(changedProps);
         this._initialized = true;
     }
+    hasRelevantChanges() {
+        return this._entityIds.some((entityId)=>this._changedEntityIds.has(entityId));
+    }
     shouldUpdate(changedProps) {
-        return !this._initialized || this._changedEntityIds.size > 0 || changedProps.has("_floorId") > 0;
+        return !this._initialized || this.hasRelevantChanges() || changedProps.has("_floorId") > 0;
     }
     getAreaName(areaId) {
         return this._areas[areaId].name;
     }
-    getLightDisplay(lightId, lightStructure, lightStates) {
+    getLightDisplay(lightId, lightStructure) {
+        const lightStates = this.getStates(lightId, lightStructure);
+        const lightEntityIds = this.getEntityIds(lightId, lightStructure);
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
             <light-component
                 class="outlined"
                 ._lightId = ${lightId}
                 ._structure = ${lightStructure}
+                ._entityIds = ${lightEntityIds}
+                ._changedEntityIds = ${this._changedEntityIds}
                 ._states = ${lightStates}
                 .callService=${this.callService}
             ></light-component>
@@ -10954,8 +10974,7 @@ class $fdede02cbd34666f$export$40073d408f029a0b extends (0, $ab210b2da7b39b9d$ex
         const areaStructure = this._structure[areaId];
         const areaComponents = Object.keys(areaStructure).map((lightId)=>{
             const lightStructure = areaStructure[lightId];
-            const lightStates = this.getStates(lightId, lightStructure);
-            return this.getLightDisplay(lightId, lightStructure, lightStates);
+            return this.getLightDisplay(lightId, lightStructure);
         });
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
             <div class="area">
@@ -11392,7 +11411,7 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
                 ._states = ${this.getFloorStates()}
                 ._areas = ${this.getAreas()}
                 ._entityIds = ${this.getFloorEntityIds()}
-                ._changedEntityIds = ${this.getFloorCEIs()}
+                ._changedEntityIds = ${this._changedEntityIds}
                 ._floorId = ${this.getFloorId()}
                 .callService=${this._hass.callService}
             ></panel-component>

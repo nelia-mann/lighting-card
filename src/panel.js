@@ -23,20 +23,28 @@ export class PanelComponent extends LitElement {
         this._initialized = true;
     }
 
+    hasRelevantChanges() {
+        return this._entityIds.some((entityId) => (this._changedEntityIds.has(entityId)))
+    }
+
     shouldUpdate(changedProps) {
-        return (!this._initialized || this._changedEntityIds.size > 0 || changedProps.has("_floorId") > 0)
+        return (!this._initialized || this.hasRelevantChanges() || changedProps.has("_floorId") > 0)
     }
 
     getAreaName(areaId) {
         return this._areas[areaId].name;
     }
 
-    getLightDisplay(lightId, lightStructure, lightStates) {
+    getLightDisplay(lightId, lightStructure) {
+        const lightStates = this.getStates(lightId, lightStructure);
+        const lightEntityIds = this.getEntityIds(lightId, lightStructure);
         return html`
             <light-component
                 class="outlined"
                 ._lightId = ${lightId}
                 ._structure = ${lightStructure}
+                ._entityIds = ${lightEntityIds}
+                ._changedEntityIds = ${this._changedEntityIds}
                 ._states = ${lightStates}
                 .callService=${this.callService}
             ></light-component>
@@ -69,8 +77,7 @@ export class PanelComponent extends LitElement {
         const areaStructure = this._structure[areaId];
         const areaComponents = Object.keys(areaStructure).map((lightId) => {
             const lightStructure = areaStructure[lightId];
-            const lightStates = this.getStates(lightId, lightStructure)
-            return this.getLightDisplay(lightId, lightStructure, lightStates)
+            return this.getLightDisplay(lightId, lightStructure)
         })
         return html`
             <div class="area">

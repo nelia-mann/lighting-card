@@ -8,8 +8,11 @@ export class LightComponent extends LitElement {
 
     _holding = false;
     _HOLD_DURATION = 500;
-    _structure;
+    _structure = {};
     _lightId;
+    _entityIds = [];
+    _changedEntityIds = new Set();
+    _initialized = false;
 
     static get properties() {
         return {
@@ -21,6 +24,19 @@ export class LightComponent extends LitElement {
     constructor() {
         super();
         this.isModalOpen = false;
+    }
+
+    update(changedProps) {
+        super.update(changedProps);
+        this._initialized = true;
+    }
+
+    hasRelevantChanges() {
+        return this._entityIds.some((entityId) => (this._changedEntityIds.has(entityId)))
+    }
+
+    shouldUpdate(changedProps) {
+        return (!this._initialized || this.hasRelevantChanges() || changedProps.has("isModalOpen") > 0)
     }
 
     static styles = [sharedStyles, styles];

@@ -490,7 +490,7 @@ export class MainCard extends LitElement {
                 ._states = ${this.getFloorStates()}
                 ._areas = ${this.getAreas()}
                 ._entityIds = ${this.getFloorEntityIds()}
-                ._changedEntityIds = ${this.getFloorCEIs()}
+                ._changedEntityIds = ${this._changedEntityIds}
                 ._floorId = ${this.getFloorId()}
                 .callService=${this._hass.callService}
             ></panel-component>
