@@ -10896,21 +10896,27 @@ customElements.define("light-component", $046ae152b1d9e254$export$5e33b198135dff
 class $fdede02cbd34666f$export$40073d408f029a0b extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
     _areas = {};
     _structure = {};
+    _entityIds = [];
+    _changedEntityIds = new Set();
+    _initialized = false;
     static get properties() {
         return {
+            _floorId: {
+                state: true
+            },
             _states: {
                 state: true
             }
         };
     }
-    /*     update(changedProps) {
+    update(changedProps) {
         super.update(changedProps);
         this._initialized = true;
     }
-
     shouldUpdate(changedProps) {
-        return (!this._initialized || this._changedEntityIds.size > 0 || changedProps.has("_floorId") > 0)
-    } */ getAreaName(areaId) {
+        return !this._initialized || this._changedEntityIds.size > 0 || changedProps.has("_floorId") > 0;
+    }
+    getAreaName(areaId) {
         return this._areas[areaId].name;
     }
     getLightDisplay(lightId, lightStructure, lightStates) {
@@ -11021,6 +11027,7 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
         }
         if (this._changedEntities) {
             this.updateStates();
+            this.setFloorCEIs();
             this._changedEntities = false;
         }
         this._ready = this._structuresBuilt && !!this._entityIds.length > 0 && this._entityIds.every((id)=>this._states[id]);
@@ -11304,6 +11311,18 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
         });
         return states;
     }
+    setFloorCEIs() {
+        const floorEntityIds = this.getFloorEntityIds();
+        const changedEntityIds = this._changedEntityIds;
+        let floorCEIs = new Set();
+        changedEntityIds.forEach((entityId)=>{
+            floorEntityIds.includes(entityId) && floorCEIs.add(entityId);
+        });
+        this._floorCEIs = floorCEIs;
+    }
+    getFloorCEIs() {
+        return this._floorCEIs;
+    }
     // deals with click to select floor.
     onClick(e) {
         this.setFloorId(e.currentTarget.id);
@@ -11372,6 +11391,9 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
                 ._structure = ${this.getFloorStructure()}
                 ._states = ${this.getFloorStates()}
                 ._areas = ${this.getAreas()}
+                ._entityIds = ${this.getFloorEntityIds()}
+                ._changedEntityIds = ${this.getFloorCEIs()}
+                ._floorId = ${this.getFloorId()}
                 .callService=${this._hass.callService}
             ></panel-component>
         `;

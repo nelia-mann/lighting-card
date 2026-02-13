@@ -7,21 +7,25 @@ export class PanelComponent extends LitElement {
 
     _areas = {};
     _structure = {};
+    _entityIds = [];
+    _changedEntityIds = new Set();
+    _initialized = false;
 
     static get properties() {
         return {
-            _states: { state: true }
+            _floorId: { state: true },
+            _states: { state: true}
         }
     }
 
-/*     update(changedProps) {
+    update(changedProps) {
         super.update(changedProps);
         this._initialized = true;
     }
 
     shouldUpdate(changedProps) {
         return (!this._initialized || this._changedEntityIds.size > 0 || changedProps.has("_floorId") > 0)
-    } */
+    }
 
     getAreaName(areaId) {
         return this._areas[areaId].name;

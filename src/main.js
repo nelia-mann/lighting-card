@@ -60,6 +60,7 @@ export class MainCard extends LitElement {
 
         if (this._changedEntities) {
             this.updateStates();
+            this.setFloorCEIs();
             this._changedEntities = false;
         }
         this._ready = this._structuresBuilt && !!this._entityIds.length > 0 && this._entityIds.every(id => this._states[id]);
@@ -401,6 +402,20 @@ export class MainCard extends LitElement {
         return states;
     }
 
+    setFloorCEIs() {
+        const floorEntityIds = this.getFloorEntityIds();
+        const changedEntityIds = this._changedEntityIds;
+        let floorCEIs = new Set();
+        changedEntityIds.forEach((entityId) => {
+            (floorEntityIds.includes(entityId)) && (floorCEIs.add(entityId));
+        })
+        this._floorCEIs = floorCEIs;
+    }
+
+    getFloorCEIs() {
+        return this._floorCEIs;
+    }
+
     // deals with click to select floor.
     onClick(e) {
         this.setFloorId(e.currentTarget.id);
@@ -474,6 +489,9 @@ export class MainCard extends LitElement {
                 ._structure = ${this.getFloorStructure()}
                 ._states = ${this.getFloorStates()}
                 ._areas = ${this.getAreas()}
+                ._entityIds = ${this.getFloorEntityIds()}
+                ._changedEntityIds = ${this.getFloorCEIs()}
+                ._floorId = ${this.getFloorId()}
                 .callService=${this._hass.callService}
             ></panel-component>
         `;
