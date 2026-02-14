@@ -695,7 +695,7 @@ var $24833e213e3419f0$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         width: 800px;
     }
 
-    panel-component {
+    floor-panel {
         width: 100%;
         height: 400px;
         margin: 0px;
@@ -10906,8 +10906,7 @@ class $046ae152b1d9e254$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
 customElements.define("light-component", $046ae152b1d9e254$export$5e33b198135dff7b);
 
 
-class $fdede02cbd34666f$export$40073d408f029a0b extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
-    _areas = {};
+class $dbb1b89729cbe16a$export$8ff612b8b93103f2 extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
     _structure = {};
     _entityIds = [];
     _changedEntityIds = new Set();
@@ -10933,7 +10932,7 @@ class $fdede02cbd34666f$export$40073d408f029a0b extends (0, $ab210b2da7b39b9d$ex
         return !this._initialized || this.hasRelevantChanges() || changedProps.has("_floorId") > 0;
     }
     getAreaName(areaId) {
-        return this._areas[areaId].name;
+        return this._structure[areaId].name;
     }
     getLightDisplay(lightId, lightStructure) {
         const lightStates = this.getStates(lightId, lightStructure);
@@ -10971,7 +10970,7 @@ class $fdede02cbd34666f$export$40073d408f029a0b extends (0, $ab210b2da7b39b9d$ex
     }
     getAreaDisplay(areaId) {
         const title = this.getAreaName(areaId);
-        const areaStructure = this._structure[areaId];
+        const areaStructure = this._structure[areaId].structure;
         const areaComponents = Object.keys(areaStructure).map((lightId)=>{
             const lightStructure = areaStructure[lightId];
             return this.getLightDisplay(lightId, lightStructure);
@@ -10993,15 +10992,13 @@ class $fdede02cbd34666f$export$40073d408f029a0b extends (0, $ab210b2da7b39b9d$ex
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`${this.getAreaDisplays()}`;
     }
 }
-customElements.define("panel-component", $fdede02cbd34666f$export$40073d408f029a0b);
+customElements.define("floor-panel", $dbb1b89729cbe16a$export$8ff612b8b93103f2);
 
 
 
 class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
     // private properties
     _hass;
-    _floors = {};
-    _areas = {};
     _structure = {};
     _entityIds = [];
     _states = {};
@@ -11010,7 +11007,6 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
     _changedEntities = false;
     _needsRender = false;
     _changedEntityIds = new Set();
-    _floorCEIs = new Set();
     // internal reactive states
     static get properties() {
         return {
@@ -11046,7 +11042,6 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
         }
         if (this._changedEntities) {
             this.updateStates();
-            this.setFloorCEIs();
             this._changedEntities = false;
         }
         this._ready = this._structuresBuilt && !!this._entityIds.length > 0 && this._entityIds.every((id)=>this._states[id]);
@@ -11071,67 +11066,48 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
     getHassFloors() {
         return this._hass.floors;
     }
-    setFloors() {
-        const hassFloors = this.getHassFloors();
-        let floors = {};
-        Object.entries(hassFloors).forEach(([floorId, floor])=>{
-            floors[floorId] = {
-                name: floor.name
-            };
-        });
-        this._floors = floors;
-    }
-    getFloors() {
-        return this._floors;
-    }
-    getFloorName(floorId) {
-        const floors = this.getFloors();
-        const floor = floors[floorId];
-        return floor.name;
-    }
     // adds the outer dictionary structure (with floor_ids as keys) to this._lightBundles
     setFloorStructure() {
         this._structure = {};
-        const floors = this.getFloors();
-        Object.keys(floors).forEach((floorId)=>{
-            this._structure[floorId] = {};
+        const floors = this.getHassFloors();
+        Object.entries(floors).forEach(([floorId, floor])=>{
+            const floorName = floor.name;
+            this._structure[floorId] = {
+                name: floorName,
+                structure: {}
+            };
         });
+    }
+    getFloorStructure(floorId) {
+        return this._structure[floorId].structure;
+    }
+    getFloorName(floorId) {
+        return this._structure[floorId].name;
     }
     /********************************* Area Structure **************************************/ getHassAreas() {
         return this._hass.areas;
     }
-    setAreas() {
-        const hassAreas = this.getHassAreas();
-        let areas = {};
-        Object.entries(hassAreas).forEach(([areaId, area])=>{
-            areas[areaId] = {
-                name: area.name,
-                floorId: area.floor_id
-            };
-        });
-        this._areas = areas;
-    }
-    // returns a dictionary of dictionaries.  The outer dictionary's keys are the area_ids.
-    // the inner dictionary has area_id, name, and floor_id keys.
-    getAreas() {
-        return this._areas;
-    }
     // determines whether a given area_id corresponds to an area on a floor with a given floor id.
     isOnFloor(floorId, areaId) {
-        const areas = this.getAreas();
+        const areas = this.getHassAreas();
         const area = areas[areaId];
-        return area.floorId === floorId;
+        return area.floor_id === floorId;
     }
     // adds the second dictionary structure (with area_ids as keys) to this._lightBundles
     setAreaStructure() {
-        const areas = this.getAreas();
+        const areas = this.getHassAreas();
         Object.entries(this._structure).forEach(([floorId, floorDictionary])=>{
-            Object.keys(areas).forEach((areaId)=>{
-                this.isOnFloor(floorId, areaId) && (floorDictionary[areaId] = {});
+            let floorStructure = floorDictionary.structure;
+            Object.entries(areas).forEach(([areaId, area])=>{
+                const name = area.name;
+                this.isOnFloor(floorId, areaId) && (floorStructure[areaId] = {
+                    name: name,
+                    structure: {}
+                });
             });
         });
     }
-    /***************************************************************************************/ getHassEntities() {
+    /******************************* Light Structure ****************************************/ getHassEntities() {
         return this._hass.entities;
     }
     getHassStates() {
@@ -11235,13 +11211,15 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
     setLightIdStructure() {
         const lightIds = this.getLightIds();
         Object.values(this._structure).forEach((floorDict)=>{
-            Object.entries(floorDict).forEach(([areaId, areaDict])=>{
+            let floorStructure = floorDict.structure;
+            Object.entries(floorStructure).forEach(([areaId, areaDict])=>{
+                let areaStructure = areaDict.structure;
                 lightIds.forEach((lightId)=>{
                     if (this.isInArea(lightId, areaId) && !this.isInAGroup(lightId)) {
                         let lightDictionary = {};
                         this.hasTheme(lightId) && this.setThemeStructure(lightId, lightDictionary);
                         this.isAGroup(lightId) && this.setGroupStructure(lightId, lightDictionary);
-                        areaDict[lightId] = lightDictionary;
+                        areaStructure[lightId] = lightDictionary;
                     }
                 });
             });
@@ -11249,17 +11227,17 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
     }
     cleanStructure() {
         Object.entries(this._structure).forEach(([floorId, floorDictionary])=>{
-            Object.entries(floorDictionary).forEach(([areaId, areaDictionary])=>{
-                const areaKeys = Object.keys(areaDictionary);
-                if (areaKeys.length === 0) delete floorDictionary[areaId];
+            let floorStructure = floorDictionary.structure;
+            Object.entries(floorStructure).forEach(([areaId, areaDictionary])=>{
+                const areaStructure = areaDictionary.structure;
+                const areaKeys = Object.keys(areaStructure);
+                if (areaKeys.length === 0) delete floorStructure[areaId];
             });
-            const floorKeys = Object.keys(floorDictionary);
+            const floorKeys = Object.keys(floorStructure);
             if (floorKeys.length === 0) delete this._structure[floorId];
         });
     }
     setStructures() {
-        this.setFloors();
-        this.setAreas();
         this.setFloorStructure();
         this.setAreaStructure();
         this.setLightIdStructure();
@@ -11300,17 +11278,18 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
     }
     // sets the current floor to be the first of the listed floors.
     initializeFloor() {
-        const floors = this.getFloors();
-        const floorIds = Object.keys(floors);
+        const structure = this._structure;
+        const floorIds = Object.keys(structure);
         this.setFloorId(floorIds[0]);
     }
     getFloorStructure() {
-        return this._structure[this.getFloorId()];
+        return this._structure[this.getFloorId()].structure;
     }
     getFloorEntityIds() {
         const floorStructure = this.getFloorStructure();
         let entityIds = [];
-        Object.values(floorStructure).forEach((areaStructure)=>{
+        Object.values(floorStructure).forEach((areaDict)=>{
+            const areaStructure = areaDict.structure;
             Object.entries(areaStructure).forEach(([lightId, lightStructure])=>{
                 entityIds.push(lightId);
                 lightStructure.theme && entityIds.push(lightStructure.theme);
@@ -11330,18 +11309,6 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
         });
         return states;
     }
-    setFloorCEIs() {
-        const floorEntityIds = this.getFloorEntityIds();
-        const changedEntityIds = this._changedEntityIds;
-        let floorCEIs = new Set();
-        changedEntityIds.forEach((entityId)=>{
-            floorEntityIds.includes(entityId) && floorCEIs.add(entityId);
-        });
-        this._floorCEIs = floorCEIs;
-    }
-    getFloorCEIs() {
-        return this._floorCEIs;
-    }
     // deals with click to select floor.
     onClick(e) {
         this.setFloorId(e.currentTarget.id);
@@ -11349,10 +11316,11 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
     /************************* style and html ***********************************/ // given a particular floor id, returns an array with the total number of lights,
     // and the number that are on.
     getLightData(floorId) {
-        const floorStructure = this._structure[floorId];
+        const floorStructure = this._structure[floorId].structure;
         let on = 0;
         let tot = 0;
-        Object.values(floorStructure).forEach((areaStructure)=>{
+        Object.values(floorStructure).forEach((areaDict)=>{
+            const areaStructure = areaDict.structure;
             Object.keys(areaStructure).forEach((lightId)=>{
                 const lightState = this._states[lightId];
                 if (lightState) {
@@ -11400,21 +11368,20 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
     }
     // generates the list of floor buttons.
     floorButtons() {
-        const floorIds = Object.keys(this.getFloors());
+        const floorIds = Object.keys(this._structure);
         return floorIds.map((floorId)=>this.floorButton(floorId));
     }
     // generates panel content, based on currently selected floor.
     content() {
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-            <panel-component
+            <floor-panel
                 ._structure = ${this.getFloorStructure()}
                 ._states = ${this.getFloorStates()}
-                ._areas = ${this.getAreas()}
                 ._entityIds = ${this.getFloorEntityIds()}
                 ._changedEntityIds = ${this._changedEntityIds}
                 ._floorId = ${this.getFloorId()}
                 .callService=${this._hass.callService}
-            ></panel-component>
+            ></floor-panel>
         `;
     }
     // pull styles

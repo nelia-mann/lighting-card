@@ -3,9 +3,8 @@ import styles from './panel.styles.js';
 import sharedStyles from './shared-styles.js';
 import './light.js';
 
-export class PanelComponent extends LitElement {
+export class FloorPanel extends LitElement {
 
-    _areas = {};
     _structure = {};
     _entityIds = [];
     _changedEntityIds = new Set();
@@ -14,7 +13,7 @@ export class PanelComponent extends LitElement {
     static get properties() {
         return {
             _floorId: { state: true },
-            _states: { state: true}
+            _states: { state: true }
         }
     }
 
@@ -32,7 +31,7 @@ export class PanelComponent extends LitElement {
     }
 
     getAreaName(areaId) {
-        return this._areas[areaId].name;
+        return this._structure[areaId].name;
     }
 
     getLightDisplay(lightId, lightStructure) {
@@ -74,7 +73,7 @@ export class PanelComponent extends LitElement {
 
     getAreaDisplay(areaId) {
         const title = this.getAreaName(areaId);
-        const areaStructure = this._structure[areaId];
+        const areaStructure = this._structure[areaId].structure;
         const areaComponents = Object.keys(areaStructure).map((lightId) => {
             const lightStructure = areaStructure[lightId];
             return this.getLightDisplay(lightId, lightStructure)
@@ -99,4 +98,4 @@ export class PanelComponent extends LitElement {
 
 }
 
-customElements.define("panel-component", PanelComponent);
+customElements.define("floor-panel", FloorPanel);

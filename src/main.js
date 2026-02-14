@@ -2,15 +2,13 @@ import { html, LitElement } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
 import styles from './main.styles.js';
 import sharedStyles from './shared-styles.js';
-import "./panel.js";
+import "./floor-panel.js";
 import { interpolateRGB, OFF, ONLIGHT, rgba } from './color-util.js';
 
 export class MainCard extends LitElement {
 
     // private properties
     _hass;
-    _floors = {};
-    _areas = {};
     _structure = {};
     _entityIds = [];
     _states = {};
@@ -19,7 +17,6 @@ export class MainCard extends LitElement {
     _changedEntities = false;
     _needsRender = false;
     _changedEntityIds = new Set();
-    _floorCEIs = new Set();
 
     // internal reactive states
     static get properties() {
@@ -60,7 +57,6 @@ export class MainCard extends LitElement {
 
         if (this._changedEntities) {
             this.updateStates();
-            this.setFloorCEIs();
             this._changedEntities = false;
         }
         this._ready = this._structuresBuilt && !!this._entityIds.length > 0 && this._entityIds.every(id => this._states[id]);
@@ -101,32 +97,22 @@ export class MainCard extends LitElement {
         return this._hass.floors;
     }
 
-    setFloors() {
-        const hassFloors = this.getHassFloors();
-        let floors = {};
-        Object.entries(hassFloors).forEach(([floorId, floor]) => {
-            floors[floorId] = { name: floor.name };
-        })
-        this._floors = floors;
-    }
-
-    getFloors() {
-        return this._floors;
-    }
-
-    getFloorName(floorId) {
-        const floors = this.getFloors();
-        const floor = floors[floorId];
-        return floor.name;
-    }
-
     // adds the outer dictionary structure (with floor_ids as keys) to this._lightBundles
     setFloorStructure() {
         this._structure = {};
-        const floors = this.getFloors();
-        Object.keys(floors).forEach((floorId) => {
-            this._structure[floorId] = {};
+        const floors = this.getHassFloors();
+        Object.entries(floors).forEach(([floorId, floor]) => {
+            const floorName = floor.name
+            this._structure[floorId] = { name: floorName, structure: {} };
         })
+    }
+
+    getFloorStructure(floorId) {
+        return this._structure[floorId].structure;
+    }
+
+    getFloorName(floorId) {
+        return this._structure[floorId].name;
     }
 
     /********************************* Area Structure **************************************/
@@ -135,39 +121,26 @@ export class MainCard extends LitElement {
         return this._hass.areas;
     }
 
-    setAreas() {
-        const hassAreas = this.getHassAreas();
-        let areas = {};
-        Object.entries(hassAreas).forEach(([areaId, area]) => {
-            areas[areaId] = { name: area.name, floorId: area.floor_id }
-        })
-        this._areas = areas;
-    }
-
-    // returns a dictionary of dictionaries.  The outer dictionary's keys are the area_ids.
-    // the inner dictionary has area_id, name, and floor_id keys.
-    getAreas() {
-        return this._areas;
-    }
-
     // determines whether a given area_id corresponds to an area on a floor with a given floor id.
     isOnFloor(floorId, areaId) {
-        const areas = this.getAreas();
+        const areas = this.getHassAreas();
         const area = areas[areaId];
-        return (area.floorId === floorId);
+        return (area.floor_id === floorId);
     }
 
     // adds the second dictionary structure (with area_ids as keys) to this._lightBundles
     setAreaStructure() {
-        const areas = this.getAreas();
+        const areas = this.getHassAreas();
         Object.entries(this._structure).forEach(([floorId, floorDictionary]) => {
-            Object.keys(areas).forEach((areaId) => {
-                (this.isOnFloor(floorId, areaId)) && (floorDictionary[areaId] = {});
+            let floorStructure = floorDictionary.structure;
+            Object.entries(areas).forEach(([areaId, area]) => {
+                const name = area.name;
+                (this.isOnFloor(floorId, areaId)) && (floorStructure[areaId] = { name: name, structure: {}});
             })
         })
     }
 
-    /***************************************************************************************/
+    /******************************* Light Structure ****************************************/
 
     getHassEntities() {
         return this._hass.entities;
@@ -289,13 +262,15 @@ export class MainCard extends LitElement {
     setLightIdStructure() {
         const lightIds = this.getLightIds();
         Object.values(this._structure).forEach((floorDict) => {
-            Object.entries(floorDict).forEach(([areaId, areaDict]) => {
+            let floorStructure = floorDict.structure;
+            Object.entries(floorStructure).forEach(([areaId, areaDict]) => {
+                let areaStructure = areaDict.structure;
                 lightIds.forEach((lightId) => {
                     if ((this.isInArea(lightId, areaId)) && (!this.isInAGroup(lightId))) {
                         let lightDictionary = {};
                         (this.hasTheme(lightId)) && (this.setThemeStructure(lightId, lightDictionary));
                         (this.isAGroup(lightId)) && (this.setGroupStructure(lightId, lightDictionary));
-                        areaDict[lightId] = lightDictionary;
+                        areaStructure[lightId] = lightDictionary;
                     }
                 })
             })
@@ -304,13 +279,15 @@ export class MainCard extends LitElement {
 
     cleanStructure() {
         Object.entries(this._structure).forEach(([floorId, floorDictionary]) => {
-            Object.entries(floorDictionary).forEach(([areaId, areaDictionary]) => {
-                const areaKeys = Object.keys(areaDictionary);
+            let floorStructure = floorDictionary.structure;
+            Object.entries(floorStructure).forEach(([areaId, areaDictionary]) => {
+                const areaStructure = areaDictionary.structure;
+                const areaKeys = Object.keys(areaStructure);
                 if (areaKeys.length === 0) {
-                    delete floorDictionary[areaId];
+                    delete floorStructure[areaId];
                 }
             })
-            const floorKeys = Object.keys(floorDictionary);
+            const floorKeys = Object.keys(floorStructure);
             if (floorKeys.length === 0) {
                 delete this._structure[floorId]
             }
@@ -318,8 +295,6 @@ export class MainCard extends LitElement {
     }
 
     setStructures() {
-        this.setFloors();
-        this.setAreas();
         this.setFloorStructure();
         this.setAreaStructure();
         this.setLightIdStructure();
@@ -366,19 +341,20 @@ export class MainCard extends LitElement {
 
     // sets the current floor to be the first of the listed floors.
     initializeFloor() {
-        const floors = this.getFloors();
-        const floorIds = Object.keys(floors);
+        const structure = this._structure;
+        const floorIds = Object.keys(structure);
         this.setFloorId(floorIds[0]);
     }
 
     getFloorStructure() {
-        return this._structure[this.getFloorId()];
+        return this._structure[this.getFloorId()].structure;
     }
 
     getFloorEntityIds() {
         const floorStructure = this.getFloorStructure();
         let entityIds = [];
-        Object.values(floorStructure).forEach((areaStructure) => {
+        Object.values(floorStructure).forEach((areaDict) => {
+            const areaStructure = areaDict.structure;
             Object.entries(areaStructure).forEach(([lightId, lightStructure]) => {
                 entityIds.push(lightId);
                 (lightStructure.theme) && (entityIds.push(lightStructure.theme))
@@ -402,20 +378,6 @@ export class MainCard extends LitElement {
         return states;
     }
 
-    setFloorCEIs() {
-        const floorEntityIds = this.getFloorEntityIds();
-        const changedEntityIds = this._changedEntityIds;
-        let floorCEIs = new Set();
-        changedEntityIds.forEach((entityId) => {
-            (floorEntityIds.includes(entityId)) && (floorCEIs.add(entityId));
-        })
-        this._floorCEIs = floorCEIs;
-    }
-
-    getFloorCEIs() {
-        return this._floorCEIs;
-    }
-
     // deals with click to select floor.
     onClick(e) {
         this.setFloorId(e.currentTarget.id);
@@ -426,10 +388,11 @@ export class MainCard extends LitElement {
     // given a particular floor id, returns an array with the total number of lights,
     // and the number that are on.
     getLightData(floorId) {
-        const floorStructure = this._structure[floorId];
+        const floorStructure = this._structure[floorId].structure;
         let on = 0;
         let tot = 0;
-        Object.values(floorStructure).forEach((areaStructure) => {
+        Object.values(floorStructure).forEach((areaDict) => {
+            const areaStructure = areaDict.structure;
             Object.keys(areaStructure).forEach((lightId) => {
                 const lightState = this._states[lightId]
                 if (lightState) {
@@ -478,22 +441,21 @@ export class MainCard extends LitElement {
 
     // generates the list of floor buttons.
     floorButtons() {
-        const floorIds = Object.keys(this.getFloors());
+        const floorIds = Object.keys(this._structure);
         return floorIds.map((floorId) => (this.floorButton(floorId)));
     }
 
     // generates panel content, based on currently selected floor.
     content() {
         return html`
-            <panel-component
+            <floor-panel
                 ._structure = ${this.getFloorStructure()}
                 ._states = ${this.getFloorStates()}
-                ._areas = ${this.getAreas()}
                 ._entityIds = ${this.getFloorEntityIds()}
                 ._changedEntityIds = ${this._changedEntityIds}
                 ._floorId = ${this.getFloorId()}
                 .callService=${this._hass.callService}
-            ></panel-component>
+            ></floor-panel>
         `;
     }
 

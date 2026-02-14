@@ -13,7 +13,7 @@ export default css`
         width: 800px;
     }
 
-    panel-component {
+    floor-panel {
         width: 100%;
         height: 400px;
         margin: 0px;
