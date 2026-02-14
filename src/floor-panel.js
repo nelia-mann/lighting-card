@@ -1,4 +1,5 @@
 import { html, LitElement } from 'lit';
+import { repeat } from 'lit-html/directives/repeat.js';
 import styles from './floor.styles.js';
 import sharedStyles from './shared-styles.js';
 import './light.js';
@@ -8,13 +9,13 @@ export class FloorPanel extends LitElement {
 
     _structure = {};
     _entityIds = [];
-    _changedEntityIds = new Set();
     _initialized = false;
 
     static get properties() {
         return {
             _floorId: { state: true },
-            _states: { state: true }
+            _states: { state: true },
+            _changedEntityIds: { state: true }
         }
     }
 
@@ -28,27 +29,31 @@ export class FloorPanel extends LitElement {
     }
 
     shouldUpdate(changedProps) {
-        return (!this._initialized || this.hasRelevantChanges() || changedProps.has("_floorId") > 0)
+        return (!this._initialized || this.hasRelevantChanges() || changedProps.has("_floorId"))
     }
 
     getAreaName(areaId) {
         return this._structure[areaId].name;
     }
 
+    getAreaDisplay(areaId) {
+        const title = this.getAreaName(areaId);
+        const areaStructure = this._structure[areaId].structure;
+        return html`
+            <area-panel
+                ._structure = ${areaStructure}
+                ._name = ${title}
+                ._states = ${this._states}
+                ._changedEntityIds = ${this._changedEntityIds}
+                ._entityIds = ${this._entityIds}
+                .callService = ${this.callService}
+            ></area-panel>
+        `
+    }
+
     getAreaDisplays() {
-        return Object.keys(this._structure).map((areaId) => {
-            const title = this.getAreaName(areaId);
-            const areaStructure = this._structure[areaId].structure;
-            return html`
-                <area-panel
-                    ._structure = ${areaStructure}
-                    ._name = ${title}
-                    ._states = ${this._states}
-                    ._changedEntityIds = ${this._changedEntityIds}
-                    ._entityIds = ${this._entityIds}
-                ></area-panel>
-            `
-        })
+        const areaIds = Object.keys(this._structure);
+        return html`${repeat(areaIds, (areaId) => areaId, (areaId) => this.getAreaDisplay(areaId))}`
     }
 
     static styles = [sharedStyles, styles];

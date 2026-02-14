@@ -1,4 +1,5 @@
 import { html, LitElement } from 'lit';
+import { keyed } from 'lit/directives/keyed.js';
 import { styleMap } from 'lit/directives/style-map.js';
 import { tempGradient, getTempColor, hsGradient, rgba, ONLIGHT, INDIGO } from './color-util.js';
 import { mdiBrightness6, mdiCreationOutline } from '@mdi/js';
@@ -11,20 +12,39 @@ import './theme-select.js';
 
 export class LightControl extends LitElement {
 
+    _entityIds = [];
     _TYPES = ['onOff', 'brightness', 'ct', 'hs', 'theme'];
     _MINTEMP = 1500;
     _MAXTEMP = 9000;
+    _initialized = false;
 
     static get properties() {
         return {
             _lightState: { state: true },
             _themeState: { state: true },
-            _control: { state: true }
+            _control: { state: true },
+            _changedEntityIds: { state: true }
         }
     }
 
     constructor() {
         super();
+    }
+
+    update(changedProps) {
+        super.update(changedProps);
+        this._initialized = true;
+    }
+
+    hasRelevantChanges() {
+        return this._entityIds.some((entityId) => (this._changedEntityIds.has(entityId)))
+    }
+
+    shouldUpdate(changedProps) {
+        return (!this._initialized
+            || this.hasRelevantChanges()
+            || changedProps.has("_control")
+            || changedProps.has("_lightState"))
     }
 
     static styles = [sharedStyles, styles];
@@ -46,7 +66,7 @@ export class LightControl extends LitElement {
                 valid = true;
                 break;
             case 'theme':
-                valid = !!(this._themeState);
+                valid = !!(this._themeState.entity_id);
                 break;
             case 'hs':
                 attribute = this._lightState.attributes['hs_color'];
@@ -97,7 +117,7 @@ export class LightControl extends LitElement {
         let content = html``;
         switch (type) {
             case 'onOff':
-                content = html`<light-icon ._state=${this._lightState} ._isGroup=${this.isGroup()}></light-icon>`;
+                content = html`<light-icon ._state=${{ ...this._lightState }} ._isGroup=${this.isGroup()}></light-icon>`;
                 break;
             case 'brightness':
                 content = html`<ha-svg-icon .path=${mdiBrightness6}></ha-svg-icon>`;
@@ -151,44 +171,57 @@ export class LightControl extends LitElement {
     }
 
     brightnessBar() {
-        return html`<slider-bar
-            class="outlined"
-            ._light=${this._lightState}
-            @change=${(e) => this.handleLightService('turn_on', 'brightness', e.detail)}
-            ._max=${100}
-            ._min=${0}
-            ._startValue=${this._lightState.attributes.brightness * 100 / 255}
-            ._type=${'brightness'}
-        ></slider-bar>`
+        const light = this._lightState;
+        return keyed(light.entity_id, html`
+            <slider-bar
+                class="outlined"
+                ._entityIds = ${this._entityIds}
+                ._changedEntityIds = ${this._changedEntityIds}
+                ._light=${{...light}}
+                @change=${(e) => this.handleLightService('turn_on', 'brightness', e.detail)}
+                ._max=${100}
+                ._min=${0}
+                ._startValue=${light.attributes.brightness * 100 / 255}
+                ._type=${'brightness'}
+            ></slider-bar>`)
     }
 
     ctBar() {
-        return html`<slider-bar
+        const light = this._lightState;
+        return keyed(light.entity_id, html`<slider-bar
             class="outlined"
-            ._light=${this._lightState}
+            ._entityIds = ${this._entityIds}
+            ._changedEntityIds = ${this._changedEntityIds}
+            ._light=${{...light}}
             @change=${(e) => this.handleLightService('turn_on', 'color_temp_kelvin', e.detail)}
-            ._max=${this._lightState.attributes.max_color_temp_kelvin}
-            ._min=${this._lightState.attributes.min_color_temp_kelvin}
-            ._startValue=${this._lightState.attributes.color_temp_kelvin}
+            ._max=${light.attributes.max_color_temp_kelvin}
+            ._min=${light.attributes.min_color_temp_kelvin}
+            ._startValue=${light.attributes.color_temp_kelvin}
             ._type=${'ct'}
-        ></slider-bar>`
+        ></slider-bar>`)
     }
 
     colorWheel() {
-        return html`<color-wheel
+        const light = this._lightState;
+        return keyed(light.entity_id, html`<color-wheel
             class="outlined"
-            ._light = ${this._lightState}
+            ._entityIds = ${this._entityIds}
+            ._changedEntityIds = ${this._changedEntityIds}
+            ._light = ${{...light}}
             @change = ${(e) => this.handleLightService('turn_on', 'hs_color', e.detail)}
-        ></color-wheel>`
+        ></color-wheel>`)
     }
 
     themeSelect() {
-        return html`<theme-select
+        const theme = this._themeState;
+        return keyed(theme.entity_id, html`<theme-select
             class="outlined"
-            ._theme = ${this._themeState}
+            ._entityIds = ${this._entityIds}
+            ._changedEntityIds = ${this._changedEntityIds}
+            ._theme = ${{...theme}}
             @change = ${this.handleTheme}
         ></theme-select>
-        `
+        `)
     }
 
     controls() {
@@ -223,12 +256,14 @@ export class LightControl extends LitElement {
     }
 
     render() {
-        return html`
-            <div class="control-column outlined">
-                ${this.icons()}
-            </div>
-            ${this.controls()}
-        `
+        if (this._initialized) {
+            return html`
+                <div class="control-column outlined">
+                    ${this.icons()}
+                </div>
+                ${this.controls()}
+            `
+        }
     }
 
 }

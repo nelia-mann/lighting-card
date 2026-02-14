@@ -813,6 +813,104 @@ var $65e9333b9a0c9dfd$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 
 
 
+
+
+/**
+ * @license
+ * Copyright 2020 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */ const { I: $311430566e21b48b$var$t } = (0, $f58f44579a4747ac$export$8613d1ca9052b22e), $311430566e21b48b$export$c3825b437cbdea5c = (o)=>null === o || "object" != typeof o && "function" != typeof o, $311430566e21b48b$export$80c36ae3cab9881d = {
+    HTML: 1,
+    SVG: 2,
+    MATHML: 3
+}, $311430566e21b48b$export$6b6d145ec2a44ca9 = (o, t)=>void 0 === t ? void 0 !== o?._$litType$ : o?._$litType$ === t, $311430566e21b48b$export$6a0e8de894d2fcca = (o)=>null != o?._$litType$?.h, $311430566e21b48b$export$2f448fec17d50a3e = (o)=>void 0 !== o?._$litDirective$, $311430566e21b48b$export$f28e31de6a6eaf32 = (o)=>o?._$litDirective$, $311430566e21b48b$export$7f431ad0fff82fd9 = (o)=>void 0 === o.strings, $311430566e21b48b$var$r = ()=>document.createComment(""), $311430566e21b48b$export$291b2338ad9b0b30 = (o, i, n)=>{
+    const e = o._$AA.parentNode, l = void 0 === i ? o._$AB : i._$AA;
+    if (void 0 === n) {
+        const i = e.insertBefore($311430566e21b48b$var$r(), l), d = e.insertBefore($311430566e21b48b$var$r(), l);
+        n = new $311430566e21b48b$var$t(i, d, o, o.options);
+    } else {
+        const t = n._$AB.nextSibling, i = n._$AM, d = i !== o;
+        if (d) {
+            let t;
+            n._$AQ?.(o), n._$AM = o, void 0 !== n._$AP && (t = o._$AU) !== i._$AU && n._$AP(t);
+        }
+        if (t !== l || d) {
+            let o = n._$AA;
+            for(; o !== t;){
+                const t = o.nextSibling;
+                e.insertBefore(o, l), o = t;
+            }
+        }
+    }
+    return n;
+}, $311430566e21b48b$export$cb8bf9562088e9f4 = (o, t, i = o)=>(o._$AI(t, i), o), $311430566e21b48b$var$u = {}, $311430566e21b48b$export$ea70d9dd5965b1c8 = (o, t = $311430566e21b48b$var$u)=>o._$AH = t, $311430566e21b48b$export$59e9bce518cde500 = (o)=>o._$AH, $311430566e21b48b$export$3133b3144bbba267 = (o)=>{
+    o._$AR(), o._$AA.remove();
+}, $311430566e21b48b$export$7f600b8138c094dc = (o)=>{
+    o._$AR();
+};
+
+
+/**
+ * @license
+ * Copyright 2017 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */ const $6db6ff6394e885e6$var$u = (e, s, t)=>{
+    const r = new Map;
+    for(let l = s; l <= t; l++)r.set(e[l], l);
+    return r;
+}, $6db6ff6394e885e6$export$76d90c956114f2c2 = (0, $107bb7d062dde330$export$99b43ad1ed32e735)(class extends (0, $107bb7d062dde330$export$befdefbdce210f91) {
+    constructor(e){
+        if (super(e), e.type !== (0, $107bb7d062dde330$export$9ba3b3f20a85bfa).CHILD) throw Error("repeat() can only be used in text expressions");
+    }
+    dt(e, s, t) {
+        let r;
+        void 0 === t ? t = s : void 0 !== s && (r = s);
+        const l = [], o = [];
+        let i = 0;
+        for (const s of e)l[i] = r ? r(s, i) : i, o[i] = t(s, i), i++;
+        return {
+            values: o,
+            keys: l
+        };
+    }
+    render(e, s, t) {
+        return this.dt(e, s, t).values;
+    }
+    update(s, [t, r, c]) {
+        const d = (0, $311430566e21b48b$export$59e9bce518cde500)(s), { values: p, keys: a } = this.dt(t, r, c);
+        if (!Array.isArray(d)) return this.ut = a, p;
+        const h = this.ut ??= [], v = [];
+        let m, y, x = 0, j = d.length - 1, k = 0, w = p.length - 1;
+        for(; x <= j && k <= w;)if (null === d[x]) x++;
+        else if (null === d[j]) j--;
+        else if (h[x] === a[k]) v[k] = (0, $311430566e21b48b$export$cb8bf9562088e9f4)(d[x], p[k]), x++, k++;
+        else if (h[j] === a[w]) v[w] = (0, $311430566e21b48b$export$cb8bf9562088e9f4)(d[j], p[w]), j--, w--;
+        else if (h[x] === a[w]) v[w] = (0, $311430566e21b48b$export$cb8bf9562088e9f4)(d[x], p[w]), (0, $311430566e21b48b$export$291b2338ad9b0b30)(s, v[w + 1], d[x]), x++, w--;
+        else if (h[j] === a[k]) v[k] = (0, $311430566e21b48b$export$cb8bf9562088e9f4)(d[j], p[k]), (0, $311430566e21b48b$export$291b2338ad9b0b30)(s, d[x], d[j]), j--, k++;
+        else if (void 0 === m && (m = $6db6ff6394e885e6$var$u(a, k, w), y = $6db6ff6394e885e6$var$u(h, x, j)), m.has(h[x])) {
+            if (m.has(h[j])) {
+                const e = y.get(a[k]), t = void 0 !== e ? d[e] : null;
+                if (null === t) {
+                    const e = (0, $311430566e21b48b$export$291b2338ad9b0b30)(s, d[x]);
+                    (0, $311430566e21b48b$export$cb8bf9562088e9f4)(e, p[k]), v[k] = e;
+                } else v[k] = (0, $311430566e21b48b$export$cb8bf9562088e9f4)(t, p[k]), (0, $311430566e21b48b$export$291b2338ad9b0b30)(s, d[x], t), d[e] = null;
+                k++;
+            } else (0, $311430566e21b48b$export$3133b3144bbba267)(d[j]), j--;
+        } else (0, $311430566e21b48b$export$3133b3144bbba267)(d[x]), x++;
+        for(; k <= w;){
+            const e = (0, $311430566e21b48b$export$291b2338ad9b0b30)(s, v[w + 1]);
+            (0, $311430566e21b48b$export$cb8bf9562088e9f4)(e, p[k]), v[k++] = e;
+        }
+        for(; x <= j;){
+            const e = d[x++];
+            null !== e && (0, $311430566e21b48b$export$3133b3144bbba267)(e);
+        }
+        return this.ut = a, (0, $311430566e21b48b$export$ea70d9dd5965b1c8)(s, v), $f58f44579a4747ac$export$9c068ae9cc5db4e8;
+    }
+});
+
+
+
 var $da359172525f210e$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
     area-panel {
         margin-left: 10px;
@@ -821,6 +919,7 @@ var $da359172525f210e$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
     }
 
 `;
+
 
 
 
@@ -8425,10 +8524,12 @@ function $f61590692659393c$export$5551a2d24ff40153(lightState) {
 
 
 class $4356f78c5c3f665b$export$82acdd66a4e4bf90 extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
-    _isGroup;
     static get properties() {
         return {
             _state: {
+                state: true
+            },
+            _isGroup: {
                 state: true
             }
         };
@@ -8456,6 +8557,7 @@ class $4356f78c5c3f665b$export$82acdd66a4e4bf90 extends (0, $ab210b2da7b39b9d$ex
     }
 }
 customElements.define("light-icon", $4356f78c5c3f665b$export$82acdd66a4e4bf90);
+
 
 
 
@@ -8538,6 +8640,28 @@ var $84adf0e0aa3f1db7$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
     }
 
 `;
+
+
+
+
+
+
+
+/**
+ * @license
+ * Copyright 2021 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */ const $bf5aa997e63c2265$export$8dbf9c790527241e = (0, $107bb7d062dde330$export$99b43ad1ed32e735)(class extends (0, $107bb7d062dde330$export$befdefbdce210f91) {
+    constructor(){
+        super(...arguments), this.key = (0, $f58f44579a4747ac$export$45b790e32b2810ee);
+    }
+    render(r, t) {
+        return this.key = r, t;
+    }
+    update(r, [t, e]) {
+        return t !== this.key && ((0, $311430566e21b48b$export$ea70d9dd5965b1c8)(r), this.key = t), e;
+    }
+});
 
 
 
@@ -8699,8 +8823,9 @@ var $57a27094fb213e22$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 class $6520265339ffabe1$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
     _max;
     _min;
-    _startValue;
     _type;
+    _entityIds = [];
+    _initialized = false;
     static get properties() {
         return {
             _light: {
@@ -8708,11 +8833,34 @@ class $6520265339ffabe1$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$ex
             },
             _value: {
                 state: true
+            },
+            _changedEntityIds: {
+                state: true
+            },
+            _startValue: {
+                state: true
             }
         };
     }
     constructor(){
         super();
+    }
+    update(changedProps) {
+        super.update(changedProps);
+        this._initialized = true;
+    }
+    firstUpdated() {
+        this.setInitialValue();
+    }
+    hasRelevantChanges() {
+        return this._entityIds.some((entityId)=>this._changedEntityIds.has(entityId));
+    }
+    shouldUpdate(changedProps) {
+        return !this._initialized || this.hasRelevantChanges() || changedProps.has("_value") || changedProps.has("_light");
+    }
+    setInitialValue() {
+        if (this._startValue) this._value = this._startValue;
+        else this._value = this._min;
     }
     static styles = [
         (0, $65e9333b9a0c9dfd$export$2e2bcd8739ae039),
@@ -8730,9 +8878,7 @@ class $6520265339ffabe1$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$ex
         this._value = value;
     }
     getValue() {
-        if (this._value) return this._value;
-        else if (this._startValue) return this._startValue;
-        else return this._min;
+        return this._value;
     }
     addUnits(value) {
         let newValue = String(Math.round(value));
@@ -8768,40 +8914,40 @@ class $6520265339ffabe1$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$ex
         return styles;
     }
     render() {
-        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-            <div class="values">
-                <div class="inner-values">
-                    <div class="top-value"> ${this.addUnits(this._max)} </div>
-                    <div class="bottom-value"> ${this.addUnits(this._min)} </div>
-                </div>
-            </div>
-            <div class="slider outlined">
-                <div class="inner-slider">
-                    <div
-                        class="shown-slider ${this._type}"
-                        style="${(0, $19f464fcda7d2482$export$1e5b4ce2fa884e6a)(this.getStyleBG())}"
-                    >
-                        <div class="shown-level" style="${(0, $19f464fcda7d2482$export$1e5b4ce2fa884e6a)(this.getStyleLevel())}"></div>
-                    </div>
-                    <input
-                        class="actual-slider"
-                        type="range"
-                        max=${this._max}
-                        min=${this._min}
-                        value="${this.getValue()}"
-                        @input="${this.handleOnInput}"
-                        @change="${this.handleOnChange}"
-                    ></input>
-                </div>
-            </div>
-            <div class="values">
-                <div class="inner-values">
-                    <div class="current-value" style="${(0, $19f464fcda7d2482$export$1e5b4ce2fa884e6a)(this.getStyleLevel())}">
-                        ${this.addUnits(this.getValue())}
+        if (this._initialized) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+                <div class="values">
+                    <div class="inner-values">
+                        <div class="top-value"> ${this.addUnits(this._max)} </div>
+                        <div class="bottom-value"> ${this.addUnits(this._min)} </div>
                     </div>
                 </div>
-            </div>
-        `;
+                <div class="slider outlined">
+                    <div class="inner-slider">
+                        <div
+                            class="shown-slider ${this._type}"
+                            style="${(0, $19f464fcda7d2482$export$1e5b4ce2fa884e6a)(this.getStyleBG())}"
+                        >
+                            <div class="shown-level" style="${(0, $19f464fcda7d2482$export$1e5b4ce2fa884e6a)(this.getStyleLevel())}"></div>
+                        </div>
+                        <input
+                            class="actual-slider"
+                            type="range"
+                            max=${this._max}
+                            min=${this._min}
+                            value="${this.getValue()}"
+                            @input="${this.handleOnInput}"
+                            @change="${this.handleOnChange}"
+                        ></input>
+                    </div>
+                </div>
+                <div class="values">
+                    <div class="inner-values">
+                        <div class="current-value" style="${(0, $19f464fcda7d2482$export$1e5b4ce2fa884e6a)(this.getStyleLevel())}">
+                            ${this.addUnits(this.getValue())}
+                        </div>
+                    </div>
+                </div>
+            `;
     }
 }
 customElements.define("slider-bar", $6520265339ffabe1$export$5ff34efdd1b9ed54);
@@ -10392,6 +10538,7 @@ customElements.define("theme-select", $a6f01a0d74278018$export$1b9e02e625a724dc)
 
 
 class $f76fa2dde9e8d076$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
+    _entityIds = [];
     _TYPES = [
         'onOff',
         'brightness',
@@ -10401,6 +10548,7 @@ class $f76fa2dde9e8d076$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$ex
     ];
     _MINTEMP = 1500;
     _MAXTEMP = 9000;
+    _initialized = false;
     static get properties() {
         return {
             _lightState: {
@@ -10411,11 +10559,24 @@ class $f76fa2dde9e8d076$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$ex
             },
             _control: {
                 state: true
+            },
+            _changedEntityIds: {
+                state: true
             }
         };
     }
     constructor(){
         super();
+    }
+    update(changedProps) {
+        super.update(changedProps);
+        this._initialized = true;
+    }
+    hasRelevantChanges() {
+        return this._entityIds.some((entityId)=>this._changedEntityIds.has(entityId));
+    }
+    shouldUpdate(changedProps) {
+        return !this._initialized || this.hasRelevantChanges() || changedProps.has("_control") || changedProps.has("_lightState");
     }
     static styles = [
         (0, $65e9333b9a0c9dfd$export$2e2bcd8739ae039),
@@ -10436,7 +10597,7 @@ class $f76fa2dde9e8d076$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$ex
                 valid = true;
                 break;
             case 'theme':
-                valid = !!this._themeState;
+                valid = !!this._themeState.entity_id;
                 break;
             case 'hs':
                 attribute = this._lightState.attributes['hs_color'];
@@ -10482,7 +10643,9 @@ class $f76fa2dde9e8d076$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$ex
         let content = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)``;
         switch(type){
             case 'onOff':
-                content = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<light-icon ._state=${this._lightState} ._isGroup=${this.isGroup()}></light-icon>`;
+                content = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<light-icon ._state=${{
+                    ...this._lightState
+                }} ._isGroup=${this.isGroup()}></light-icon>`;
                 break;
             case 'brightness':
                 content = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<ha-svg-icon .path=${0, $04557c061247a0a6$export$6ace9c955f434b80}></ha-svg-icon>`;
@@ -10528,41 +10691,62 @@ class $f76fa2dde9e8d076$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$ex
         this.callService('select', 'select_option', data);
     }
     brightnessBar() {
-        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<slider-bar
-            class="outlined"
-            ._light=${this._lightState}
-            @change=${(e)=>this.handleLightService('turn_on', 'brightness', e.detail)}
-            ._max=${100}
-            ._min=${0}
-            ._startValue=${this._lightState.attributes.brightness * 100 / 255}
-            ._type=${'brightness'}
-        ></slider-bar>`;
+        const light = this._lightState;
+        return (0, $bf5aa997e63c2265$export$8dbf9c790527241e)(light.entity_id, (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+            <slider-bar
+                class="outlined"
+                ._entityIds = ${this._entityIds}
+                ._changedEntityIds = ${this._changedEntityIds}
+                ._light=${{
+            ...light
+        }}
+                @change=${(e)=>this.handleLightService('turn_on', 'brightness', e.detail)}
+                ._max=${100}
+                ._min=${0}
+                ._startValue=${light.attributes.brightness * 100 / 255}
+                ._type=${'brightness'}
+            ></slider-bar>`);
     }
     ctBar() {
-        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<slider-bar
+        const light = this._lightState;
+        return (0, $bf5aa997e63c2265$export$8dbf9c790527241e)(light.entity_id, (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<slider-bar
             class="outlined"
-            ._light=${this._lightState}
+            ._entityIds = ${this._entityIds}
+            ._changedEntityIds = ${this._changedEntityIds}
+            ._light=${{
+            ...light
+        }}
             @change=${(e)=>this.handleLightService('turn_on', 'color_temp_kelvin', e.detail)}
-            ._max=${this._lightState.attributes.max_color_temp_kelvin}
-            ._min=${this._lightState.attributes.min_color_temp_kelvin}
-            ._startValue=${this._lightState.attributes.color_temp_kelvin}
+            ._max=${light.attributes.max_color_temp_kelvin}
+            ._min=${light.attributes.min_color_temp_kelvin}
+            ._startValue=${light.attributes.color_temp_kelvin}
             ._type=${'ct'}
-        ></slider-bar>`;
+        ></slider-bar>`);
     }
     colorWheel() {
-        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<color-wheel
+        const light = this._lightState;
+        return (0, $bf5aa997e63c2265$export$8dbf9c790527241e)(light.entity_id, (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<color-wheel
             class="outlined"
-            ._light = ${this._lightState}
+            ._entityIds = ${this._entityIds}
+            ._changedEntityIds = ${this._changedEntityIds}
+            ._light = ${{
+            ...light
+        }}
             @change = ${(e)=>this.handleLightService('turn_on', 'hs_color', e.detail)}
-        ></color-wheel>`;
+        ></color-wheel>`);
     }
     themeSelect() {
-        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<theme-select
+        const theme = this._themeState;
+        return (0, $bf5aa997e63c2265$export$8dbf9c790527241e)(theme.entity_id, (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<theme-select
             class="outlined"
-            ._theme = ${this._themeState}
+            ._entityIds = ${this._entityIds}
+            ._changedEntityIds = ${this._changedEntityIds}
+            ._theme = ${{
+            ...theme
+        }}
             @change = ${this.handleTheme}
         ></theme-select>
-        `;
+        `);
     }
     controls() {
         let panel;
@@ -10592,12 +10776,12 @@ class $f76fa2dde9e8d076$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$ex
         return icons;
     }
     render() {
-        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-            <div class="control-column outlined">
-                ${this.icons()}
-            </div>
-            ${this.controls()}
-        `;
+        if (this._initialized) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+                <div class="control-column outlined">
+                    ${this.icons()}
+                </div>
+                ${this.controls()}
+            `;
     }
 }
 customElements.define("light-control", $f76fa2dde9e8d076$export$5ebffa7af4af21de);
@@ -10606,7 +10790,10 @@ customElements.define("light-control", $f76fa2dde9e8d076$export$5ebffa7af4af21de
 
 class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
     _structure;
+    _theme;
     _lightId;
+    _entityIds = [];
+    _initialized = false;
     static get properties() {
         return {
             opened: {
@@ -10621,8 +10808,32 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
             },
             _states: {
                 state: true
+            },
+            _changedEntityIds: {
+                state: true
             }
         };
+    }
+    update(changedProps) {
+        super.update(changedProps);
+        this._initialized = true;
+    }
+    hasRelevantChanges() {
+        return this._entityIds.some((entityId)=>this._changedEntityIds.has(entityId));
+    }
+    shouldUpdate(changedProps) {
+        return !this._initialized || this.hasRelevantChanges() || changedProps.has("opened") || changedProps.has("_selectedId");
+    }
+    firstUpdated() {
+        this._selectedId = this._lightId;
+    }
+    // Lifecycle method to open/close the native dialog
+    updated(changedProperties) {
+        if (changedProperties.has('opened')) {
+            const dialog = this.shadowRoot.querySelector('dialog');
+            if (this.opened) dialog.showModal(); // Opens the dialog modally, disabling content behind it
+            else dialog.close();
+        }
     }
     static styles = [
         (0, $65e9333b9a0c9dfd$export$2e2bcd8739ae039),
@@ -10663,26 +10874,32 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
         }
     }
     isGroup(entityId) {
+        const lightIds = Object.keys(this._structure);
         if (this._lightId != entityId) return false;
-        else return !!this._structure.members;
+        else return lightIds.length > 0;
     }
     lights() {
-        const memberIds = this._structure.members;
-        if (memberIds) return Object.keys(memberIds).map((memberId)=>{
-            return this.innerLight(memberId, true);
-        });
+        const memberIds = Object.keys(this._structure);
+        return (0, $6db6ff6394e885e6$export$76d90c956114f2c2)(memberIds, (memberId)=>memberId, (memberId)=>this.innerLight(memberId, true));
     }
     lightControl() {
-        if (this.selectedLightState()) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+        const lightState = this.selectedLightState();
+        if (lightState) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
                 <light-control
-                    ._lightState = ${this.selectedLightState()}
-                    ._themeState = ${this.selectedThemeState()}
+                    id = ${lightState.entity_id}
+                    ._lightState = ${{
+            ...lightState
+        }}
+                    ._entityIds = ${this._entityIds}
+                    ._changedEntityIds = ${this._changedEntityIds}
+                    ._themeState = ${{
+            ...this.selectedThemeState()
+        }}
                     .callService=${this.callService}
                 ></light-control>
             `;
     }
     render() {
-        this.defaultSelect();
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
         <dialog class="outlined" @close="${this._handleClose}">
             <div class="modal-header">
@@ -10702,18 +10919,6 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
         </dialog>
         `;
     }
-    possibleIds() {
-        let ids = [
-            this._lightId
-        ];
-        if (this._structure.members) Object.keys(this._structure.members).forEach((memberId)=>{
-            ids.push(memberId);
-        });
-        return ids;
-    }
-    defaultSelect() {
-        if (!this.possibleIds().includes(this._selectedId)) this._selectedId = this._lightId;
-    }
     select(lightState) {
         this._selectedId = lightState.entity_id;
     }
@@ -10725,17 +10930,9 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
     }
     selectedThemeState() {
         let themeId;
-        if (this._selectedId === this._lightId) themeId = this._structure.theme;
-        else themeId = this._structure.members[this._selectedId].theme;
+        if (this._selectedId === this._lightId) themeId = this._theme;
+        else themeId = this._structure[this._selectedId].theme;
         if (themeId) return this._states[themeId];
-    }
-    // Lifecycle method to open/close the native dialog
-    updated(changedProperties) {
-        if (changedProperties.has('opened')) {
-            const dialog = this.shadowRoot.querySelector('dialog');
-            if (this.opened) dialog.showModal(); // Opens the dialog modally, disabling content behind it
-            else dialog.close();
-        }
     }
     closeModal() {
         this.opened = false;
@@ -10778,9 +10975,9 @@ class $046ae152b1d9e254$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
     _holding = false;
     _HOLD_DURATION = 500;
     _structure = {};
+    _theme;
     _lightId;
     _entityIds = [];
-    _changedEntityIds = new Set();
     _initialized = false;
     static get properties() {
         return {
@@ -10788,6 +10985,9 @@ class $046ae152b1d9e254$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
                 type: Boolean
             },
             _states: {
+                state: true
+            },
+            _changedEntityIds: {
                 state: true
             }
         };
@@ -10804,7 +11004,7 @@ class $046ae152b1d9e254$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
         return this._entityIds.some((entityId)=>this._changedEntityIds.has(entityId));
     }
     shouldUpdate(changedProps) {
-        return !this._initialized || this.hasRelevantChanges() || changedProps.has("isModalOpen") > 0;
+        return !this._initialized || this.hasRelevantChanges() || changedProps.has("isModalOpen");
     }
     static styles = [
         (0, $65e9333b9a0c9dfd$export$2e2bcd8739ae039),
@@ -10812,30 +11012,26 @@ class $046ae152b1d9e254$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
     ];
     icons() {
         let result;
-        const memberIds = this._structure.members;
+        let lightIds = Object.keys(this._structure);
+        lightIds.length === 0 && (lightIds = [
+            this._lightId
+        ]);
         let lightState;
-        if (memberIds) result = Object.keys(memberIds).map((memberId)=>{
-            lightState = this._states[memberId];
-            return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-                    <light-icon ._state=${lightState} ._isGroup=${false}></light-icon>
-                `;
+        result = (0, $6db6ff6394e885e6$export$76d90c956114f2c2)(lightIds, (lightId)=>lightId, (lightId)=>{
+            lightState = this._states[lightId];
+            return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<light-icon ._state=${lightState} ._isGroup=${false}></light-icon>`;
         });
-        else {
-            lightState = this._states[this._lightId];
-            result = (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-                    <light-icon ._state=${lightState} ._isGroup=${false}></light-icon>
-                `;
-        }
         return result;
     }
     hasOptions() {
         let valid = false;
         const state = this._states[this._lightId];
+        const lightIds = Object.keys(this._structure);
         !!this._structure.theme && (valid = true);
         !(state.attributes['hs_color'] === undefined) && (valid = true);
         !(state.attributes['color_temp_kelvin'] === undefined) && (valid = true);
         !(state.attributes['brightness'] === undefined) && (valid = true);
-        !!this._structure.members && (valid = true);
+        lightIds.length > 0 && (valid = true);
         return valid;
     }
     popoutWindow() {
@@ -10849,6 +11045,9 @@ class $046ae152b1d9e254$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
                     ._states = ${this._states}
                     ._lightId = ${this._lightId}
                     ._structure = ${this._structure}
+                    ._theme = ${this._theme}
+                    ._changedEntityIds = ${this._changedEntityIds}
+                    ._entityIds = ${this._entityIds}
                     .callService="${this.callService}"
                 ></popout-window>
             `;
@@ -10895,6 +11094,7 @@ customElements.define("light-component", $046ae152b1d9e254$export$5e33b198135dff
 
 
 
+
 var $93c1baf9705a8bf4$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
 
     light-component {
@@ -10917,94 +11117,14 @@ class $c4bf9ea410a302e7$export$f07dc1717dcb8b95 extends (0, $ab210b2da7b39b9d$ex
     _structure = {};
     _name;
     _entityIds = [];
-    _changedEntityIds = new Set();
     _initialized = false;
     _ready = false;
     static get properties() {
         return {
             _states: {
                 state: true
-            }
-        };
-    }
-    /*     update(changedProps) {
-        super.update(changedProps);
-        this._initialized = true;
-    }
-
-    hasRelevantChanges() {
-        return this._entityIds.some((entityId) => (this._changedEntityIds.has(entityId)))
-    }
-
-    shouldUpdate(changedProps) {
-        return (!this._intialized) || this.hasRelevantChanges()
-    } */ getAreaName() {
-        return this._name;
-    }
-    getLightDisplay(lightId, lightStructure) {
-        const lightStates = this.getStates(lightId, lightStructure);
-        const lightEntityIds = this.getEntityIds(lightId, lightStructure);
-        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-            <light-component
-                class="outlined"
-                ._lightId = ${lightId}
-                ._structure = ${lightStructure}
-                ._entityIds = ${lightEntityIds}
-                ._changedEntityIds = ${this._changedEntityIds}
-                ._states = ${lightStates}
-                .callService=${this.callService}
-            ></light-component>
-        `;
-    }
-    getEntityIds(lightId, lightStructure) {
-        let entityIds = [
-            lightId
-        ];
-        lightStructure.theme && entityIds.push(lightStructure.theme);
-        if (lightStructure.members) Object.entries(lightStructure.members).forEach(([memberId, memberStructure])=>{
-            entityIds.push(memberId);
-            memberStructure.theme && entityIds.push(memberStructure.theme);
-        });
-        return entityIds;
-    }
-    getStates(lightId, lightStructure) {
-        const entityIds = this.getEntityIds(lightId, lightStructure);
-        let states = {};
-        entityIds.forEach((entityId)=>{
-            states[entityId] = this._states[entityId];
-        });
-        return states;
-    }
-    static styles = [
-        (0, $65e9333b9a0c9dfd$export$2e2bcd8739ae039),
-        (0, $93c1baf9705a8bf4$export$2e2bcd8739ae039)
-    ];
-    render() {
-        const title = this.getAreaName();
-        const areaComponents = Object.keys(this._structure).map((lightId)=>{
-            const lightStructure = this._structure[lightId];
-            return this.getLightDisplay(lightId, lightStructure);
-        });
-        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-            <div class="small-heading">${title}</div>
-            ${areaComponents}
-            `;
-    }
-}
-customElements.define("area-panel", $c4bf9ea410a302e7$export$f07dc1717dcb8b95);
-
-
-class $dbb1b89729cbe16a$export$8ff612b8b93103f2 extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
-    _structure = {};
-    _entityIds = [];
-    _changedEntityIds = new Set();
-    _initialized = false;
-    static get properties() {
-        return {
-            _floorId: {
-                state: true
             },
-            _states: {
+            _changedEntityIds: {
                 state: true
             }
         };
@@ -11017,25 +11137,102 @@ class $dbb1b89729cbe16a$export$8ff612b8b93103f2 extends (0, $ab210b2da7b39b9d$ex
         return this._entityIds.some((entityId)=>this._changedEntityIds.has(entityId));
     }
     shouldUpdate(changedProps) {
-        return !this._initialized || this.hasRelevantChanges() || changedProps.has("_floorId") > 0;
+        return !this._intialized || this.hasRelevantChanges();
+    }
+    getAreaName() {
+        return this._name;
+    }
+    getLightDisplay(lightId) {
+        const lightStructure = this._structure[lightId].structure;
+        const lightTheme = this._structure[lightId].theme;
+        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+            <light-component
+                class="outlined"
+                ._lightId = ${lightId}
+                ._structure = ${lightStructure}
+                ._theme = ${lightTheme}
+                ._entityIds = ${this._entityIds}
+                ._changedEntityIds = ${this._changedEntityIds}
+                ._states = ${this._states}
+                .callService=${this.callService}
+            ></light-component>
+        `;
+    }
+    getEntityIds(lightId) {
+        const lightStructure = this._structure[lightId].structure;
+        let entityIds = [
+            lightId
+        ];
+        lightStructure.theme && entityIds.push(lightStructure.theme);
+        if (lightStructure.members) Object.entries(lightStructure.members).forEach(([memberId, memberStructure])=>{
+            entityIds.push(memberId);
+            memberStructure.theme && entityIds.push(memberStructure.theme);
+        });
+        return entityIds;
+    }
+    static styles = [
+        (0, $65e9333b9a0c9dfd$export$2e2bcd8739ae039),
+        (0, $93c1baf9705a8bf4$export$2e2bcd8739ae039)
+    ];
+    render() {
+        const title = this.getAreaName();
+        const lightIds = Object.keys(this._structure);
+        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+            <div class="small-heading">${title}</div>
+            ${(0, $6db6ff6394e885e6$export$76d90c956114f2c2)(lightIds, (lightId)=>lightId, (lightId)=>this.getLightDisplay(lightId))}
+        `;
+    }
+}
+customElements.define("area-panel", $c4bf9ea410a302e7$export$f07dc1717dcb8b95);
+
+
+class $dbb1b89729cbe16a$export$8ff612b8b93103f2 extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
+    _structure = {};
+    _entityIds = [];
+    _initialized = false;
+    static get properties() {
+        return {
+            _floorId: {
+                state: true
+            },
+            _states: {
+                state: true
+            },
+            _changedEntityIds: {
+                state: true
+            }
+        };
+    }
+    update(changedProps) {
+        super.update(changedProps);
+        this._initialized = true;
+    }
+    hasRelevantChanges() {
+        return this._entityIds.some((entityId)=>this._changedEntityIds.has(entityId));
+    }
+    shouldUpdate(changedProps) {
+        return !this._initialized || this.hasRelevantChanges() || changedProps.has("_floorId");
     }
     getAreaName(areaId) {
         return this._structure[areaId].name;
     }
+    getAreaDisplay(areaId) {
+        const title = this.getAreaName(areaId);
+        const areaStructure = this._structure[areaId].structure;
+        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+            <area-panel
+                ._structure = ${areaStructure}
+                ._name = ${title}
+                ._states = ${this._states}
+                ._changedEntityIds = ${this._changedEntityIds}
+                ._entityIds = ${this._entityIds}
+                .callService = ${this.callService}
+            ></area-panel>
+        `;
+    }
     getAreaDisplays() {
-        return Object.keys(this._structure).map((areaId)=>{
-            const title = this.getAreaName(areaId);
-            const areaStructure = this._structure[areaId].structure;
-            return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-                <area-panel
-                    ._structure = ${areaStructure}
-                    ._name = ${title}
-                    ._states = ${this._states}
-                    ._changedEntityIds = ${this._changedEntityIds}
-                    ._entityIds = ${this._entityIds}
-                ></area-panel>
-            `;
-        });
+        const areaIds = Object.keys(this._structure);
+        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`${(0, $6db6ff6394e885e6$export$76d90c956114f2c2)(areaIds, (areaId)=>areaId, (areaId)=>this.getAreaDisplay(areaId))}`;
     }
     static styles = [
         (0, $65e9333b9a0c9dfd$export$2e2bcd8739ae039),
@@ -11054,7 +11251,6 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
     _hass;
     _structure = {};
     _entityIds = [];
-    _states = {};
     _ready = false;
     _structuresBuilt = false;
     _changedEntities = false;
@@ -11064,6 +11260,9 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
     static get properties() {
         return {
             _floorId: {
+                state: true
+            },
+            _states: {
                 state: true
             }
         };
@@ -11099,6 +11298,7 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
         }
         this._ready = this._structuresBuilt && !!this._entityIds.length > 0 && this._entityIds.every((id)=>this._states[id]);
         super.update(changedProps);
+        this._changedEntityIds = new Set();
         this._needsRender = false;
     }
     shouldUpdate(changedProps) {
@@ -11259,7 +11459,7 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
             this.hasTheme(memberId) && this.setThemeStructure(memberId, memberDictionary);
             members[memberId] = memberDictionary;
         });
-        lightDictionary.members = members;
+        lightDictionary.structure = members;
     }
     setLightIdStructure() {
         const lightIds = this.getLightIds();
@@ -11269,7 +11469,9 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
                 let areaStructure = areaDict.structure;
                 lightIds.forEach((lightId)=>{
                     if (this.isInArea(lightId, areaId) && !this.isInAGroup(lightId)) {
-                        let lightDictionary = {};
+                        let lightDictionary = {
+                            structure: {}
+                        };
                         this.hasTheme(lightId) && this.setThemeStructure(lightId, lightDictionary);
                         this.isAGroup(lightId) && this.setGroupStructure(lightId, lightDictionary);
                         areaStructure[lightId] = lightDictionary;
@@ -11429,8 +11631,8 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
             <floor-panel
                 ._structure = ${this.getFloorStructure()}
-                ._states = ${this.getFloorStates()}
-                ._entityIds = ${this.getFloorEntityIds()}
+                ._states = ${this._states}
+                ._entityIds = ${this._entityIds}
                 ._changedEntityIds = ${this._changedEntityIds}
                 ._floorId = ${this.getFloorId()}
                 .callService=${this._hass.callService}

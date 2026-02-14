@@ -1,4 +1,5 @@
 import { html, LitElement } from 'lit';
+import { repeat } from 'lit-html/directives/repeat.js';
 import styles from './area.styles.js';
 import sharedStyles from './shared-styles.js';
 import './light.js';
@@ -8,17 +9,17 @@ export class AreaPanel extends LitElement {
     _structure = {};
     _name;
     _entityIds = [];
-    _changedEntityIds = new Set();
     _initialized = false;
     _ready = false;
 
     static get properties() {
         return {
-            _states: { state: true }
+            _states: { state: true },
+            _changedEntityIds: { state: true }
         }
     }
 
-/*     update(changedProps) {
+    update(changedProps) {
         super.update(changedProps);
         this._initialized = true;
     }
@@ -29,29 +30,31 @@ export class AreaPanel extends LitElement {
 
     shouldUpdate(changedProps) {
         return (!this._intialized) || this.hasRelevantChanges()
-    } */
+    }
 
     getAreaName() {
         return this._name;
     }
 
-    getLightDisplay(lightId, lightStructure) {
-        const lightStates = this.getStates(lightId, lightStructure);
-        const lightEntityIds = this.getEntityIds(lightId, lightStructure);
+    getLightDisplay(lightId) {
+        const lightStructure = this._structure[lightId].structure;
+        const lightTheme = this._structure[lightId].theme;
         return html`
             <light-component
                 class="outlined"
                 ._lightId = ${lightId}
                 ._structure = ${lightStructure}
-                ._entityIds = ${lightEntityIds}
+                ._theme = ${lightTheme}
+                ._entityIds = ${this._entityIds}
                 ._changedEntityIds = ${this._changedEntityIds}
-                ._states = ${lightStates}
+                ._states = ${this._states}
                 .callService=${this.callService}
             ></light-component>
         `
     }
 
-    getEntityIds(lightId, lightStructure) {
+    getEntityIds(lightId) {
+        const lightStructure = this._structure[lightId].structure;
         let entityIds = [lightId];
         (lightStructure.theme) && (entityIds.push(lightStructure.theme));
         if (lightStructure.members) {
@@ -63,27 +66,15 @@ export class AreaPanel extends LitElement {
         return entityIds;
     }
 
-    getStates(lightId, lightStructure) {
-        const entityIds = this.getEntityIds(lightId, lightStructure);
-        let states = {};
-        entityIds.forEach((entityId) => {
-            states[entityId] = this._states[entityId];
-        })
-        return states;
-    }
-
     static styles = [sharedStyles, styles];
 
     render() {
         const title = this.getAreaName();
-        const areaComponents = Object.keys(this._structure).map((lightId) => {
-            const lightStructure = this._structure[lightId];
-            return this.getLightDisplay(lightId, lightStructure)
-        })
+        const lightIds = Object.keys(this._structure);
         return html`
             <div class="small-heading">${title}</div>
-            ${areaComponents}
-            `
+            ${repeat(lightIds, (lightId) => lightId, lightId => this.getLightDisplay(lightId))}
+        `
     }
 
 }

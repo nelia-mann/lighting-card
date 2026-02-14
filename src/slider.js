@@ -8,18 +8,49 @@ export class SliderBar extends LitElement {
 
     _max;
     _min;
-    _startValue;
     _type;
+    _entityIds = [];
+    _initialized = false;
 
     static get properties() {
         return {
             _light: { state: true },
             _value: { state: true },
+            _changedEntityIds: { state: true },
+            _startValue: { state: true }
         }
     }
 
     constructor() {
         super();
+    }
+
+    update(changedProps) {
+        super.update(changedProps);
+        this._initialized = true;
+    }
+
+    firstUpdated() {
+        this.setInitialValue();
+    }
+
+    hasRelevantChanges() {
+        return this._entityIds.some((entityId) => (this._changedEntityIds.has(entityId)))
+    }
+
+    shouldUpdate(changedProps) {
+        return (!this._initialized
+            || this.hasRelevantChanges()
+            || changedProps.has("_value")
+            || changedProps.has("_light"))
+    }
+
+    setInitialValue() {
+        if (this._startValue) {
+            this._value = this._startValue;
+        } else {
+            this._value = this._min;
+        }
     }
 
     static styles = [sharedStyles, styles];
@@ -36,13 +67,7 @@ export class SliderBar extends LitElement {
     }
 
     getValue() {
-        if (this._value) {
-            return this._value;
-        } else if (this._startValue) {
-            return this._startValue;
-        } else {
-            return this._min;
-        }
+        return this._value;
     }
 
     addUnits(value) {
@@ -90,40 +115,42 @@ export class SliderBar extends LitElement {
     }
 
     render() {
-        return html`
-            <div class="values">
-                <div class="inner-values">
-                    <div class="top-value"> ${this.addUnits(this._max)} </div>
-                    <div class="bottom-value"> ${this.addUnits(this._min)} </div>
-                </div>
-            </div>
-            <div class="slider outlined">
-                <div class="inner-slider">
-                    <div
-                        class="shown-slider ${this._type}"
-                        style="${styleMap(this.getStyleBG())}"
-                    >
-                        <div class="shown-level" style="${styleMap(this.getStyleLevel())}"></div>
-                    </div>
-                    <input
-                        class="actual-slider"
-                        type="range"
-                        max=${this._max}
-                        min=${this._min}
-                        value="${this.getValue()}"
-                        @input="${this.handleOnInput}"
-                        @change="${this.handleOnChange}"
-                    ></input>
-                </div>
-            </div>
-            <div class="values">
-                <div class="inner-values">
-                    <div class="current-value" style="${styleMap(this.getStyleLevel())}">
-                        ${this.addUnits(this.getValue())}
+        if (this._initialized) {
+            return html`
+                <div class="values">
+                    <div class="inner-values">
+                        <div class="top-value"> ${this.addUnits(this._max)} </div>
+                        <div class="bottom-value"> ${this.addUnits(this._min)} </div>
                     </div>
                 </div>
-            </div>
-        `
+                <div class="slider outlined">
+                    <div class="inner-slider">
+                        <div
+                            class="shown-slider ${this._type}"
+                            style="${styleMap(this.getStyleBG())}"
+                        >
+                            <div class="shown-level" style="${styleMap(this.getStyleLevel())}"></div>
+                        </div>
+                        <input
+                            class="actual-slider"
+                            type="range"
+                            max=${this._max}
+                            min=${this._min}
+                            value="${this.getValue()}"
+                            @input="${this.handleOnInput}"
+                            @change="${this.handleOnChange}"
+                        ></input>
+                    </div>
+                </div>
+                <div class="values">
+                    <div class="inner-values">
+                        <div class="current-value" style="${styleMap(this.getStyleLevel())}">
+                            ${this.addUnits(this.getValue())}
+                        </div>
+                    </div>
+                </div>
+            `
+        }
     }
 
 }

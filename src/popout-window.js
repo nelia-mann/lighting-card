@@ -1,4 +1,5 @@
 import { html, LitElement } from 'lit';
+import { repeat } from 'lit-html/directives/repeat.js';
 import { styleMap } from 'lit/directives/style-map.js';
 import { mdiCloseCircleOutline } from '@mdi/js';
 import styles from './popout.styles.js';
@@ -9,14 +10,50 @@ import { getColor } from './light-util.js';
 export class PopoutWindow extends LitElement {
 
     _structure;
+    _theme;
     _lightId;
+    _entityIds = [];
+    _initialized = false;
 
     static get properties() {
         return {
             opened: { type: Boolean, reflect: true },
             title: { type: String },
             _selectedId: { state: true },
-            _states: { state: true }
+            _states: { state: true },
+            _changedEntityIds: { state: true },
+        }
+    }
+
+    update(changedProps) {
+        super.update(changedProps);
+        this._initialized = true;
+    }
+
+    hasRelevantChanges() {
+        return this._entityIds.some((entityId) => (this._changedEntityIds.has(entityId)))
+    }
+
+    shouldUpdate(changedProps) {
+        return (!this._initialized
+            || this.hasRelevantChanges()
+            || changedProps.has("opened")
+            || changedProps.has("_selectedId"))
+    }
+
+    firstUpdated() {
+        this._selectedId = this._lightId;
+    }
+
+    // Lifecycle method to open/close the native dialog
+    updated(changedProperties) {
+        if (changedProperties.has('opened')) {
+        const dialog = this.shadowRoot.querySelector('dialog');
+        if (this.opened) {
+            dialog.showModal(); // Opens the dialog modally, disabling content behind it
+        } else {
+            dialog.close();
+        }
         }
     }
 
@@ -63,28 +100,29 @@ export class PopoutWindow extends LitElement {
     }
 
     isGroup(entityId) {
+        const lightIds = Object.keys(this._structure);
         if (this._lightId != entityId) {
             return false;
         } else {
-            return !!this._structure.members;
+            return (lightIds.length > 0);
         }
     }
 
     lights() {
-        const memberIds = this._structure.members;
-        if (memberIds) {
-            return Object.keys(memberIds).map((memberId) => {
-                return this.innerLight(memberId, true)
-            })
-        }
+        const memberIds = Object.keys(this._structure);
+        return repeat(memberIds, (memberId) => memberId, (memberId) => this.innerLight(memberId, true))
     }
 
     lightControl() {
-        if (this.selectedLightState()) {
+        const lightState = this.selectedLightState();
+        if (lightState) {
             return html`
                 <light-control
-                    ._lightState = ${this.selectedLightState()}
-                    ._themeState = ${this.selectedThemeState()}
+                    id = ${lightState.entity_id}
+                    ._lightState = ${{ ...lightState }}
+                    ._entityIds = ${this._entityIds}
+                    ._changedEntityIds = ${this._changedEntityIds}
+                    ._themeState = ${{...this.selectedThemeState()}}
                     .callService=${this.callService}
                 ></light-control>
             `
@@ -92,7 +130,6 @@ export class PopoutWindow extends LitElement {
     }
 
     render() {
-        this.defaultSelect();
         return html`
         <dialog class="outlined" @close="${this._handleClose}">
             <div class="modal-header">
@@ -113,22 +150,6 @@ export class PopoutWindow extends LitElement {
         `;
     }
 
-    possibleIds() {
-        let ids = [this._lightId];
-        if (this._structure.members) {
-            Object.keys(this._structure.members).forEach((memberId) => {
-                ids.push(memberId)
-            })
-        }
-        return ids;
-    }
-
-    defaultSelect() {
-        if (!this.possibleIds().includes(this._selectedId)) {
-            this._selectedId = this._lightId;
-        }
-    }
-
     select(lightState) {
         this._selectedId = lightState.entity_id;
     }
@@ -144,24 +165,12 @@ export class PopoutWindow extends LitElement {
     selectedThemeState() {
         let themeId;
         if (this._selectedId === this._lightId) {
-            themeId = this._structure.theme;
+            themeId = this._theme;
         } else {
-            themeId = this._structure.members[this._selectedId].theme;
+            themeId = this._structure[this._selectedId].theme;
         }
         if (themeId) {
             return this._states[themeId];
-        }
-    }
-
-    // Lifecycle method to open/close the native dialog
-    updated(changedProperties) {
-        if (changedProperties.has('opened')) {
-        const dialog = this.shadowRoot.querySelector('dialog');
-        if (this.opened) {
-            dialog.showModal(); // Opens the dialog modally, disabling content behind it
-        } else {
-            dialog.close();
-        }
         }
     }
 

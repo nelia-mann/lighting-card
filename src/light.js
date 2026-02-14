@@ -1,4 +1,5 @@
 import { html, LitElement } from 'lit';
+import { repeat } from 'lit-html/directives/repeat.js';
 import './light-icon.js';
 import './popout-window.js';
 import styles from './light.styles.js';
@@ -9,15 +10,16 @@ export class LightComponent extends LitElement {
     _holding = false;
     _HOLD_DURATION = 500;
     _structure = {};
+    _theme;
     _lightId;
     _entityIds = [];
-    _changedEntityIds = new Set();
     _initialized = false;
 
     static get properties() {
         return {
             isModalOpen: { type: Boolean },
-            _states: { state: true }
+            _states: { state: true },
+            _changedEntityIds: { state: true }
         }
     }
 
@@ -36,45 +38,38 @@ export class LightComponent extends LitElement {
     }
 
     shouldUpdate(changedProps) {
-        return (!this._initialized || this.hasRelevantChanges() || changedProps.has("isModalOpen") > 0)
+        return (!this._initialized || this.hasRelevantChanges() || changedProps.has("isModalOpen"))
     }
 
     static styles = [sharedStyles, styles];
 
     icons() {
         let result;
-        const memberIds = this._structure.members;
+        let lightIds = Object.keys(this._structure);
+        (lightIds.length === 0) && (lightIds = [this._lightId])
         let lightState;
-        if (memberIds) {
-            result = Object.keys(memberIds).map((memberId) => {
-                lightState = this._states[memberId];
-                return html`
-                    <light-icon ._state=${lightState} ._isGroup=${false}></light-icon>
-                `
-            })
-        } else {
-            lightState = this._states[this._lightId];
-            result = html`
-                    <light-icon ._state=${lightState} ._isGroup=${false}></light-icon>
-                `
-        }
+        result = repeat(lightIds, (lightId) => lightId, (lightId) => {
+            lightState = this._states[lightId];
+            return html`<light-icon ._state=${lightState} ._isGroup=${false}></light-icon>`
+        })
         return result;
     }
 
     hasOptions() {
         let valid = false;
         const state = this._states[this._lightId];
+        const lightIds = Object.keys(this._structure);
         !!(this._structure.theme) && (valid = true);
         !(state.attributes['hs_color'] === undefined) && (valid = true);
         !(state.attributes['color_temp_kelvin'] === undefined) && (valid = true);
         !(state.attributes['brightness'] === undefined) && (valid = true);
-        !!(this._structure.members) && (valid = true);
+        (lightIds.length > 0) && (valid = true);
         return valid;
     }
 
     popoutWindow() {
         if (this.hasOptions()) {
-        const name = this._states[this._lightId].attributes.friendly_name;
+            const name = this._states[this._lightId].attributes.friendly_name;
             return html`
                 <popout-window
                     title="${name}"
@@ -83,6 +78,9 @@ export class LightComponent extends LitElement {
                     ._states = ${this._states}
                     ._lightId = ${this._lightId}
                     ._structure = ${this._structure}
+                    ._theme = ${this._theme}
+                    ._changedEntityIds = ${this._changedEntityIds}
+                    ._entityIds = ${this._entityIds}
                     .callService="${this.callService}"
                 ></popout-window>
             `

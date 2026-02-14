@@ -11,7 +11,6 @@ export class MainCard extends LitElement {
     _hass;
     _structure = {};
     _entityIds = [];
-    _states = {};
     _ready = false;
     _structuresBuilt = false;
     _changedEntities = false;
@@ -21,7 +20,8 @@ export class MainCard extends LitElement {
     // internal reactive states
     static get properties() {
         return {
-            _floorId: { state: true }
+            _floorId: { state: true },
+            _states: { state: true }
         };
     }
 
@@ -61,6 +61,7 @@ export class MainCard extends LitElement {
         }
         this._ready = this._structuresBuilt && !!this._entityIds.length > 0 && this._entityIds.every(id => this._states[id]);
         super.update(changedProps);
+        this._changedEntityIds = new Set();
         this._needsRender = false;
     }
 
@@ -256,7 +257,7 @@ export class MainCard extends LitElement {
             (this.hasTheme(memberId)) && (this.setThemeStructure(memberId, memberDictionary));
             members[memberId] = memberDictionary;
         })
-        lightDictionary.members = members;
+        lightDictionary.structure = members;
     }
 
     setLightIdStructure() {
@@ -267,7 +268,7 @@ export class MainCard extends LitElement {
                 let areaStructure = areaDict.structure;
                 lightIds.forEach((lightId) => {
                     if ((this.isInArea(lightId, areaId)) && (!this.isInAGroup(lightId))) {
-                        let lightDictionary = {};
+                        let lightDictionary = { structure: {} };
                         (this.hasTheme(lightId)) && (this.setThemeStructure(lightId, lightDictionary));
                         (this.isAGroup(lightId)) && (this.setGroupStructure(lightId, lightDictionary));
                         areaStructure[lightId] = lightDictionary;
@@ -450,8 +451,8 @@ export class MainCard extends LitElement {
         return html`
             <floor-panel
                 ._structure = ${this.getFloorStructure()}
-                ._states = ${this.getFloorStates()}
-                ._entityIds = ${this.getFloorEntityIds()}
+                ._states = ${this._states}
+                ._entityIds = ${this._entityIds}
                 ._changedEntityIds = ${this._changedEntityIds}
                 ._floorId = ${this.getFloorId()}
                 .callService=${this._hass.callService}
