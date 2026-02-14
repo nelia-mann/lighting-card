@@ -13,11 +13,4 @@ export default css`
         display: flex;
         flex-flow: row nowrap;
     }
-
-    area-panel {
-        margin-left: 10px;
-        margin-right: 10px;
-        margin-top: 20px;
-    }
-
 `;

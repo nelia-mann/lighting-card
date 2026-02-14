@@ -813,20 +813,7 @@ var $65e9333b9a0c9dfd$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 
 
 
-var $fd69d66a3348dfcc$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
-
-    light-component {
-        width: 180px;
-        height: 25px;
-        padding: 10px;
-        padding-top: 8px;
-        padding-bottom: 5px;
-        margin: 10px;
-        touch-action: none;
-        display: flex;
-        flex-flow: row nowrap;
-    }
-
+var $da359172525f210e$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
     area-panel {
         margin-left: 10px;
         margin-right: 10px;
@@ -10908,6 +10895,21 @@ customElements.define("light-component", $046ae152b1d9e254$export$5e33b198135dff
 
 
 
+var $93c1baf9705a8bf4$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf350e5966cf602)`
+
+    light-component {
+        width: 180px;
+        height: 25px;
+        padding: 10px;
+        padding-top: 8px;
+        padding-bottom: 5px;
+        margin: 10px;
+        touch-action: none;
+        display: flex;
+        flex-flow: row nowrap;
+    }
+`;
+
 
 
 
@@ -10975,7 +10977,7 @@ class $c4bf9ea410a302e7$export$f07dc1717dcb8b95 extends (0, $ab210b2da7b39b9d$ex
     }
     static styles = [
         (0, $65e9333b9a0c9dfd$export$2e2bcd8739ae039),
-        (0, $fd69d66a3348dfcc$export$2e2bcd8739ae039)
+        (0, $93c1baf9705a8bf4$export$2e2bcd8739ae039)
     ];
     render() {
         const title = this.getAreaName();
@@ -11037,7 +11039,7 @@ class $dbb1b89729cbe16a$export$8ff612b8b93103f2 extends (0, $ab210b2da7b39b9d$ex
     }
     static styles = [
         (0, $65e9333b9a0c9dfd$export$2e2bcd8739ae039),
-        (0, $fd69d66a3348dfcc$export$2e2bcd8739ae039)
+        (0, $da359172525f210e$export$2e2bcd8739ae039)
     ];
     render() {
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`${this.getAreaDisplays()}`;

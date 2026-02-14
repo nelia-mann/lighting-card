@@ -1,5 +1,5 @@
 import { html, LitElement } from 'lit';
-import styles from './panel.styles.js';
+import styles from './floor.styles.js';
 import sharedStyles from './shared-styles.js';
 import './light.js';
 import './area-panel.js';
