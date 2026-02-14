@@ -827,7 +827,7 @@ var $fd69d66a3348dfcc$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
         flex-flow: row nowrap;
     }
 
-    .area {
+    area-panel {
         margin-left: 10px;
         margin-right: 10px;
         margin-top: 20px;
@@ -10906,33 +10906,38 @@ class $046ae152b1d9e254$export$5e33b198135dff7b extends (0, $ab210b2da7b39b9d$ex
 customElements.define("light-component", $046ae152b1d9e254$export$5e33b198135dff7b);
 
 
-class $dbb1b89729cbe16a$export$8ff612b8b93103f2 extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
+
+
+
+
+
+class $c4bf9ea410a302e7$export$f07dc1717dcb8b95 extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
     _structure = {};
+    _name;
     _entityIds = [];
     _changedEntityIds = new Set();
     _initialized = false;
+    _ready = false;
     static get properties() {
         return {
-            _floorId: {
-                state: true
-            },
             _states: {
                 state: true
             }
         };
     }
-    update(changedProps) {
+    /*     update(changedProps) {
         super.update(changedProps);
         this._initialized = true;
     }
+
     hasRelevantChanges() {
-        return this._entityIds.some((entityId)=>this._changedEntityIds.has(entityId));
+        return this._entityIds.some((entityId) => (this._changedEntityIds.has(entityId)))
     }
+
     shouldUpdate(changedProps) {
-        return !this._initialized || this.hasRelevantChanges() || changedProps.has("_floorId") > 0;
-    }
-    getAreaName(areaId) {
-        return this._structure[areaId].name;
+        return (!this._intialized) || this.hasRelevantChanges()
+    } */ getAreaName() {
+        return this._name;
     }
     getLightDisplay(lightId, lightStructure) {
         const lightStates = this.getStates(lightId, lightStructure);
@@ -10968,21 +10973,67 @@ class $dbb1b89729cbe16a$export$8ff612b8b93103f2 extends (0, $ab210b2da7b39b9d$ex
         });
         return states;
     }
-    getAreaDisplay(areaId) {
-        const title = this.getAreaName(areaId);
-        const areaStructure = this._structure[areaId].structure;
-        const areaComponents = Object.keys(areaStructure).map((lightId)=>{
-            const lightStructure = areaStructure[lightId];
+    static styles = [
+        (0, $65e9333b9a0c9dfd$export$2e2bcd8739ae039),
+        (0, $fd69d66a3348dfcc$export$2e2bcd8739ae039)
+    ];
+    render() {
+        const title = this.getAreaName();
+        const areaComponents = Object.keys(this._structure).map((lightId)=>{
+            const lightStructure = this._structure[lightId];
             return this.getLightDisplay(lightId, lightStructure);
         });
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-            <div class="area">
-                <div class="small-heading">${title}</div>
-                ${areaComponents}
-            </div>`;
+            <div class="small-heading">${title}</div>
+            ${areaComponents}
+            `;
+    }
+}
+customElements.define("area-panel", $c4bf9ea410a302e7$export$f07dc1717dcb8b95);
+
+
+class $dbb1b89729cbe16a$export$8ff612b8b93103f2 extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
+    _structure = {};
+    _entityIds = [];
+    _changedEntityIds = new Set();
+    _initialized = false;
+    static get properties() {
+        return {
+            _floorId: {
+                state: true
+            },
+            _states: {
+                state: true
+            }
+        };
+    }
+    update(changedProps) {
+        super.update(changedProps);
+        this._initialized = true;
+    }
+    hasRelevantChanges() {
+        return this._entityIds.some((entityId)=>this._changedEntityIds.has(entityId));
+    }
+    shouldUpdate(changedProps) {
+        return !this._initialized || this.hasRelevantChanges() || changedProps.has("_floorId") > 0;
+    }
+    getAreaName(areaId) {
+        return this._structure[areaId].name;
     }
     getAreaDisplays() {
-        return Object.keys(this._structure).map((areaId)=>this.getAreaDisplay(areaId));
+        return Object.keys(this._structure).map((areaId)=>{
+            const title = this.getAreaName(areaId);
+            const areaStructure = this._structure[areaId].structure;
+            return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+                <area-panel
+                    ._structure = ${areaStructure}
+                    ._name = ${title}
+                    ._states = ${this._states}
+                    ._changedEntityIds = ${this._changedEntityIds}
+                    ._entityIds = ${this._entityIds}
+                ></area-panel>
+            `;
+        });
     }
     static styles = [
         (0, $65e9333b9a0c9dfd$export$2e2bcd8739ae039),

@@ -2,6 +2,7 @@ import { html, LitElement } from 'lit';
 import styles from './panel.styles.js';
 import sharedStyles from './shared-styles.js';
 import './light.js';
+import './area-panel.js';
 
 export class FloorPanel extends LitElement {
 
@@ -34,60 +35,20 @@ export class FloorPanel extends LitElement {
         return this._structure[areaId].name;
     }
 
-    getLightDisplay(lightId, lightStructure) {
-        const lightStates = this.getStates(lightId, lightStructure);
-        const lightEntityIds = this.getEntityIds(lightId, lightStructure);
-        return html`
-            <light-component
-                class="outlined"
-                ._lightId = ${lightId}
-                ._structure = ${lightStructure}
-                ._entityIds = ${lightEntityIds}
-                ._changedEntityIds = ${this._changedEntityIds}
-                ._states = ${lightStates}
-                .callService=${this.callService}
-            ></light-component>
-        `
-    }
-
-    getEntityIds(lightId, lightStructure) {
-        let entityIds = [lightId];
-        (lightStructure.theme) && (entityIds.push(lightStructure.theme));
-        if (lightStructure.members) {
-            Object.entries(lightStructure.members).forEach(([memberId, memberStructure]) => {
-                entityIds.push(memberId);
-                (memberStructure.theme) && (entityIds.push(memberStructure.theme));
-            })
-        }
-        return entityIds;
-    }
-
-    getStates(lightId, lightStructure) {
-        const entityIds = this.getEntityIds(lightId, lightStructure);
-        let states = {};
-        entityIds.forEach((entityId) => {
-            states[entityId] = this._states[entityId];
-        })
-        return states;
-    }
-
-    getAreaDisplay(areaId) {
-        const title = this.getAreaName(areaId);
-        const areaStructure = this._structure[areaId].structure;
-        const areaComponents = Object.keys(areaStructure).map((lightId) => {
-            const lightStructure = areaStructure[lightId];
-            return this.getLightDisplay(lightId, lightStructure)
-        })
-        return html`
-            <div class="area">
-                <div class="small-heading">${title}</div>
-                ${areaComponents}
-            </div>`
-    }
-
     getAreaDisplays() {
-        return Object.keys(this._structure).map((areaId) =>
-            (this.getAreaDisplay(areaId)))
+        return Object.keys(this._structure).map((areaId) => {
+            const title = this.getAreaName(areaId);
+            const areaStructure = this._structure[areaId].structure;
+            return html`
+                <area-panel
+                    ._structure = ${areaStructure}
+                    ._name = ${title}
+                    ._states = ${this._states}
+                    ._changedEntityIds = ${this._changedEntityIds}
+                    ._entityIds = ${this._entityIds}
+                ></area-panel>
+            `
+        })
     }
 
     static styles = [sharedStyles, styles];
