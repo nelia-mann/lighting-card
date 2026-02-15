@@ -115,12 +115,13 @@ export class PopoutWindow extends LitElement {
 
     lightControl() {
         const lightState = this.selectedLightState();
+        const entityIds = this.selectedLightEntityIds();
         if (lightState) {
             return html`
                 <light-control
                     id = ${lightState.entity_id}
                     ._lightState = ${{ ...lightState }}
-                    ._entityIds = ${this._entityIds}
+                    ._entityIds = ${entityIds}
                     ._changedEntityIds = ${this._changedEntityIds}
                     ._themeState = ${{...this.selectedThemeState()}}
                     .callService=${this.callService}
@@ -130,24 +131,27 @@ export class PopoutWindow extends LitElement {
     }
 
     render() {
-        return html`
-        <dialog class="outlined" @close="${this._handleClose}">
-            <div class="modal-header">
-                <div></div>
-                <div class="large-heading">${this.title}</div>
-                <button class="close-button" @click="${this.closeModal}" aria-label="Close modal">
-                    <ha-svg-icon .path=${mdiCloseCircleOutline}"></ha-svg-icon>
-                </button>
-            </div>
-            <div class="content-row">
-                <div class="select-lights">
-                    ${this.innerLight(this._lightId, false)}
-                    ${this.lights()}
-                </div>
-                ${this.lightControl()}
-            </div>
-        </dialog>
-        `;
+        if (this._initialized) {
+            console.log("making popup");
+            return html`
+                <dialog class="outlined" @close="${this._handleClose}">
+                    <div class="modal-header">
+                        <div></div>
+                        <div class="large-heading">${this.title}</div>
+                        <button class="close-button" @click="${this.closeModal}" aria-label="Close modal">
+                            <ha-svg-icon .path=${mdiCloseCircleOutline}"></ha-svg-icon>
+                        </button>
+                    </div>
+                    <div class="content-row">
+                        <div class="select-lights">
+                            ${this.innerLight(this._lightId, false)}
+                            ${this.lights()}
+                        </div>
+                        ${this.lightControl()}
+                    </div>
+                </dialog>
+                `;
+        }
     }
 
     select(lightState) {
@@ -160,6 +164,18 @@ export class PopoutWindow extends LitElement {
 
     selectedLightState() {
         return this._states[this._selectedId];
+    }
+
+    selectedLightEntityIds() {
+        let entityIds;
+        if (this._selectedId === this._lightId) {
+            entityIds = [this._lightId];
+            const themeId = this._theme;
+            (themeId) && entityIds.push(themeId);
+        } else {
+            entityIds = this._structure[this._selectedId].entityIds;
+        }
+        return entityIds;
     }
 
     selectedThemeState() {

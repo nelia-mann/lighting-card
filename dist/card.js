@@ -10884,13 +10884,14 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
     }
     lightControl() {
         const lightState = this.selectedLightState();
+        const entityIds = this.selectedLightEntityIds();
         if (lightState) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
                 <light-control
                     id = ${lightState.entity_id}
                     ._lightState = ${{
             ...lightState
         }}
-                    ._entityIds = ${this._entityIds}
+                    ._entityIds = ${entityIds}
                     ._changedEntityIds = ${this._changedEntityIds}
                     ._themeState = ${{
             ...this.selectedThemeState()
@@ -10900,24 +10901,27 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
             `;
     }
     render() {
-        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-        <dialog class="outlined" @close="${this._handleClose}">
-            <div class="modal-header">
-                <div></div>
-                <div class="large-heading">${this.title}</div>
-                <button class="close-button" @click="${this.closeModal}" aria-label="Close modal">
-                    <ha-svg-icon .path=${0, $04557c061247a0a6$export$cdf8f7e64334eb05}"></ha-svg-icon>
-                </button>
-            </div>
-            <div class="content-row">
-                <div class="select-lights">
-                    ${this.innerLight(this._lightId, false)}
-                    ${this.lights()}
-                </div>
-                ${this.lightControl()}
-            </div>
-        </dialog>
-        `;
+        if (this._initialized) {
+            console.log("making popup");
+            return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+                <dialog class="outlined" @close="${this._handleClose}">
+                    <div class="modal-header">
+                        <div></div>
+                        <div class="large-heading">${this.title}</div>
+                        <button class="close-button" @click="${this.closeModal}" aria-label="Close modal">
+                            <ha-svg-icon .path=${0, $04557c061247a0a6$export$cdf8f7e64334eb05}"></ha-svg-icon>
+                        </button>
+                    </div>
+                    <div class="content-row">
+                        <div class="select-lights">
+                            ${this.innerLight(this._lightId, false)}
+                            ${this.lights()}
+                        </div>
+                        ${this.lightControl()}
+                    </div>
+                </dialog>
+                `;
+        }
     }
     select(lightState) {
         this._selectedId = lightState.entity_id;
@@ -10927,6 +10931,17 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
     }
     selectedLightState() {
         return this._states[this._selectedId];
+    }
+    selectedLightEntityIds() {
+        let entityIds;
+        if (this._selectedId === this._lightId) {
+            entityIds = [
+                this._lightId
+            ];
+            const themeId = this._theme;
+            themeId && entityIds.push(themeId);
+        } else entityIds = this._structure[this._selectedId].entityIds;
+        return entityIds;
     }
     selectedThemeState() {
         let themeId;
@@ -11145,13 +11160,14 @@ class $c4bf9ea410a302e7$export$f07dc1717dcb8b95 extends (0, $ab210b2da7b39b9d$ex
     getLightDisplay(lightId) {
         const lightStructure = this._structure[lightId].structure;
         const lightTheme = this._structure[lightId].theme;
+        const entityIds = this._structure[lightId].entityIds;
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
             <light-component
                 class="outlined"
                 ._lightId = ${lightId}
                 ._structure = ${lightStructure}
                 ._theme = ${lightTheme}
-                ._entityIds = ${this._entityIds}
+                ._entityIds = ${entityIds}
                 ._changedEntityIds = ${this._changedEntityIds}
                 ._states = ${this._states}
                 .callService=${this.callService}
@@ -11219,13 +11235,14 @@ class $dbb1b89729cbe16a$export$8ff612b8b93103f2 extends (0, $ab210b2da7b39b9d$ex
     getAreaDisplay(areaId) {
         const title = this.getAreaName(areaId);
         const areaStructure = this._structure[areaId].structure;
+        const areaEntityIds = this._structure[areaId].entityIds;
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
             <area-panel
                 ._structure = ${areaStructure}
                 ._name = ${title}
                 ._states = ${this._states}
                 ._changedEntityIds = ${this._changedEntityIds}
-                ._entityIds = ${this._entityIds}
+                ._entityIds = ${areaEntityIds}
                 .callService = ${this.callService}
             ></area-panel>
         `;
@@ -11419,6 +11436,7 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
     setThemeStructure(lightId, lightDictionary) {
         const themeId = this.getThemeId(lightId);
         lightDictionary.theme = themeId;
+        lightDictionary.entityIds.push(themeId);
     }
     getGroupIds() {
         const lightIds = this.getLightIds();
@@ -11455,29 +11473,52 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
         const memberIds = this.getMemberIds(lightId);
         let members = {};
         memberIds.forEach((memberId)=>{
-            let memberDictionary = {};
+            let memberDictionary = {
+                entityIds: [
+                    memberId
+                ]
+            };
             this.hasTheme(memberId) && this.setThemeStructure(memberId, memberDictionary);
             members[memberId] = memberDictionary;
         });
         lightDictionary.structure = members;
+        lightDictionary.entityIds = [
+            ...lightDictionary.entityIds,
+            ...memberIds
+        ];
     }
     setLightIdStructure() {
         const lightIds = this.getLightIds();
         Object.values(this._structure).forEach((floorDict)=>{
             let floorStructure = floorDict.structure;
+            let floorEntityIds = [];
             Object.entries(floorStructure).forEach(([areaId, areaDict])=>{
                 let areaStructure = areaDict.structure;
+                let areaEntityIds = [];
                 lightIds.forEach((lightId)=>{
                     if (this.isInArea(lightId, areaId) && !this.isInAGroup(lightId)) {
                         let lightDictionary = {
-                            structure: {}
+                            structure: {},
+                            entityIds: [
+                                lightId
+                            ]
                         };
                         this.hasTheme(lightId) && this.setThemeStructure(lightId, lightDictionary);
                         this.isAGroup(lightId) && this.setGroupStructure(lightId, lightDictionary);
                         areaStructure[lightId] = lightDictionary;
+                        areaEntityIds = [
+                            ...areaEntityIds,
+                            ...lightDictionary.entityIds
+                        ];
                     }
                 });
+                areaDict.entityIds = areaEntityIds;
+                floorEntityIds = [
+                    ...floorEntityIds,
+                    ...areaEntityIds
+                ];
             });
+            floorDict.entityIds = floorEntityIds;
         });
     }
     cleanStructure() {
@@ -11541,20 +11582,7 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
         return this._structure[this.getFloorId()].structure;
     }
     getFloorEntityIds() {
-        const floorStructure = this.getFloorStructure();
-        let entityIds = [];
-        Object.values(floorStructure).forEach((areaDict)=>{
-            const areaStructure = areaDict.structure;
-            Object.entries(areaStructure).forEach(([lightId, lightStructure])=>{
-                entityIds.push(lightId);
-                lightStructure.theme && entityIds.push(lightStructure.theme);
-                if (lightStructure.members) Object.entries(lightStructure.members).forEach(([memberId, memberStructure])=>{
-                    entityIds.push(memberId);
-                    memberStructure.theme && entityIds.push(memberStructure.theme);
-                });
-            });
-        });
-        return entityIds;
+        return this._structure[this.getFloorId()].entityIds;
     }
     getFloorStates() {
         const entityIds = this.getFloorEntityIds();
@@ -11632,7 +11660,7 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
             <floor-panel
                 ._structure = ${this.getFloorStructure()}
                 ._states = ${this._states}
-                ._entityIds = ${this._entityIds}
+                ._entityIds = ${this.getFloorEntityIds()}
                 ._changedEntityIds = ${this._changedEntityIds}
                 ._floorId = ${this.getFloorId()}
                 .callService=${this._hass.callService}

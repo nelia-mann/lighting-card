@@ -39,13 +39,14 @@ export class AreaPanel extends LitElement {
     getLightDisplay(lightId) {
         const lightStructure = this._structure[lightId].structure;
         const lightTheme = this._structure[lightId].theme;
+        const entityIds = this._structure[lightId].entityIds;
         return html`
             <light-component
                 class="outlined"
                 ._lightId = ${lightId}
                 ._structure = ${lightStructure}
                 ._theme = ${lightTheme}
-                ._entityIds = ${this._entityIds}
+                ._entityIds = ${entityIds}
                 ._changedEntityIds = ${this._changedEntityIds}
                 ._states = ${this._states}
                 .callService=${this.callService}

@@ -39,13 +39,14 @@ export class FloorPanel extends LitElement {
     getAreaDisplay(areaId) {
         const title = this.getAreaName(areaId);
         const areaStructure = this._structure[areaId].structure;
+        const areaEntityIds = this._structure[areaId].entityIds;
         return html`
             <area-panel
                 ._structure = ${areaStructure}
                 ._name = ${title}
                 ._states = ${this._states}
                 ._changedEntityIds = ${this._changedEntityIds}
-                ._entityIds = ${this._entityIds}
+                ._entityIds = ${areaEntityIds}
                 .callService = ${this.callService}
             ></area-panel>
         `

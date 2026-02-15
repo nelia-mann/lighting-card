@@ -214,6 +214,7 @@ export class MainCard extends LitElement {
     setThemeStructure(lightId, lightDictionary) {
         const themeId = this.getThemeId(lightId);
         lightDictionary.theme = themeId;
+        lightDictionary.entityIds.push(themeId);
     }
 
     getGroupIds() {
@@ -253,28 +254,35 @@ export class MainCard extends LitElement {
         const memberIds = this.getMemberIds(lightId);
         let members = {};
         memberIds.forEach((memberId) => {
-            let memberDictionary = {};
+            let memberDictionary = { entityIds: [memberId] };
             (this.hasTheme(memberId)) && (this.setThemeStructure(memberId, memberDictionary));
             members[memberId] = memberDictionary;
         })
         lightDictionary.structure = members;
+        lightDictionary.entityIds = [...lightDictionary.entityIds, ...memberIds];
     }
 
     setLightIdStructure() {
         const lightIds = this.getLightIds();
         Object.values(this._structure).forEach((floorDict) => {
             let floorStructure = floorDict.structure;
+            let floorEntityIds = [];
             Object.entries(floorStructure).forEach(([areaId, areaDict]) => {
                 let areaStructure = areaDict.structure;
+                let areaEntityIds = [];
                 lightIds.forEach((lightId) => {
                     if ((this.isInArea(lightId, areaId)) && (!this.isInAGroup(lightId))) {
-                        let lightDictionary = { structure: {} };
+                        let lightDictionary = { structure: {}, entityIds: [lightId] };
                         (this.hasTheme(lightId)) && (this.setThemeStructure(lightId, lightDictionary));
                         (this.isAGroup(lightId)) && (this.setGroupStructure(lightId, lightDictionary));
                         areaStructure[lightId] = lightDictionary;
+                        areaEntityIds = [...areaEntityIds, ...lightDictionary.entityIds]
                     }
                 })
+                areaDict.entityIds = areaEntityIds;
+                floorEntityIds = [...floorEntityIds, ...areaEntityIds];
             })
+            floorDict.entityIds = floorEntityIds;
         })
     }
 
@@ -352,22 +360,7 @@ export class MainCard extends LitElement {
     }
 
     getFloorEntityIds() {
-        const floorStructure = this.getFloorStructure();
-        let entityIds = [];
-        Object.values(floorStructure).forEach((areaDict) => {
-            const areaStructure = areaDict.structure;
-            Object.entries(areaStructure).forEach(([lightId, lightStructure]) => {
-                entityIds.push(lightId);
-                (lightStructure.theme) && (entityIds.push(lightStructure.theme))
-                if (lightStructure.members) {
-                    Object.entries(lightStructure.members).forEach(([memberId, memberStructure]) => {
-                        entityIds.push(memberId);
-                        (memberStructure.theme) && (entityIds.push(memberStructure.theme))
-                    })
-                }
-            })
-        })
-        return entityIds;
+        return this._structure[this.getFloorId()].entityIds;
     }
 
     getFloorStates() {
@@ -452,7 +445,7 @@ export class MainCard extends LitElement {
             <floor-panel
                 ._structure = ${this.getFloorStructure()}
                 ._states = ${this._states}
-                ._entityIds = ${this._entityIds}
+                ._entityIds = ${this.getFloorEntityIds()}
                 ._changedEntityIds = ${this._changedEntityIds}
                 ._floorId = ${this.getFloorId()}
                 .callService=${this._hass.callService}
