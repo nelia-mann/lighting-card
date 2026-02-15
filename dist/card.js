@@ -8839,30 +8839,36 @@ class $6520265339ffabe1$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$ex
             }
         };
     }
+    /************* lifecycle ***********************************************/ // when first constructed
     constructor(){
         super();
     }
+    // each time an update occurs resulting in rerendering
     update(changedProps) {
         super.update(changedProps);
-        this._initialized = true;
     }
-    firstUpdated() {
-        this.setInitialValue();
-    }
-    hasRelevantChanges() {
-        return this._changedEntityIds.has(this._light.entity_id);
-    }
+    // determines if an update should occur
     shouldUpdate(changedProps) {
         return !this._initialized || this.hasRelevantChanges() || changedProps.has("_value");
     }
-    updated(changedProps) {
-        if (this.hasRelevantChanges()) this.setInitialValue();
+    // runs after the first update
+    firstUpdated() {
+        this.setInitialValue();
+        this._initialized = true;
     }
+    // runs after every update
+    updated() {
+        this.hasRelevantChanges() && this.setInitialValue();
+    }
+    // helper to determine if should update
+    hasRelevantChanges() {
+        return this._changedEntityIds.has(this._light.entity_id);
+    }
+    // syncs the value to the value from the state
     setInitialValue() {
-        if (this._startValue) this._value = this._startValue;
-        else this._value = this._min;
+        this._startValue ? this._value = this._startValue : this._value = this._min;
     }
-    handleOnChange(e) {
+    /*************************************************************************/ handleOnChange(e) {
         let value = e.target.value;
         this._type === "brightness" && (value = Math.round(value * 255 / 100));
         this.dispatchEvent(new CustomEvent('change', {

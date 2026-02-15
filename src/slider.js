@@ -20,42 +20,45 @@ export class SliderBar extends LitElement {
         }
     }
 
+    /************* lifecycle ***********************************************/
+
+    // when first constructed
     constructor() {
         super();
     }
 
+    // each time an update occurs resulting in rerendering
     update(changedProps) {
         super.update(changedProps);
+    }
+
+    // determines if an update should occur
+    shouldUpdate(changedProps) {
+        return (!this._initialized || this.hasRelevantChanges() || changedProps.has("_value"))
+    }
+
+    // runs after the first update
+    firstUpdated() {
+        this.setInitialValue();
         this._initialized = true;
     }
 
-    firstUpdated() {
-        this.setInitialValue();
+    // runs after every update
+    updated() {
+        (this.hasRelevantChanges()) && (this.setInitialValue());
     }
 
+    // helper to determine if should update
     hasRelevantChanges() {
         return this._changedEntityIds.has(this._light.entity_id);
     }
 
-    shouldUpdate(changedProps) {
-        return (!this._initialized
-            || this.hasRelevantChanges()
-            || changedProps.has("_value"))
-    }
-
-    updated(changedProps) {
-        if (this.hasRelevantChanges()) {
-            this.setInitialValue();
-        }
-    }
-
+    // syncs the value to the value from the state
     setInitialValue() {
-        if (this._startValue) {
-            this._value = this._startValue;
-        } else {
-            this._value = this._min;
-        }
+        (this._startValue) ? (this._value = this._startValue) : (this._value = this._min);
     }
+
+    /*************************************************************************/
 
     handleOnChange(e) {
         let value = e.target.value;
