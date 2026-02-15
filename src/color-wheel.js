@@ -13,11 +13,14 @@ export class ColorWheel extends LitElement {
     static get properties() {
         return {
             _light: { state: true },
+            _changedEntityIds: { state: true},
             _hue: { state: true },
             _saturation: { state: true },
             _isDown: { state: true },
         }
     }
+
+    /************* lifecycle ***********************************************/
 
     constructor() {
         super();
@@ -28,8 +31,6 @@ export class ColorWheel extends LitElement {
         this._box = this.renderRoot.querySelector('.wheel-background');
         this.initializeValues();
     }
-
-    static styles = [sharedStyles, styles];
 
     initializeValues() {
         const hs_values = this._light.attributes.hs_color;
@@ -42,6 +43,8 @@ export class ColorWheel extends LitElement {
             this._saturation = 0;
         }
     }
+
+    /*************************************************************************/
 
     getXY() {
         const angle = this._hue * 2 * Math.PI / 360;
@@ -70,6 +73,8 @@ export class ColorWheel extends LitElement {
         styles['background'] = this.getColor();
         return styles;
     }
+
+    static styles = [sharedStyles, styles];
 
     render() {
         const XY = this.getXY();

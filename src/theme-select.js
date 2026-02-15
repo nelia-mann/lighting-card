@@ -1,4 +1,5 @@
 import { html, LitElement } from 'lit';
+import { repeat } from 'lit-html/directives/repeat.js';
 import styles from './theme.styles.js';
 import sharedStyles from './shared-styles.js';
 import { styleMap } from 'lit/directives/style-map.js';
@@ -17,12 +18,22 @@ export class ThemeSelect extends LitElement {
         }
     }
 
+    /************* lifecycle ***********************************************/
+
     constructor() {
         super();
     }
 
     update(changedProps) {
         super.update(changedProps);
+    }
+
+    shouldUpdate(changedProps) {
+        return (!this._initialized || this.hasRelevantChanges() || changedProps.has("_option"))
+    }
+
+    firstUpdated() {
+        this.setInitialValue();
         this._initialized = true;
     }
 
@@ -30,31 +41,20 @@ export class ThemeSelect extends LitElement {
         return this._changedEntityIds.has(this._theme.entity_id);
     }
 
-    shouldUpdate(changedProps) {
-        return (!this._initialized
-            || this.hasRelevantChanges()
-            || changedProps.has("_option")
-        )
+    updated(changedProps) {
+        (changedProps.has('_theme')) && this.setInitialValue();
     }
 
-    firstUpdated() {
-        this.setValue();
+    setInitialValue() {
+        this._option = this._theme.state;
     }
 
-    updated(changedProperties) {
-        if (changedProperties.has('_theme')) {
-            this.setValue();
-        }
-    }
+    /*************************************************************************/
 
     onClick(e) {
         const newOption = e.target.id;
         this._option = newOption;
         this.dispatchEvent(new CustomEvent('change', { detail: newOption }))
-    }
-
-    setValue() {
-        this._option = this._theme.state;
     }
 
     getOptions() {
@@ -78,7 +78,7 @@ export class ThemeSelect extends LitElement {
 
     listOptions() {
         const optionList = this.getOptions();
-        return optionList.map((option) => {
+        return repeat(optionList, (option) => option, option => {
             return html`<div
                 class="option outlined sub-info"
                 style="${styleMap(this.getStyles(option))}"

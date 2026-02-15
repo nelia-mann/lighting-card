@@ -9000,6 +9000,9 @@ class $39525fd96e3f385d$export$f80663f808113381 extends (0, $ab210b2da7b39b9d$ex
             _light: {
                 state: true
             },
+            _changedEntityIds: {
+                state: true
+            },
             _hue: {
                 state: true
             },
@@ -9011,7 +9014,7 @@ class $39525fd96e3f385d$export$f80663f808113381 extends (0, $ab210b2da7b39b9d$ex
             }
         };
     }
-    constructor(){
+    /************* lifecycle ***********************************************/ constructor(){
         super();
         this._isDown = false;
     }
@@ -9019,10 +9022,6 @@ class $39525fd96e3f385d$export$f80663f808113381 extends (0, $ab210b2da7b39b9d$ex
         this._box = this.renderRoot.querySelector('.wheel-background');
         this.initializeValues();
     }
-    static styles = [
-        (0, $65e9333b9a0c9dfd$export$2e2bcd8739ae039),
-        (0, $9da7823e99ded1f7$export$2e2bcd8739ae039)
-    ];
     initializeValues() {
         const hs_values = this._light.attributes.hs_color;
         if (hs_values) {
@@ -9033,7 +9032,7 @@ class $39525fd96e3f385d$export$f80663f808113381 extends (0, $ab210b2da7b39b9d$ex
             this._saturation = 0;
         }
     }
-    getXY() {
+    /*************************************************************************/ getXY() {
         const angle = this._hue * 2 * Math.PI / 360;
         const relX = this._saturation * Math.sin(angle) / 2;
         const relY = this._saturation * Math.cos(angle) / 2;
@@ -9060,6 +9059,10 @@ class $39525fd96e3f385d$export$f80663f808113381 extends (0, $ab210b2da7b39b9d$ex
         styles['background'] = this.getColor();
         return styles;
     }
+    static styles = [
+        (0, $65e9333b9a0c9dfd$export$2e2bcd8739ae039),
+        (0, $9da7823e99ded1f7$export$2e2bcd8739ae039)
+    ];
     render() {
         const XY = this.getXY();
         return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
@@ -9106,6 +9109,7 @@ class $39525fd96e3f385d$export$f80663f808113381 extends (0, $ab210b2da7b39b9d$ex
     }
 }
 customElements.define("color-wheel", $39525fd96e3f385d$export$f80663f808113381);
+
 
 
 
@@ -10486,34 +10490,34 @@ class $a6f01a0d74278018$export$1b9e02e625a724dc extends (0, $ab210b2da7b39b9d$ex
             }
         };
     }
-    constructor(){
+    /************* lifecycle ***********************************************/ constructor(){
         super();
     }
     update(changedProps) {
         super.update(changedProps);
-        this._initialized = true;
-    }
-    hasRelevantChanges() {
-        return this._changedEntityIds.has(this._theme.entity_id);
     }
     shouldUpdate(changedProps) {
         return !this._initialized || this.hasRelevantChanges() || changedProps.has("_option");
     }
     firstUpdated() {
-        this.setValue();
+        this.setInitialValue();
+        this._initialized = true;
     }
-    updated(changedProperties) {
-        if (changedProperties.has('_theme')) this.setValue();
+    hasRelevantChanges() {
+        return this._changedEntityIds.has(this._theme.entity_id);
     }
-    onClick(e) {
+    updated(changedProps) {
+        changedProps.has('_theme') && this.setInitialValue();
+    }
+    setInitialValue() {
+        this._option = this._theme.state;
+    }
+    /*************************************************************************/ onClick(e) {
         const newOption = e.target.id;
         this._option = newOption;
         this.dispatchEvent(new CustomEvent('change', {
             detail: newOption
         }));
-    }
-    setValue() {
-        this._option = this._theme.state;
     }
     getOptions() {
         const optionList = this._theme.attributes.options;
@@ -10533,7 +10537,7 @@ class $a6f01a0d74278018$export$1b9e02e625a724dc extends (0, $ab210b2da7b39b9d$ex
     }
     listOptions() {
         const optionList = this.getOptions();
-        return optionList.map((option)=>{
+        return (0, $6db6ff6394e885e6$export$76d90c956114f2c2)(optionList, (option)=>option, (option)=>{
             return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<div
                 class="option outlined sub-info"
                 style="${(0, $19f464fcda7d2482$export$1e5b4ce2fa884e6a)(this.getStyles(option))}"
