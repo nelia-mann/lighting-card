@@ -175,7 +175,6 @@ export class LightControl extends LitElement {
         return keyed(light.entity_id, html`
             <slider-bar
                 class="outlined"
-                ._entityIds = ${this._entityIds}
                 ._changedEntityIds = ${this._changedEntityIds}
                 ._light=${{...light}}
                 @change=${(e) => this.handleLightService('turn_on', 'brightness', e.detail)}
@@ -190,7 +189,6 @@ export class LightControl extends LitElement {
         const light = this._lightState;
         return keyed(light.entity_id, html`<slider-bar
             class="outlined"
-            ._entityIds = ${this._entityIds}
             ._changedEntityIds = ${this._changedEntityIds}
             ._light=${{...light}}
             @change=${(e) => this.handleLightService('turn_on', 'color_temp_kelvin', e.detail)}

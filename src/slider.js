@@ -8,8 +8,8 @@ export class SliderBar extends LitElement {
 
     _max;
     _min;
+    _startValue;
     _type;
-    _entityIds = [];
     _initialized = false;
 
     static get properties() {
@@ -17,7 +17,6 @@ export class SliderBar extends LitElement {
             _light: { state: true },
             _value: { state: true },
             _changedEntityIds: { state: true },
-            _startValue: { state: true }
         }
     }
 
@@ -35,14 +34,19 @@ export class SliderBar extends LitElement {
     }
 
     hasRelevantChanges() {
-        return this._entityIds.some((entityId) => (this._changedEntityIds.has(entityId)))
+        return this._changedEntityIds.has(this._light.entity_id);
     }
 
     shouldUpdate(changedProps) {
         return (!this._initialized
             || this.hasRelevantChanges()
-            || changedProps.has("_value")
-            || changedProps.has("_light"))
+            || changedProps.has("_value"))
+    }
+
+    updated(changedProps) {
+        if (this.hasRelevantChanges()) {
+            this.setInitialValue();
+        }
     }
 
     setInitialValue() {
@@ -52,8 +56,6 @@ export class SliderBar extends LitElement {
             this._value = this._min;
         }
     }
-
-    static styles = [sharedStyles, styles];
 
     handleOnChange(e) {
         let value = e.target.value;
@@ -113,6 +115,8 @@ export class SliderBar extends LitElement {
         }
         return styles;
     }
+
+    static styles = [sharedStyles, styles];
 
     render() {
         if (this._initialized) {

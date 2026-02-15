@@ -8823,8 +8823,8 @@ var $57a27094fb213e22$export$2e2bcd8739ae039 = (0, $def2de46b9306e8a$export$dbf3
 class $6520265339ffabe1$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
     _max;
     _min;
+    _startValue;
     _type;
-    _entityIds = [];
     _initialized = false;
     static get properties() {
         return {
@@ -8835,9 +8835,6 @@ class $6520265339ffabe1$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$ex
                 state: true
             },
             _changedEntityIds: {
-                state: true
-            },
-            _startValue: {
                 state: true
             }
         };
@@ -8853,19 +8850,18 @@ class $6520265339ffabe1$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$ex
         this.setInitialValue();
     }
     hasRelevantChanges() {
-        return this._entityIds.some((entityId)=>this._changedEntityIds.has(entityId));
+        return this._changedEntityIds.has(this._light.entity_id);
     }
     shouldUpdate(changedProps) {
-        return !this._initialized || this.hasRelevantChanges() || changedProps.has("_value") || changedProps.has("_light");
+        return !this._initialized || this.hasRelevantChanges() || changedProps.has("_value");
+    }
+    updated(changedProps) {
+        if (this.hasRelevantChanges()) this.setInitialValue();
     }
     setInitialValue() {
         if (this._startValue) this._value = this._startValue;
         else this._value = this._min;
     }
-    static styles = [
-        (0, $65e9333b9a0c9dfd$export$2e2bcd8739ae039),
-        (0, $57a27094fb213e22$export$2e2bcd8739ae039)
-    ];
     handleOnChange(e) {
         let value = e.target.value;
         this._type === "brightness" && (value = Math.round(value * 255 / 100));
@@ -8913,6 +8909,10 @@ class $6520265339ffabe1$export$5ff34efdd1b9ed54 extends (0, $ab210b2da7b39b9d$ex
         } else if (this._type === 'ct') styles['background'] = this.getTempGradient();
         return styles;
     }
+    static styles = [
+        (0, $65e9333b9a0c9dfd$export$2e2bcd8739ae039),
+        (0, $57a27094fb213e22$export$2e2bcd8739ae039)
+    ];
     render() {
         if (this._initialized) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
                 <div class="values">
@@ -10707,7 +10707,6 @@ class $f76fa2dde9e8d076$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$ex
         return (0, $bf5aa997e63c2265$export$8dbf9c790527241e)(light.entity_id, (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
             <slider-bar
                 class="outlined"
-                ._entityIds = ${this._entityIds}
                 ._changedEntityIds = ${this._changedEntityIds}
                 ._light=${{
             ...light
@@ -10723,7 +10722,6 @@ class $f76fa2dde9e8d076$export$5ebffa7af4af21de extends (0, $ab210b2da7b39b9d$ex
         const light = this._lightState;
         return (0, $bf5aa997e63c2265$export$8dbf9c790527241e)(light.entity_id, (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`<slider-bar
             class="outlined"
-            ._entityIds = ${this._entityIds}
             ._changedEntityIds = ${this._changedEntityIds}
             ._light=${{
             ...light
