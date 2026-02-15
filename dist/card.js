@@ -10466,6 +10466,7 @@ function $250cd39cb2d393e2$export$cc5233436f23d8d4(theme) {
 
 
 class $a6f01a0d74278018$export$1b9e02e625a724dc extends (0, $ab210b2da7b39b9d$export$3f2f9f5909897157) {
+    _initialized = false;
     static get properties() {
         return {
             _theme: {
@@ -10473,16 +10474,25 @@ class $a6f01a0d74278018$export$1b9e02e625a724dc extends (0, $ab210b2da7b39b9d$ex
             },
             _option: {
                 state: true
+            },
+            _changedEntityIds: {
+                state: true
             }
         };
     }
     constructor(){
         super();
     }
-    static styles = [
-        (0, $65e9333b9a0c9dfd$export$2e2bcd8739ae039),
-        (0, $fc4a6c4e4b89c4fa$export$2e2bcd8739ae039)
-    ];
+    update(changedProps) {
+        super.update(changedProps);
+        this._initialized = true;
+    }
+    hasRelevantChanges() {
+        return this._changedEntityIds.has(this._theme.entity_id);
+    }
+    shouldUpdate(changedProps) {
+        return !this._initialized || this.hasRelevantChanges() || changedProps.has("_option");
+    }
     firstUpdated() {
         this.setValue();
     }
@@ -10528,10 +10538,12 @@ class $a6f01a0d74278018$export$1b9e02e625a724dc extends (0, $ab210b2da7b39b9d$ex
             </div>`;
         });
     }
+    static styles = [
+        (0, $65e9333b9a0c9dfd$export$2e2bcd8739ae039),
+        (0, $fc4a6c4e4b89c4fa$export$2e2bcd8739ae039)
+    ];
     render() {
-        return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
-            ${this.listOptions()}
-        `;
+        if (this._initialized) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`${this.listOptions()}`;
     }
 }
 customElements.define("theme-select", $a6f01a0d74278018$export$1b9e02e625a724dc);
@@ -10901,9 +10913,7 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
             `;
     }
     render() {
-        if (this._initialized) {
-            console.log("making popup");
-            return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
+        if (this._initialized) return (0, $f58f44579a4747ac$export$c0bb0b647f701bb5)`
                 <dialog class="outlined" @close="${this._handleClose}">
                     <div class="modal-header">
                         <div></div>
@@ -10921,7 +10931,6 @@ class $4b68482a6361126c$export$506b69e3dcbd131b extends (0, $ab210b2da7b39b9d$ex
                     </div>
                 </dialog>
                 `;
-        }
     }
     select(lightState) {
         this._selectedId = lightState.entity_id;
@@ -11472,6 +11481,7 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
     setGroupStructure(lightId, lightDictionary) {
         const memberIds = this.getMemberIds(lightId);
         let members = {};
+        let entityIds = [];
         memberIds.forEach((memberId)=>{
             let memberDictionary = {
                 entityIds: [
@@ -11480,11 +11490,15 @@ class $b161f025c07cf354$export$7fe46a8978a1b23d extends (0, $ab210b2da7b39b9d$ex
             };
             this.hasTheme(memberId) && this.setThemeStructure(memberId, memberDictionary);
             members[memberId] = memberDictionary;
+            entityIds = [
+                ...entityIds,
+                ...memberDictionary.entityIds
+            ];
         });
         lightDictionary.structure = members;
         lightDictionary.entityIds = [
             ...lightDictionary.entityIds,
-            ...memberIds
+            ...entityIds
         ];
     }
     setLightIdStructure() {

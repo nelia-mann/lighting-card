@@ -132,7 +132,6 @@ export class PopoutWindow extends LitElement {
 
     render() {
         if (this._initialized) {
-            console.log("making popup");
             return html`
                 <dialog class="outlined" @close="${this._handleClose}">
                     <div class="modal-header">

@@ -7,10 +7,13 @@ import { getThemeGradient, getThemeOutline } from './theme-util.js';
 
 export class ThemeSelect extends LitElement {
 
+    _initialized = false;
+
     static get properties() {
         return {
             _theme: { state: true },
-            _option: { state: true }
+            _option: { state: true },
+            _changedEntityIds: { state: true }
         }
     }
 
@@ -18,7 +21,21 @@ export class ThemeSelect extends LitElement {
         super();
     }
 
-    static styles = [sharedStyles, styles];
+    update(changedProps) {
+        super.update(changedProps);
+        this._initialized = true;
+    }
+
+    hasRelevantChanges() {
+        return this._changedEntityIds.has(this._theme.entity_id);
+    }
+
+    shouldUpdate(changedProps) {
+        return (!this._initialized
+            || this.hasRelevantChanges()
+            || changedProps.has("_option")
+        )
+    }
 
     firstUpdated() {
         this.setValue();
@@ -73,10 +90,12 @@ export class ThemeSelect extends LitElement {
         })
     }
 
+    static styles = [sharedStyles, styles];
+
     render() {
-        return html`
-            ${this.listOptions()}
-        `
+        if (this._initialized) {
+            return html`${this.listOptions()}`
+        }
     }
 
 }

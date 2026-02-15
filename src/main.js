@@ -253,13 +253,15 @@ export class MainCard extends LitElement {
     setGroupStructure(lightId, lightDictionary) {
         const memberIds = this.getMemberIds(lightId);
         let members = {};
+        let entityIds = [];
         memberIds.forEach((memberId) => {
             let memberDictionary = { entityIds: [memberId] };
             (this.hasTheme(memberId)) && (this.setThemeStructure(memberId, memberDictionary));
             members[memberId] = memberDictionary;
+            entityIds = [...entityIds, ... memberDictionary.entityIds]
         })
         lightDictionary.structure = members;
-        lightDictionary.entityIds = [...lightDictionary.entityIds, ...memberIds];
+        lightDictionary.entityIds = [...lightDictionary.entityIds, ...entityIds];
     }
 
     setLightIdStructure() {
